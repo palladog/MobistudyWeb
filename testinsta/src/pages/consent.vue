@@ -31,7 +31,7 @@
       <q-btn class="nextbutton"
       label="REVIEW BEFORE SUBMISSION"
       color="orange"
-      @click="gotopagecriteria"
+      @click="gotopageSubmissionPreview"
       >
       </q-btn>
     </div>
@@ -99,8 +99,8 @@ export default {
     }
   },
   methods: {
-    gotopagecriteria () {
-      this.$router.push('/')
+    gotopageSubmissionPreview () {
+      this.$router.push('submissionpreview')
     }
   }
 }

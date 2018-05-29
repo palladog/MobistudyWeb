@@ -54,7 +54,7 @@
       label="Next Page"
       icon-right="arrow_forward"
       color="orange"
-      @click="gotopagetasks"
+      @click="gotopageTasks"
       >
       </q-btn>
     </div>
@@ -155,7 +155,7 @@ export default {
     }
   },
   methods: {
-    gotopagetasks () {
+    gotopageTasks () {
       this.$router.push('pagetasks')
     },
     addrow (index) {

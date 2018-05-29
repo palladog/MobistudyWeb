@@ -28,7 +28,7 @@
       label="Next Page"
       icon-right="arrow_forward"
       color="orange"
-      @click="gotopagecriteria"
+      @click="gotopageconsent"
       >
       </q-btn>
     </div>
@@ -95,7 +95,7 @@ export default {
     }
   },
   methods: {
-    gotopagecriteria () {
+    gotopageconsent () {
       this.$router.push('pageconsent')
     }
   }
