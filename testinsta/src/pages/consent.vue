@@ -75,6 +75,7 @@
   flex: 1;
 }
 
+/* Privacy Policy */
 .privacy-policy-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
