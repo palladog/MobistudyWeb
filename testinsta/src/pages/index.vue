@@ -57,9 +57,9 @@
     <div class="dates-section-container">
       <div class="sectionlabel">
         <label>Start Date:</label>
-        <q-datetime class="date-input" v-model="model" type="date" stack-label='Start Date' />
+        <q-datetime class="date-input" v-model="dateStart" type="date" format="D-MMM-YYYY" stack-label='Start Date' />
         <label>End Date:</label>
-        <q-datetime class="date-input" v-model="model" type="date" stack-label='End Date' />
+        <q-datetime class="date-input" v-model="dateEnd" type="date" format="D-MMM-YYYY" stack-label='End Date' />
       </div>
     </div>
     <div class="next-container">
@@ -175,6 +175,8 @@ table.investigatortable {
 export default {
   data () {
     return {
+      dateStart: null,
+      dateEnd: null,
       rows: [
         {id: 1, name: 'Rad', contact: 'london', institution: 'mBA'},
         {id: 3, name: 'Redf', contact: 'Len', institution: 'And'}
