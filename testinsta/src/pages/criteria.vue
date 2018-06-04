@@ -59,7 +59,14 @@
       </table>
     </div>
     <div class="next-container">
-      <q-btn class="nextbutton"
+      <q-btn class="previous-button"
+      label="Previous Page"
+      icon="arrow_back"
+      color="orange"
+      @click="gotopageGeneralities"
+      >
+      </q-btn>
+      <q-btn class="next-button"
       label="Next Page"
       icon-right="arrow_forward"
       color="orange"
@@ -141,17 +148,22 @@ table.customcriteriatable {
   border-bottom: 1px solid #DDD;
 }
 /*Next button*/
-.next-container{
+.next-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
   background-color: rgb(60, 122, 141);
 }
 
-.nextbutton{
+.next-button {
   width: 25%;
-  flex: 1;
+  display: flex;
   margin-left: auto;
+}
+
+.previous-button {
+  width: 25%;
+  display: flex;
 }
 </style>
 
@@ -167,6 +179,9 @@ export default {
     }
   },
   methods: {
+    gotopageGeneralities () {
+      this.$router.push('/')
+    },
     gotopageTasks () {
       this.$router.push('pageTasks')
     },

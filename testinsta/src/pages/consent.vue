@@ -91,6 +91,11 @@
   padding: 30px;
   background-color: rgb(60, 122, 141);
 }
+
+.nextbutton{
+  width: 100%;
+  display: flex;
+}
 </style>
 
 <script>

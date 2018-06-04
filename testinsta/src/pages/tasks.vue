@@ -25,11 +25,18 @@
       </form>
     </div>
     <div class="next-container">
-      <q-btn class="nextbutton"
+      <q-btn class="previous-button"
+      label="Previous Page"
+      icon="arrow_back"
+      color="orange"
+      @click="gotopageCriteria"
+      >
+      </q-btn>
+      <q-btn class="next-button"
       label="Next Page"
       icon-right="arrow_forward"
       color="orange"
-      @click="gotopageconsent"
+      @click="gotopageConsent"
       >
       </q-btn>
     </div>
@@ -74,19 +81,31 @@
 }
 
 /* Form Questionnaire Builder*/
-.questionnaire-container{
+.questionnaire-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
   background-color: rgb(218, 68, 255);
 }
 /*Next button*/
-.next-container{
+.next-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
   background-color: rgb(60, 122, 141);
 }
+
+.next-button {
+  width: 25%;
+  display: flex;
+  margin-left: auto;
+}
+
+.previous-button {
+  width: 25%;
+  display: flex;
+}
+
 </style>
 
 <script>
@@ -96,8 +115,11 @@ export default {
     }
   },
   methods: {
-    gotopageconsent () {
-      this.$router.push('pageconsent')
+    gotopageCriteria () {
+      this.$router.push('pageCriteria')
+    },
+    gotopageConsent () {
+      this.$router.push('pageConsent')
     }
   }
 }

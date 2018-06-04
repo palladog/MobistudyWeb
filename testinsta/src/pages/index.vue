@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="next-container">
-      <q-btn class="nextbutton"
+      <q-btn class="next-button"
       label="Next Page"
       icon-right="arrow_forward"
       color="orange"
@@ -163,9 +163,9 @@ table.investigatortable {
   display: flex;
 }
 
-.nextbutton{
+.next-button{
   width: 25%;
-  flex: 1;
+  display: flex;
   margin-left: auto;
 }
 </style>
