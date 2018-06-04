@@ -1,11 +1,12 @@
 <template>
   <q-page>
-    <div style="width:500px; max-widt:90vw;">
-      <q-btn
-      @click="$q.notify('General Items')"
-      color="negative"
-      label="General Items"
-      />
+    <div>
+      <q-tabs align="justify">
+        <q-route-tab slot="title" name="tab-1" icon="subject" label="Generalities" to="/" exact />
+        <q-route-tab slot="title" name="tab-2" icon="fingerprint" label="Inclusion Criteria" to="/pagecriteria" exact />
+        <q-route-tab slot="title" name="tab-3" icon="list" label="Tasks" to="/pagetasks" exact />
+        <q-route-tab slot="title" name="tab-4" icon="verified_user" label="Consent" to="/pageconsent" exact />
+      </q-tabs>
     </div>
     <div class="title-descr-container">
       <form action="">
@@ -182,7 +183,7 @@ export default {
   },
   methods: {
     gotopagecriteria () {
-      this.$router.push('pagecriteria')
+      this.$router.push('pageCriteria')
     },
     addrow (index) {
       this.rows.splice(index + 1, 0, {})

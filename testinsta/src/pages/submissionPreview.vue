@@ -33,7 +33,7 @@ export default {
   // name: 'PageName',
   methods: {
     gotopageFinalPage () {
-      this.$router.push('finalpage')
+      this.$router.push('finalPage')
     }
   }
 }

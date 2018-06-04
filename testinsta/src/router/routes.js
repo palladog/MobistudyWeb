@@ -5,11 +5,11 @@ export default [
     component: () => import('layouts/default'),
     children: [
       { path: '', component: () => import('pages/index') },
-      { path: 'pagecriteria', component: () => import('pages/criteria') },
-      { path: 'pagetasks', component: () => import('pages/tasks') },
-      { path: 'pageconsent', component: () => import('pages/consent') },
-      { path: 'submissionpreview', component: () => import('pages/submissionPreview') },
-      { path: 'finalpage', component: () => import('pages/finalpage') }
+      { path: 'pageCriteria', component: () => import('pages/criteria') },
+      { path: 'pageTasks', component: () => import('pages/tasks') },
+      { path: 'pageConsent', component: () => import('pages/consent') },
+      { path: 'submissionPreview', component: () => import('pages/submissionPreview') },
+      { path: 'finalPage', component: () => import('pages/finalPage') }
     ]
   },
 
