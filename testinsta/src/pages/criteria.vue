@@ -10,25 +10,33 @@
     </div>
     <div class="form-age-container">
       <form action="">
-        <div class="form-age">
-          <label for="agerange">AGE RANGE:</label>
-          <input class="age-min-input" type="number" id="agemin" placeholder="MIN">
-          <input class="age-max-input" type="number" id="agemax" placeholder="MAX">
-        </div>
-        <div class="form-gender">
-          <label for="genderchoice">SEX:</label>
-          <q-checkbox v-model="checkArray" label="M" color="red" val="one" />
-          <q-checkbox v-model="checkArray" label="F" val="two" color="secondary" style="margin-left: 10px" />
-          <q-checkbox v-model="checkArray" label="OTHER" val="three" color="red" style="margin-left: 10px" />
-        </div>
-        <div class="form-disease">
-          <label for="disease">DISEASE (Clinical conditions):</label>
-          <input class="disease-input" type="text" id="diseaseID" placeholder="Disease">
-        </div>
-        <div class="form-meds">
-          <label for="meds">MEDS:</label>
-          <input class="meds-input" type="text" id="medsID" placeholder="Meds">
-        </div>
+        <ul class="flex-outer">
+          <li>
+            <label for="age-range-form">AGE RANGE:</label>
+            <input type="number" id="agemin" placeholder="MIN">
+            <input type="number" id="agemax" placeholder="MAX">
+          </li>
+          <li>
+            <label for="gender-form">SEX:</label>
+            <ul class="flex-inner">
+              <q-checkbox v-model="checkArray" label="M" color="red" val="one" />
+              <q-checkbox v-model="checkArray" label="F" val="two" color="secondary" style="margin-left: 10px" />
+              <q-checkbox v-model="checkArray" label="OTHER" val="three" color="red" style="margin-left: 10px" />
+            </ul>
+          </li>
+          <li>
+            <label for="disease-choice">DISEASE (Clinical conditions):</label>
+            <input type="text" id="disease-form" placeholder="Disease">
+          </li>
+          <li>
+            <label for="lifestyle-choice">LIFESTYLE:</label>
+            <input type="text" id="lifestyle-form" placeholder="Lifestyle">
+          </li>
+          <li>
+            <label for="meds">MEDS:</label>
+            <input type="text" id="meds-form" placeholder="Lifestyle">
+          </li>
+        </ul>
       </form>
     </div>
     <div class="investigator-section-container">
@@ -64,6 +72,36 @@
 
 <style>
 /* title description */
+.flex-outer li,
+.flex-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.flex-outer > li > label,
+.flex-outer li p {
+  flex: 1 0 120px;
+  max-width: 220px;
+}
+
+.flex-outer > li > label + *,
+.flex-inner {
+  flex: 1 0 220px;
+}
+
+.flex-inner li {
+  width: 100px;
+}
+
+.flex-inner {
+  justify-content: space-between;
+}
+/* Spacing between*/
+.flex-outer > li:not(:last-child) {
+  margin-bottom: 20px;
+}
+
 .form-age-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
@@ -71,33 +109,6 @@
   background-color: #FFF444;
 }
 
-.form-row {
-  padding: 10px 0;
-  height: 50px;
-  display: flex;
-}
-
-.form-row label {
-  padding-right: 190px;
-}
-
-.form-row input {
-  flex: 1;
-}
-
-.form-rowdesc {
-  padding: 10px 0;
-  height: 250px;
-  display: flex;
-}
-
-.form-rowdesc label {
-  padding-right: 100px;
-}
-
-.form-rowdesc input {
-  flex: 1;
-}
 /* table investigator */
 .investigator-section-container {
   max-width: 750px;
