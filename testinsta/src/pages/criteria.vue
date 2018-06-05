@@ -39,24 +39,23 @@
         </ul>
       </form>
     </div>
-    <div class="investigator-section-container">
-      <div class="sectionlabel">
-        <label>CUSTOM CRITERIA:</label>
-      </div>
-      <table class="customcriteriatable">
-        <tbody>
-          <tr v-for="row in rows" :key="row.id">
-            <td>{{row.id}}</td>
-            <td>
-              <input class="form-control" placeholder="name" v-model="row.criteriaquestion" />
-            </td>
-            <td>
-                <q-btn color="primary" icon="add" label="Add" @click="addrow" />
-                <q-btn color="red" icon="remove" label="Remove" @click="removerow" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="criteria-section-container">
+        <ul class="flex-outer" id="criteria-button-form">
+          <li>
+            <label>Custom Criteria:</label>
+            <q-btn color="primary" icon="add" label="Add" @click="addRowCriteria" />
+            <q-btn color="red" icon="remove" label="Remove" @click="removeRowCriteria" />
+          </li>
+        </ul>
+      <form action="">
+        <ul class="flex-outer" id="criteria-form">
+          <li>
+            <label for="question-example-input">Question Example:</label>
+            <input type="text" id="question-example-form" placeholder="Question Example">
+          </li>
+        </ul>
+      </form>
+      <div id=repeat-after-Criteria></div>
     </div>
     <div class="next-container">
       <q-btn class="previous-button"
@@ -116,8 +115,8 @@
   background-color: #FFF444;
 }
 
-/* table investigator */
-.investigator-section-container {
+/* Criteria Investigation*/
+.criteria-section-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
@@ -185,11 +184,16 @@ export default {
     gotopageTasks () {
       this.$router.push('pageTasks')
     },
-    addrow (index) {
-      this.rows.splice(index + 1, 0, {})
+    addRowCriteria () {
+      var itm = document.getElementById('criteria-form')
+      var cln = itm.cloneNode(true)
+      document.getElementById('repeat-after-Criteria').appendChild(cln)
     },
-    removerow (index) {
-      this.rows.splice(index, 1)
+    removeRowCriteria () {
+      var list = document.getElementById('criteria-form')
+      if (list.hasChildNodes()) {
+        list.removeChild(list.childNodes[0])
+      }
     }
   }
 }

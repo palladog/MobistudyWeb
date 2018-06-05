@@ -10,57 +10,85 @@
     </div>
     <div class="title-descr-container">
       <form action="">
-        <div class="form-row">
-          <label for="name">Title:</label>
-          <input type="text" id="name">
-        </div>
-        <div class="form-rowdesc">
-          <label for="favColor">Short Description:</label>
-          <input type="text" id="favColor">
-        </div>
+          <ul class="flex-outer" id="title-form">
+            <li>
+              <label for="title-input">Title:</label>
+              <input type="text" id="title-quest-form" placeholder="TITLE OF QUESTIONNAIRE">
+            </li>
+            <li>
+              <label for="descr-input">Description:</label>
+              <input type="text" id="descr-quest-form" class="form-rowdesc" placeholder="DESCRIPTION">
+            </li>
+          </ul>
       </form>
     </div>
     <div class="investigator-section-container">
-      <div class="sectionlabel">
-        <label>Principal investigator(s):</label>
-      </div>
-      <table class="investigatortable">
-<!--         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Contact</th>
-            <th>Institution</th>
-          </tr>
-        </thead> -->
-
-        <tbody>
-          <tr v-for="row in rows" :key="row.id">
-            <td>{{row.id}}</td>
-            <td>
-              <input class="form-control" placeholder="name" v-model="row.name" />
-            </td>
-            <td>
-              <input class="form-control" placeholder="contact" v-model="row.contact" />
-            </td>
-            <td>
-              <input class="form-control" placeholder="institution" v-model="row.institution" />
-            </td>
-            <td>
-                <q-btn color="primary" icon="add" label="Add" @click="addrow" />
-                <q-btn color="red" icon="remove" label="Remove" @click="removerow" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <ul class="flex-outer" id="list-investigator-form">
+          <li>
+            <label>Principal investigator(s):</label>
+            <q-btn color="primary" icon="add" label="Add" @click="addRowInvestigator" />
+            <q-btn color="red" icon="remove" label="Remove" @click="removeRowInvestigator" />
+          </li>
+        </ul>
+      <form action="">
+        <ul class="flex-outer" id="investigator-form">
+          <li>
+            <label for="name-input">Name/Title:</label>
+            <input type="text" id="name-investigator-form" placeholder="NAME/TITLE">
+          </li>
+           <li>
+            <label for="contact-input">Contact:</label>
+            <input type="text" id="contact-investigator-form" placeholder="CONTACT">
+          </li>
+          <li>
+            <label for="institution-input">Institution:</label>
+            <input type="text" id="institution-investigator-form" placeholder="INSTITUTION">
+          </li>
+        </ul>
+      </form>
+      <div id=repeat-after-Investigator></div>
+    </div>
+    <div class="institution-section-container">
+        <ul class="flex-outer" id="list-institution-form">
+          <li>
+            <label>Institutions:</label>
+            <q-btn color="primary" icon="add" label="Add" @click="addRowInstitution" />
+            <q-btn color="red" icon="remove" label="Remove" @click="removeRowInstitution" />
+          </li>
+        </ul>
+      <form action="">
+        <ul class="flex-outer" id="institution-form">
+          <li>
+            <label for="name-input">Name of institution:</label>
+            <input type="text" id="name-institution-form" placeholder="NAME OF INSTITUION">
+          </li>
+           <li>
+            <label for="contact-input">Contact for institution:</label>
+            <input type="text" id="contact-institution-form" placeholder="CONTACT FOR INSTITUTION">
+          </li>
+          <li>
+            <label for="contact-input">Data Access:</label>
+              <q-radio v-model="radio1" val="one" color="secondary" label="NO" />
+              <q-radio v-model="radio1" val="two" color="amber" label="ANON" />
+              <q-radio v-model="radio1" val="three" color="red" label="FULL" />
+          </li>
+        </ul>
+      </form>
+      <div id=repeat-after-Institution></div>
     </div>
     <div class="dates-section-container">
-      <div class="sectionlabel">
-        <label>Start Date:</label>
-        <q-datetime class="date-input" v-model="dateStart" type="date" format="D-MMM-YYYY" stack-label='Start Date' />
-        <label>End Date:</label>
-        <q-datetime class="date-input" v-model="dateEnd" type="date" format="D-MMM-YYYY" stack-label='End Date' />
-      </div>
+        <form action="">
+          <ul class="flex-outer" id="date-form">
+            <li>
+              <label for="date-input">Start Date:</label>
+              <q-datetime class="date-input" v-model="dateStart" type="date" format="D-MMM-YYYY" stack-label='Start Date' />
+            </li>
+            <li>
+              <label for="date-input">End Date:</label>
+              <q-datetime class="date-input" v-model="dateEnd" type="date" format="D-MMM-YYYY" stack-label='End Date' />
+            </li>
+          </ul>
+        </form>
     </div>
     <div class="next-container">
       <q-btn class="next-button"
@@ -83,64 +111,50 @@
   background-color: #FFF444;
 }
 
-.form-row {
-  padding: 10px 0;
-  height: 50px;
-  display: flex;
-}
-
-.form-row label {
-  padding-right: 190px;
-}
-
-.form-row input {
-  flex: 1;
-}
-
 .form-rowdesc {
   padding: 10px 0;
   height: 250px;
   display: flex;
 }
-
-.form-rowdesc label {
-  padding-right: 100px;
-}
-
-.form-rowdesc input {
-  flex: 1;
-}
-/* table investigator */
+/* Principal Investigator */
 .investigator-section-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
   background-color: #444;
 }
-.sectionlabel{
-  flex:1;
-}
-table.investigatortable {
-  width: 70%;
-  margin-left: auto;
-  border: 2px solid #42b983;
-  border-radius: 3px;
-  background-color: rgb(255, 255, 255);
-   }
 
-.investigatortable th, .investigatortable td {
-  min-width: 120px;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  padding: 0.25em;
+/* Institution */
+.institution-section-container {
+  max-width: 750px;
+  margin: 20px auto 0 auto;
+  padding: 30px;
+  background-color: rgb(97, 35, 94);
 }
 
-.investigatortable tr {
+/* Lists */
+.flex-outer li{
   display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid #DDD;
+  flex-wrap: wrap;
+  align-items: center;
+  text-transform: uppercase;
 }
+
+.flex-outer > li > label,
+.flex-outer li p {
+  flex: 1 0 120px;
+  max-width: 220px;
+}
+
+.flex-outer > li > label + * {
+  flex: 1 0 220px;
+}
+
+/* Spacing between*/
+.flex-outer > li:not(:last-child) {
+  margin-bottom: 20px;
+}
+
 /* Date Section */
 .dates-section-container {
   max-width: 750px;
@@ -177,21 +191,34 @@ export default {
     return {
       dateStart: null,
       dateEnd: null,
-      rows: [
-        {id: 1, name: 'Rad', contact: 'london', institution: 'mBA'},
-        {id: 3, name: 'Redf', contact: 'Len', institution: 'And'}
-      ]
+      radio1: 'one'
     }
   },
   methods: {
     gotopagecriteria () {
       this.$router.push('pageCriteria')
     },
-    addrow (index) {
-      this.rows.splice(index + 1, 0, {})
+    addRowInvestigator () {
+      var itm = document.getElementById('investigator-form')
+      var cln = itm.cloneNode(true)
+      document.getElementById('repeat-after-Investigator').appendChild(cln)
     },
-    removerow (index) {
-      this.rows.splice(index, 1)
+    removeRowInvestigator () {
+      var list = document.getElementById('investigator-form')
+      if (list.hasChildNodes()) {
+        list.removeChild(list.childNodes[0])
+      }
+    },
+    addRowInstitution () {
+      var itm = document.getElementById('institution-form')
+      var cln = itm.cloneNode(true)
+      document.getElementById('repeat-after-Institution').appendChild(cln)
+    },
+    removeRowInstitution () {
+      var list = document.getElementById('institution-form')
+      if (list.hasChildNodes()) {
+        list.removeChild(list.childNodes[0])
+      }
     }
   }
 }

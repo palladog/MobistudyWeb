@@ -10,22 +10,26 @@
     </div>
     <div class="title-descr-container">
       <form action="">
-        <div class="form-rowdesc">
-          <label for="invimessage">INVITATION MESSAGE:</label>
-          <input type="text" id="inviMessage">
-        </div>
-        <div class="form-rowdesc">
-          <label for="layDescr">LAY DESCRIPTION:</label>
-          <input type="text" id="layDescription">
-        </div>
+        <ul class="flex-outer" id="invitation-form">
+          <li>
+            <label for="invimessage">INVITATION MESSAGE:</label>
+            <input type="text" class="form-rowdesc" id="invi-message-form">
+          </li>
+          <li>
+            <label for="layDescr">LAY DESCRIPTION:</label>
+            <input type="text" class="form-rowdesc" id="lay-description-form">
+          </li>
+        </ul>
       </form>
     </div>
     <div class="privacy-policy-container">
       <form action="">
-        <div class="form-rowdesc">
-          <label for="privapolicy">PRIVACY POLICY:</label>
-          <input type="text" id="privacyPolicy">
-        </div>
+        <ul class="flex-outer" id="privacy-form">
+          <li>
+            <label for="privapolicy">PRIVACY POLICY:</label>
+            <input type="text" class="form-rowdesc" id="privacy-policy-form">
+          </li>
+        </ul>
       </form>
     </div>
     <div class="next-container">
@@ -48,32 +52,33 @@
   background-color: #FFF444;
 }
 
-.form-row {
-  padding: 10px 0;
-  height: 50px;
+/* Lists */
+.flex-outer li{
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  text-transform: uppercase;
 }
 
-.form-row label {
-  padding-right: 190px;
+.flex-outer > li > label,
+.flex-outer li p {
+  flex: 1 0 120px;
+  max-width: 220px;
 }
 
-.form-row input {
-  flex: 1;
+.flex-outer > li > label + * {
+  flex: 1 0 220px;
+}
+
+/* Spacing between*/
+.flex-outer > li:not(:last-child) {
+  margin-bottom: 20px;
 }
 
 .form-rowdesc {
   padding: 10px 0;
   height: 250px;
   display: flex;
-}
-
-.form-rowdesc label {
-  padding-right: 100px;
-}
-
-.form-rowdesc input {
-  flex: 1;
 }
 
 /* Privacy Policy */
