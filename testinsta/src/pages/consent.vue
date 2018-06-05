@@ -49,7 +49,7 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: #FFF444;
+  background-color: rgba(38, 134, 138, 0.2);
 }
 
 /* Lists */
@@ -94,7 +94,7 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: rgb(60, 122, 141);
+  background-color: rgba(60, 122, 141, 0.7);
 }
 
 .nextbutton{

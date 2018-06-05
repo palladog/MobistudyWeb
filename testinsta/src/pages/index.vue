@@ -26,8 +26,10 @@
         <ul class="flex-outer" id="list-investigator-form">
           <li>
             <label>Principal investigator(s):</label>
-            <q-btn color="primary" icon="add" label="Add" @click="addRowInvestigator" />
-            <q-btn color="red" icon="remove" label="Remove" @click="removeRowInvestigator" />
+            <ul class="flex-btn">
+                <q-btn round color="primary" icon="add" label="Add" @click="addRowInvestigator" />
+                <!-- <q-btn round color="red" icon="remove" label="Remove" @click="removeRowInvestigator" /> -->
+            </ul>
           </li>
         </ul>
       <form action="">
@@ -52,8 +54,10 @@
         <ul class="flex-outer" id="list-institution-form">
           <li>
             <label>Institutions:</label>
-            <q-btn color="primary" icon="add" label="Add" @click="addRowInstitution" />
-            <q-btn color="red" icon="remove" label="Remove" @click="removeRowInstitution" />
+            <ul class="flex-btn">
+              <q-btn round color="primary" icon="add" label="Add" @click="addRowInstitution" />
+              <!-- <q-btn round color="red" icon="remove" label="Remove" @click="removeRowInstitution" /> -->
+            </ul>
           </li>
         </ul>
       <form action="">
@@ -110,7 +114,7 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: #FFF444;
+  background-color: rgba(38, 134, 138, 0.2);
 }
 
 .form-rowdesc {
@@ -123,7 +127,7 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: #444;
+  background-color: rgba(38, 134, 138, 0.2);
 }
 
 /* Institution */
@@ -131,7 +135,7 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: rgb(97, 35, 94);
+  background-color: rgba(38, 134, 138, 0.2);
 }
 
 /* Lists */
@@ -176,7 +180,7 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: rgb(119, 141, 60);
+  background-color:  rgba(38, 134, 138, 0.2);
 }
 
 .date-input {
@@ -189,7 +193,7 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: rgb(60, 122, 141);
+  background-color: rgb(60, 122, 141, 0.7);
   display: flex;
 }
 

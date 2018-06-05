@@ -43,8 +43,10 @@
         <ul class="flex-outer" id="criteria-button-form">
           <li>
             <label>Custom Criteria:</label>
-            <q-btn color="primary" icon="add" label="Add" @click="addRowCriteria" />
-            <q-btn color="red" icon="remove" label="Remove" @click="removeRowCriteria" />
+            <ul class="flex-btn">
+              <q-btn round color="primary" icon="add" label="Add" @click="addRowCriteria" />
+              <!-- <q-btn round color="red" icon="remove" label="Remove" @click="removeRowCriteria" /> -->
+            </ul>
           </li>
         </ul>
       <form action="">
@@ -112,7 +114,13 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: #FFF444;
+  background-color:  rgba(38, 134, 138, 0.2);
+}
+
+.flex-btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 /* Criteria Investigation*/
@@ -120,38 +128,18 @@
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: #444;
+  background-color:  rgba(38, 134, 138, 0.2);
 }
 .sectionlabel{
   flex:1;
 }
-table.customcriteriatable {
-  width: 70%;
-  margin-left: auto;
-  border: 2px solid #42b983;
-  border-radius: 3px;
-  background-color: rgb(255, 255, 255);
-   }
 
-.investigatortable th, .investigatortable td {
-  min-width: 120px;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  padding: 0.25em;
-}
-
-.investigatortable tr {
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid #DDD;
-}
 /*Next button*/
 .next-container {
   max-width: 750px;
   margin: 20px auto 0 auto;
   padding: 30px;
-  background-color: rgb(60, 122, 141);
+  background-color: rgb(60, 122, 141, 0.7);
 }
 
 .next-button {
