@@ -19,9 +19,10 @@
           <li>
             <label for="gender-form">SEX:</label>
             <ul class="flex-inner">
-              <q-checkbox v-model="checkArray" label="M" color="red" val="one" />
-              <q-checkbox v-model="checkArray" label="F" val="two" color="secondary" style="margin-left: 10px" />
-              <q-checkbox v-model="checkArray" label="OTHER" val="three" color="red" style="margin-left: 10px" />
+              <q-checkbox v-model="checkArray" label="ALL" color="secondary" val="four" />
+              <q-checkbox v-model="checkArray" label="M" color="secondary" val="one" />
+              <q-checkbox v-model="checkArray" label="F" val="two" color="secondary"/>
+              <q-checkbox v-model="checkArray" label="OTHER" val="three" color="secondary"/>
             </ul>
           </li>
           <li>
@@ -159,10 +160,7 @@
 export default {
   data () {
     return {
-      checkArray: ['one'],
-      rows: [
-        {id: 1, criteriaquestion: 'Question-example'}
-      ]
+      checkArray: ['one']
     }
   },
   methods: {
