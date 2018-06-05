@@ -19,6 +19,12 @@
             <label for="layDescr">LAY DESCRIPTION:</label>
             <input type="text" class="form-rowdesc" id="lay-description-form">
           </li>
+          <li>
+            <label for="gender-form">Consent Question:</label>
+            <ul class="flex-inner">
+              <q-checkbox v-model="checkArray" label="Dynamic" color="secondary" val="one" />
+            </ul>
+          </li>
         </ul>
       </form>
     </div>
@@ -107,6 +113,7 @@
 export default {
   data () {
     return {
+      checkArray: ['one']
     }
   },
   methods: {
