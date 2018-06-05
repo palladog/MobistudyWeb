@@ -60,7 +60,7 @@
         <ul class="flex-outer" id="institution-form">
           <li>
             <label for="name-input">Name of institution:</label>
-            <input type="text" id="name-institution-form" placeholder="NAME OF INSTITUION">
+            <input type="text" id="name-institution-form" placeholder="NAME OF INSTITUTION">
           </li>
            <li>
             <label for="contact-input">Contact for institution:</label>
@@ -68,9 +68,11 @@
           </li>
           <li>
             <label for="contact-input">Data Access:</label>
+            <ul class="flex-inner">
               <q-radio v-model="radio1" val="one" color="secondary" label="NO" />
               <q-radio v-model="radio1" val="two" color="amber" label="ANON" />
               <q-radio v-model="radio1" val="three" color="red" label="FULL" />
+            </ul>
           </li>
         </ul>
       </form>
@@ -133,11 +135,17 @@
 }
 
 /* Lists */
-.flex-outer li{
+.flex-outer li,
+.flex-inner {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  text-transform: uppercase;
+}
+
+.flex-btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .flex-outer > li > label,
@@ -146,10 +154,18 @@
   max-width: 220px;
 }
 
-.flex-outer > li > label + * {
+.flex-outer > li > label + *,
+.flex-inner {
   flex: 1 0 220px;
 }
 
+.flex-inner li {
+  width: 100px;
+}
+
+.flex-inner {
+  justify-content: space-between;
+}
 /* Spacing between*/
 .flex-outer > li:not(:last-child) {
   margin-bottom: 20px;
