@@ -19,7 +19,7 @@
                   <q-item-side icon="folder" inverted color="primary" />
                   <q-item-main>
                     <q-item-tile label>Steps</q-item-tile>
-                    <q-item-tile sublabel>February 22, 2016</q-item-tile>
+                    <!-- <q-item-tile sublabel>February 22, 2016</q-item-tile> -->
                   </q-item-main>
                   <q-item-side right icon="info" color="amber" />
                 </q-item>
@@ -27,8 +27,8 @@
                 <q-item v-close-overlay @click.native="showNotification">
                   <q-item-side icon="assignment" inverted color="secondary" />
                   <q-item-main>
-                    <q-item-tile label>Vacation</q-item-tile>
-                    <q-item-tile sublabel>February 22, 2016</q-item-tile>
+                    <q-item-tile label>Weight</q-item-tile>
+                    <!-- <q-item-tile sublabel>February 22, 2016</q-item-tile> -->
                   </q-item-main>
                   <q-item-side right icon="info" color="amber" />
                 </q-item>
@@ -165,7 +165,7 @@ export default {
       this.$router.push('pageConsent')
     },
     showNotification () {
-      this.$q.notify('Option selected & closed dropdown')
+      this.$q.notify('Option selected')
     }
   }
 }
