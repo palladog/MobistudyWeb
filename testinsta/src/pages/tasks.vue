@@ -8,10 +8,25 @@
         <q-route-tab slot="title" name="tab-4" icon="verified_user" label="Consent" to="/pageconsent" exact />
       </q-tabs>
     </div>
+    <q-btn-dropdown label="Add a task" class="q-ma-md">
+      <q-list link>
+        <q-item>
+          <q-item-main>
+            <q-item-tile label>Form</q-item-tile>
+          </q-item-main>
+        </q-item>
+        <q-item>
+          <q-item-main>
+            <q-item-tile label>Data query</q-item-tile>
+          </q-item-main>
+        </q-item>
+      </q-list>
+    </q-btn-dropdown>
     <div class="data-query-container">
       <form action="">
         <ul class="flex-outer" id="data-query-form">
           <li>
+            <q-select v-model="select" :options="options" />
             <label for="data-query-input">Data Query:</label>
              <q-btn-dropdown color="primary" label="Types of Data">
               <q-list link>
@@ -155,6 +170,16 @@
 export default {
   data () {
     return {
+      options: [
+        {
+          label: 'Steps',
+          value: 'steps'
+        },
+        {
+          label: 'Weight',
+          value: 'weight'
+        }
+      ]
     }
   },
   methods: {

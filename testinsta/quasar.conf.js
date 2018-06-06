@@ -61,7 +61,16 @@ module.exports = function (ctx) {
         'QTab',
         'QTabPane',
         'QRouteTab',
-        'QRadio'
+        'QRadio',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardMedia',
+        'QCardSeparator',
+        'QCardActions',
+        'QInput',
+        'QField',
+        'QSelect'
       ],
       directives: [
         'Ripple'
