@@ -6,11 +6,10 @@
         <q-tab slot="title" name="tasks" icon="list" label="Tasks"/>
         <q-tab slot="title" name="consent" icon="verified_user" label="Consent"/>
         <!-- General Tab -->
-        <q-tab-pane name="generalities">
-          Gen tab
+        <q-tab-pane name="generalities">Gen tab
+          <!-- General Information Tab Card -->
           <q-card class="bg-cyan-2 q-ma-xl">
-            <q-card-title>
-              Generalities
+            <q-card-title>Generalities
               <span slot="subtitle">General information about the study</span>
             </q-card-title>
             <q-card-main>
@@ -20,6 +19,33 @@
               <q-field label="Description" helper="Layman's description of the study">
                 <q-input v-model="area" type="textarea" rows="7" clearable />
               </q-field>
+            </q-card-main>
+          </q-card>
+          <!-- Gen Info Tab: Principal Investigator Card -->
+          <q-card class="bg-cyan-2 q-ma-xl">
+             <q-card-title>Principal Investigator(s)
+              <span slot="subtitle">Information concerning the principal investigators</span>
+            </q-card-title>
+            <q-card-main>
+              <q-field label="Name & Title" helper="Principal Investigator Name/Title">
+                <q-input v-model="text" clearable />
+              </q-field>
+              <q-field label="Contact" helper="Contact Details, may include address">
+                <q-input v-model="text" clearable />
+              </q-field>
+              <q-field label="Institution" helper="Name of Institution involved in study">
+                <q-input v-model="text" clearable />
+              </q-field>
+            </q-card-main>
+          </q-card>
+          <!-- Gen Info Tab: Institutions Card To implement lists with button -->
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-main>
+            </q-card-main>
+          </q-card>
+          <!-- Gen Info Tab: Date Card -->
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-main>
             </q-card-main>
           </q-card>
         </q-tab-pane>
@@ -36,6 +62,7 @@
               Consent
               <span slot="subtitle">Consent form that is viewed by participant</span>
             </q-card-title>
+            <!-- Consent Tab: Invitation Message Card -->
             <q-card-main>
               <q-field label="Invitation Message" helper="The invitation message sent for the study">
                 <q-input v-model="area" readonly type="textarea" rows="7"/>
@@ -47,6 +74,7 @@
               <q-checkbox v-model="check1" color="positive" label="Dynamic" left-label />
             </q-card-main>
           </q-card>
+          <!-- Consent Tab: Privacy Policy Card -->
           <q-card class="bg-amber-3 q-ma-xl">
             <q-card-title>
               Privacy Policy
