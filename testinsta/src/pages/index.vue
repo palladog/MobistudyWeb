@@ -8,32 +8,20 @@
         <q-route-tab slot="title" name="tab-4" icon="verified_user" label="Consent" to="/pageconsent" exact />
       </q-tabs>
     </div>
-    <q-card class="q-ma-md">
+    <q-card class="bg-cyan-2 q-ma-xl">
       <q-card-title>
         Generalities
         <span slot="subtitle">General information about the study</span>
       </q-card-title>
       <q-card-main>
         <q-field label="Title" helper="Short name of the study">
-          <q-input v-model="text" />
+          <q-input v-model="text" clearable />
         </q-field>
         <q-field label="Description" helper="Layman's description of the study">
-          <q-input v-model="area" type="textarea" rows="7"/>
+          <q-input v-model="area" type="textarea" rows="7" clearable />
         </q-field>
       </q-card-main>
     </q-card>
-    <div class="title-descr-container">
-          <ul class="flex-outer" id="title-form">
-            <li>
-              <label for="title-input">Title:</label>
-              <input type="text" id="title-quest-form" placeholder="TITLE OF QUESTIONNAIRE">
-            </li>
-            <li>
-              <label for="descr-input">Description:</label>
-              <input type="text" id="descr-quest-form" class="form-rowdesc" placeholder="DESCRIPTION">
-            </li>
-          </ul>
-    </div>
     <div class="investigator-section-container">
         <ul class="flex-outer" id="list-investigator-form">
           <li>
