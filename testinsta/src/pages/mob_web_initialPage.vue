@@ -45,8 +45,20 @@
           </q-card>
           <!-- Gen Info Tab: Date Card -->
           <q-card class="bg-cyan-2 q-ma-xl">
-            <q-card-main>
-            </q-card-main>
+                <q-card-title>
+                  Dates Of Study
+                  <span slot="subtitle">The Start and End Dates of the study</span>
+                </q-card-title>
+                  <q-card-main>
+                    <q-card-actions>
+                      <q-field label="Start Date" />
+                      <q-datetime class="q-ml-xl" v-model="dateStart" type="date" format="D-MMM-YYYY" clearable />
+                    </q-card-actions>
+                    <q-card-actions>
+                      <q-field label="End Date" />
+                      <q-datetime class="q-ml-xl" v-model="dateEnd" type="date" format="D-MMM-YYYY" clearable />
+                    </q-card-actions>
+                  </q-card-main>
           </q-card>
         </q-tab-pane>
         <!-- Criteria Tab -->
@@ -93,7 +105,12 @@
 
 <script>
 export default {
-  // name: 'PageName',
+  data () {
+    return {
+      dateStart: null,
+      dateEnd: null
+    }
+  }
 }
 </script>
 
