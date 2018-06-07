@@ -45,27 +45,127 @@
           </q-card>
           <!-- Gen Info Tab: Date Card -->
           <q-card class="bg-cyan-2 q-ma-xl">
-                <q-card-title>
-                  Dates Of Study
-                  <span slot="subtitle">The Start and End Dates of the study</span>
-                </q-card-title>
-                  <q-card-main>
-                    <q-card-actions>
-                      <q-field label="Start Date" />
-                      <q-datetime class="q-ml-xl" v-model="dateStart" type="date" format="D-MMM-YYYY" clearable />
-                    </q-card-actions>
-                    <q-card-actions>
-                      <q-field label="End Date" />
-                      <q-datetime class="q-ml-xl" v-model="dateEnd" type="date" format="D-MMM-YYYY" clearable />
-                    </q-card-actions>
-                  </q-card-main>
+            <q-card-title>Dates Of Study
+              <span slot="subtitle">The Start and End Dates of the study</span>
+            </q-card-title>
+            <q-card-main>
+              <div>
+                <div>
+                  <div class="row gutter-lg">
+                    <div class="col-xs-4 col-md-4">
+                        <q-field label="Start Date" />
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <q-datetime class="q-ml-xl q-mb-lg" v-model="dateStart" type="date" format="D-MMM-YYYY" clearable />
+                        </div>
+                    </div>
+                  </div>
+              </div>
+              <div>
+                <div>
+                  <div class="row gutter-lg">
+                    <div class="col-xs-4 col-md-4">
+                        <q-field label="End Date" />
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                          <q-datetime class="q-ml-xl" v-model="dateEnd" type="date" format="D-MMM-YYYY" clearable />
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            </q-card-main>
           </q-card>
         </q-tab-pane>
         <!-- Criteria Tab -->
         <q-tab-pane name="criteria">Crit tab
+          <!-- Inclusion Criteria Tab Card -->
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>Inclusion Criteria
+              <span slot="subtitle">Criteria to filter paritcipants in the study</span>
+            </q-card-title>
+            <q-card-main>
+              <div>
+                <div>
+                <!-- Age Range & Sex -->
+                  <div class="row gutter-lg">
+                    <div class="col-xs-4 col-md-4">
+                        <q-field label="Age Range"/>
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                        <q-input v-model="ageMin" type="number" placeholder="Min Age1" clearable/>
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                        <q-input v-model="ageMin" type="number" placeholder="Max Age1" clearable/>
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                      <q-field label="Sex" />
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                      <q-checkbox class="q-mr-lg" v-model="checkArray" label="M" color="secondary" val="one" />
+                      <q-checkbox class="q-mr-lg" v-model="checkArray" label="F" val="two" color="secondary" />
+                      <q-checkbox v-model="checkArray" label="OTHER" val="three" color="secondary" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </q-card-main>
+          </q-card>
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-main>
+              <div>
+                <div>
+                  <!-- Disease, Lifestyle and Meds -->
+                  <div class="row gutter-lg">
+                    <div class="col-xs-4 col-md-4">
+                      <q-field label="Disease Choice" />
+                    </div>
+                    <div class="col-xs-4 col-md-6">
+                      <q-input type="text" id="disease-form" placeholder="Disease" />
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                      <q-field label="Lifestyle" />
+                    </div>
+                    <div class="col-xs-4 col-md-6">
+                      <q-radio v-model="radio_1" val="active" color="secondary" label="Active" />
+                      <q-radio v-model="radio_1" val="not active" color="amber" label="Not Active" style="margin-left: 10px" />
+                    </div>
+                    <div class="col-xs-4 col-md-4">
+                      <q-field label="Meds" />
+                    </div>
+                    <div class="col-xs-4 col-md-6">
+                      <q-input type="text" id="meds-form" placeholder="Meds" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </q-card-main>
+          </q-card>
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-main>
+              <div>
+                <div>
+                  <!-- Custom Criteria Questions -->
+                  <div class="row gutter-lg">
+                    <div class="col-xs-4 col-md-4">
+                      <q-field label="Custom Criteria:" />
+                    </div>
+                    <div class="col-xs-4 col-md-6">
+                      <q-input type="text" id="disease-form" placeholder="Question Example:" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </q-card-main>
+          </q-card>
         </q-tab-pane>
         <!-- Tasks Tab -->
         <q-tab-pane name="tasks">Tasks tab
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>Tasks
+            </q-card-title>
+            <q-card-main>
+            </q-card-main>
+          </q-card>
         </q-tab-pane>
         <!-- Consent Tab -->
         <q-tab-pane name="consent">Consent tab
@@ -107,8 +207,12 @@
 export default {
   data () {
     return {
+      ageMin: null,
+      ageMax: null,
+      checkArray: ['one'],
       dateStart: null,
-      dateEnd: null
+      dateEnd: null,
+      radio_1: 'Active'
     }
   }
 }
