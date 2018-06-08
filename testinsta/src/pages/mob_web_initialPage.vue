@@ -81,7 +81,7 @@
           <!-- Inclusion Criteria Tab Card -->
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-title>Inclusion Criteria
-              <span slot="subtitle">Criteria to filter participants in the study</span>
+              <span slot="subtitle">Criteria to filter paritcipants in the study</span>
             </q-card-title>
             <q-card-main>
               <div>
@@ -160,52 +160,10 @@
         </q-tab-pane>
         <!-- Tasks Tab -->
         <q-tab-pane name="tasks">Tasks tab
-          <q-card class="q-ma-xl">
-            <q-card-title>Principal Investigator(s)
-              <span slot="subtitle">Information concerning the principal investigators</span>
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>Tasks
             </q-card-title>
             <q-card-main>
-              <div>
-                <div>
-                  <div class="row gutter-lg" id="investigator-form">
-                    <div class="col-xs-4 col-md-4 col-lg-6">
-                      <q-list highlight>
-                          <q-item class="q-pr-sm">
-                            <q-item-main label="Name & Title:" helper="Principal Investigator Name/Title" />
-                            <q-input type="text" placeholder="NAME/TITLE" clearable/>
-                            <q-item-side>
-                              <q-btn color="primary" label="Add" @click.native="addRowInvestigator" />
-                              <q-btn color="negative" label="Remove" @click.native="showNotification" />
-                            </q-item-side>
-                          </q-item>
-                          <q-item>
-                            <q-item-main label="Contact:" />
-                            <q-input type="text" id="contact-investigator-form" placeholder="CONTACT" clearable/>
-                          </q-item>
-                          <q-item>
-                            <q-item-main label="Institution:" />
-                            <q-input helper="Name of Institution involved in study" placeholder="INSTITUTION" v-model="text" clearable />
-                          </q-item>
-                      </q-list>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- <q-list highlight>
-                <q-list-header>Inv</q-list-header>
-                  <q-item>
-                    <q-item-main label="Name & Title:" helper="Principal Investigator Name/Title" />
-                    <q-input v-model="ageMin" type="text" placeholder="NAME/TITLE" clearable/>
-                    <q-item-side>
-                      <q-btn color="primary" label="Add" @click.native="showNotification" />
-                    </q-item-side>
-                  </q-item>
-                  <q-item>
-                    <q-item-main label="Contact:" />
-                      <q-input v-model="ageMax" type="text" id="contact-investigator-form" placeholder="CONTACT" clearable/>
-                  </q-item>
-              </q-list> -->
-              <div id=repeat-after-Investigator></div>
             </q-card-main>
           </q-card>
         </q-tab-pane>
@@ -255,16 +213,6 @@ export default {
       dateStart: null,
       dateEnd: null,
       radio_1: 'Active'
-    }
-  },
-  methods: {
-    showNotification () {
-      this.$q.notify('Option selected')
-    },
-    addRowInvestigator () {
-      var itm = document.getElementById('investigator-form')
-      var cln = itm.cloneNode(true)
-      document.getElementById('repeat-after-Investigator').appendChild(cln)
     }
   }
 }
