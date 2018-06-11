@@ -162,7 +162,11 @@
         <q-tab-pane name="tasks">Tasks tab
           <q-card class="q-ma-xl">
             <q-card-title>Principal Investigator(s)
-              <span slot="subtitle">Information concerning the principal investigators</span>
+              <span slot="subtitle">Information concerning the principal investigators
+                <br>
+                <br>
+              <q-btn class="q-ml-md" round size="sm" color="primary" icon="add" @click.native="addRowInvestigator" />
+              </span>
             </q-card-title>
             <q-card-main>
               <div>
@@ -170,17 +174,16 @@
                   <div class="row gutter-lg" id="investigator-form">
                     <div class="col-xs-4 col-md-4 col-lg-6">
                       <q-list highlight>
+                        <q-item>
+                          <q-btn round size="sm" color="negative" icon="remove" @click.native="removeRowInvestigator" />
+                        </q-item>
                           <q-item class="q-pr-sm">
                             <q-item-main label="Name & Title:" helper="Principal Investigator Name/Title" />
                             <q-input type="text" placeholder="NAME/TITLE" clearable/>
-                            <q-item-side>
-                              <q-btn color="primary" label="Add" @click.native="addRowInvestigator" />
-                              <q-btn color="negative" label="Remove" @click.native="showNotification" />
-                            </q-item-side>
                           </q-item>
                           <q-item>
                             <q-item-main label="Contact:" />
-                            <q-input type="text" id="contact-investigator-form" placeholder="CONTACT" clearable/>
+                            <q-input type="textarea" rows=3 id="contact-investigator-form" placeholder="CONTACT" clearable/>
                           </q-item>
                           <q-item>
                             <q-item-main label="Institution:" />
@@ -246,6 +249,9 @@
 </template>
 
 <script>
+
+var globalGridRowId = 0
+
 export default {
   data () {
     return {
@@ -262,9 +268,23 @@ export default {
       this.$q.notify('Option selected')
     },
     addRowInvestigator () {
-      var itm = document.getElementById('investigator-form')
-      var cln = itm.cloneNode(true)
-      document.getElementById('repeat-after-Investigator').appendChild(cln)
+      // increment the id
+      ++globalGridRowId
+      this.$q.notify('The id is : ' + globalGridRowId)
+      // var itm = document.getElementById('investigator-form')
+      // var gridRowId = globalGridRowId
+      var newElement = document.createElement('divtest')
+      newElement.className = 'row'
+      newElement.innerHTML = '<input type="text" name="name" value="" />'
+      document.getElementById('repeat-after-Investigator').appendChild(newElement)
+      // var cln = itm.cloneNode(true)
+      // document.getElementById('repeat-after-Investigator').appendChild(cln)
+    },
+    removeRowInvestigator () {
+      this.$q.notify('The id removed is : ' + globalGridRowId)
+      // putting repeat-after-Investigator as the parent so that last can be removed
+      var parent = document.getElementById('repeat-after-Investigator')
+      parent.removeChild(parent.lastChild)
     }
   }
 }
