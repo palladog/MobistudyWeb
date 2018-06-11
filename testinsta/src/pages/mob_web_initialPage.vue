@@ -209,41 +209,66 @@
                 <div>
                   <div class="row gutter-lg" id="investigator-form">
                     <div class="col-xs-4 col-md-4 col-lg-6">
-                      <q-list highlight>
+                      <q-list highlight v-for="(input, index) in inputs" :key="input.id">
                         <q-item>
-                          <q-btn round size="sm" color="negative" icon="remove" @click.native="removeRowInvestigator" />
+                          <q-btn round size="sm" color="negative" icon="remove" @click.native="removeRowInvestigator(index)" />
                         </q-item>
                           <q-item class="q-pr-sm">
                             <q-item-main label="Name & Title:" helper="Principal Investigator Name/Title" />
-                            <q-input type="text" placeholder="NAME/TITLE" clearable/>
+                            <q-input type="text" v-model="input.one" placeholder="NAME/TITLE" clearable/> {{ input.one }}
                           </q-item>
                           <q-item>
                             <q-item-main label="Contact:" />
-                            <q-input type="textarea" rows=3 id="contact-investigator-form" placeholder="CONTACT" clearable/>
+                            <q-input type="textarea" v-model="input.two" rows=3 id="contact-investigator-form" placeholder="CONTACT" clearable/> {{ input.two }}
                           </q-item>
                           <q-item>
                             <q-item-main label="Institution:" />
-                            <q-input helper="Name of Institution involved in study" placeholder="INSTITUTION" v-model="text" clearable />
+                            <q-input type="textarea" placeholder="INSTITUTION" v-model="input.three" clearable /> {{ input.three }}
                           </q-item>
                       </q-list>
                     </div>
                   </div>
                 </div>
               </div>
-              <!-- <q-list highlight>
-                <q-list-header>Inv</q-list-header>
-                  <q-item>
-                    <q-item-main label="Name & Title:" helper="Principal Investigator Name/Title" />
-                    <q-input v-model="ageMin" type="text" placeholder="NAME/TITLE" clearable/>
-                    <q-item-side>
-                      <q-btn color="primary" label="Add" @click.native="showNotification" />
-                    </q-item-side>
-                  </q-item>
-                  <q-item>
-                    <q-item-main label="Contact:" />
-                      <q-input v-model="ageMax" type="text" id="contact-investigator-form" placeholder="CONTACT" clearable/>
-                  </q-item>
-              </q-list> -->
+              <div id=repeat-after-Investigator></div>
+            </q-card-main>
+          </q-card>
+          <q-card class="bg-cyan-2 q-ma-xl">
+              <q-card-title>Institution(s)
+              <span slot="subtitle">Institutions that the data might or might not be shared with
+                <br>
+                <br>
+              <q-btn class="q-ml-md" round size="sm" color="primary" icon="add" @click.native="addRowInvestigator" />
+              </span>
+            </q-card-title>
+            <q-card-main>
+              <div>
+                <div>
+                  <div class="row gutter-lg" id="institution-form">
+                    <div class="col-xs-4 col-md-4 col-lg-6">
+                      <q-list highlight v-for="(input, index) in inputs" :key="input.id">
+                        <q-item>
+                          <q-btn round size="sm" color="negative" icon="remove" @click.native="removeRowInvestigator(index)" />
+                        </q-item>
+                          <q-item class="q-pr-sm">
+                            <q-item-main label="Name of Institution:" helper="Principal Investigator Name/Title" />
+                            <q-input type="text" v-model="input.one" placeholder="NAME/TITLE" clearable/> {{ input.one }}
+                          </q-item>
+                          <q-item>
+                            <q-item-main label="Contact Details of Institution:" />
+                            <q-input type="textarea" v-model="input.two" rows=3 id="contact-investigator-form" placeholder="CONTACT" clearable/> {{ input.two }}
+                          </q-item>
+                          <q-item>
+                            <q-item-main label="Data Access:" />
+                            <q-radio v-model="radio1" val="one" color="secondary" label="NO" />
+                            <q-radio v-model="radio1" val="two" color="amber" label="ANON" />
+                            <q-radio v-model="radio1" val="three" color="red" label="FULL" />
+                          </q-item>
+                      </q-list>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div id=repeat-after-Investigator></div>
             </q-card-main>
           </q-card>
@@ -254,7 +279,7 @@
 
 <script>
 
-var globalGridRowId = 0
+// var globalGridRowId = 0
 
 export default {
   data () {
@@ -264,7 +289,8 @@ export default {
       checkArray: ['one'],
       dateStart: null,
       dateEnd: null,
-      radio_1: 'Active'
+      radio_1: 'Active',
+      inputs: ['one']
     }
   },
   methods: {
@@ -273,18 +299,14 @@ export default {
     },
     addRowInvestigator () {
       // increment the id
-      ++globalGridRowId
-      this.$q.notify('The id is : ' + globalGridRowId)
-      var itm = document.getElementById('investigator-form')
-      // var gridRowId = globalGridRowId
-      var cln = itm.cloneNode(true)
-      document.getElementById('repeat-after-Investigator').appendChild(cln)
+      this.inputs.push({
+        one: '',
+        two: '',
+        three: ''
+      })
     },
-    removeRowInvestigator () {
-      this.$q.notify('The id removed is : ' + globalGridRowId)
-      // putting repeat-after-Investigator as the parent so that last can be removed
-      var parent = document.getElementById('repeat-after-Investigator')
-      parent.removeChild(parent.lastChild)
+    removeRowInvestigator (index) {
+      this.inputs.splice(index, 1)
     }
   }
 }
