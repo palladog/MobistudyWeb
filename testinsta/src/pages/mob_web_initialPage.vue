@@ -5,6 +5,7 @@
         <q-tab slot="title" name="criteria" icon="fingerprint" label="Inclusion Criteria" />
         <q-tab slot="title" name="tasks" icon="list" label="Tasks"/>
         <q-tab slot="title" name="consent" icon="verified_user" label="Consent"/>
+        <q-tab slot="title" name="test" icon="verified_user" label="Test"/>
         <!-- General Tab -->
         <q-tab-pane name="generalities">Gen tab
           <!-- General Information Tab Card -->
@@ -160,6 +161,41 @@
         </q-tab-pane>
         <!-- Tasks Tab -->
         <q-tab-pane name="tasks">Tasks tab
+        </q-tab-pane>
+        <!-- Consent Tab -->
+        <q-tab-pane name="consent">Consent tab
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>
+              Consent
+              <span slot="subtitle">Consent form that is viewed by participant</span>
+            </q-card-title>
+            <!-- Consent Tab: Invitation Message Card -->
+            <q-card-main>
+              <q-field label="Invitation Message" helper="The invitation message sent for the study">
+                <q-input v-model="area" readonly type="textarea" rows="7"/>
+              </q-field>
+              <q-field label="Lay Description" helper="Layman's description of the study">
+                <q-input v-model="area" readonly type="textarea" rows="7"/>
+              </q-field>
+              <p class="caption">Consent Question:</p>
+              <q-checkbox v-model="check1" color="positive" label="Dynamic" left-label />
+            </q-card-main>
+          </q-card>
+          <!-- Consent Tab: Privacy Policy Card -->
+          <q-card class="bg-amber-3 q-ma-xl">
+            <q-card-title>
+              Privacy Policy
+              <span slot="subtitle">Privacy form that is viewed by participant.</span>
+            </q-card-title>
+            <q-card-main>
+              <q-field label="Privacy Message" helper="This the privacy policy for the study. It includes...">
+                <q-input v-model="area" readonly type="textarea" rows="7"/>
+              </q-field>
+            </q-card-main>
+          </q-card>
+        </q-tab-pane>
+                <!-- TESTING Tab -->
+        <q-tab-pane name="test">Test tab
           <q-card class="q-ma-xl">
             <q-card-title>Principal Investigator(s)
               <span slot="subtitle">Information concerning the principal investigators
@@ -212,38 +248,6 @@
             </q-card-main>
           </q-card>
         </q-tab-pane>
-        <!-- Consent Tab -->
-        <q-tab-pane name="consent">Consent tab
-          <q-card class="bg-cyan-2 q-ma-xl">
-            <q-card-title>
-              Consent
-              <span slot="subtitle">Consent form that is viewed by participant</span>
-            </q-card-title>
-            <!-- Consent Tab: Invitation Message Card -->
-            <q-card-main>
-              <q-field label="Invitation Message" helper="The invitation message sent for the study">
-                <q-input v-model="area" readonly type="textarea" rows="7"/>
-              </q-field>
-              <q-field label="Lay Description" helper="Layman's description of the study">
-                <q-input v-model="area" readonly type="textarea" rows="7"/>
-              </q-field>
-              <p class="caption">Consent Question:</p>
-              <q-checkbox v-model="check1" color="positive" label="Dynamic" left-label />
-            </q-card-main>
-          </q-card>
-          <!-- Consent Tab: Privacy Policy Card -->
-          <q-card class="bg-amber-3 q-ma-xl">
-            <q-card-title>
-              Privacy Policy
-              <span slot="subtitle">Privacy form that is viewed by participant.</span>
-            </q-card-title>
-            <q-card-main>
-              <q-field label="Privacy Message" helper="This the privacy policy for the study. It includes...">
-                <q-input v-model="area" readonly type="textarea" rows="7"/>
-              </q-field>
-            </q-card-main>
-          </q-card>
-        </q-tab-pane>
       </q-tabs>
   </q-page>
 </template>
@@ -271,14 +275,10 @@ export default {
       // increment the id
       ++globalGridRowId
       this.$q.notify('The id is : ' + globalGridRowId)
-      // var itm = document.getElementById('investigator-form')
+      var itm = document.getElementById('investigator-form')
       // var gridRowId = globalGridRowId
-      var newElement = document.createElement('divtest')
-      newElement.className = 'row'
-      newElement.innerHTML = '<input type="text" name="name" value="" />'
-      document.getElementById('repeat-after-Investigator').appendChild(newElement)
-      // var cln = itm.cloneNode(true)
-      // document.getElementById('repeat-after-Investigator').appendChild(cln)
+      var cln = itm.cloneNode(true)
+      document.getElementById('repeat-after-Investigator').appendChild(cln)
     },
     removeRowInvestigator () {
       this.$q.notify('The id removed is : ' + globalGridRowId)
