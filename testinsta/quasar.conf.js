@@ -63,6 +63,7 @@ module.exports = function (ctx) {
         'QLayoutDrawer',
         'QList',
         'QListHeader',
+        'QOptionGroup',
         'QPageContainer',
         'QPage',
         'QRadio',

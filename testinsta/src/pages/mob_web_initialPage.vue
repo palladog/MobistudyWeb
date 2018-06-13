@@ -180,16 +180,16 @@
             </q-card-title>
           </q-card>
             <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
-              <q-card-title>
-                <q-option-group
+              <q-card-title style="width: 300px; max-width: 90vw;">
+              <q-select
                   color="secondary"
                   v-model="selectDataTypeForQuery"
-                  :options="[
-                    { label: 'steps', value: 'valSteps', color: 'black' },
-                    { label: 'weight', value: 'valWeight', color: 'secondary' }
-                  ]"
+                  @input="selectedDataType"
+                  :options="selectOptionsDataTypeForQuery"
                 />
               </q-card-title>
+              <q-card-main>
+              </q-card-main>
             </q-card>
         </q-tab-pane>
         <!-- Consent Tab -->
@@ -323,7 +323,11 @@ export default {
       inputs: ['one'],
       showDataQuery: true,
       showForm: true,
-      selectDataTypeForQuery: ''
+      selectDataTypeForQuery: [],
+      selectOptionsDataTypeForQuery: [
+        { label: 'Steps', value: 'valSteps', color: 'black' },
+        { label: 'Weight', value: 'valWeight', color: 'secondary' }
+      ]
     }
   },
   methods: {
@@ -346,6 +350,9 @@ export default {
     },
     selectedForm () {
       this.$q.notify('selectedData Form')
+    },
+    selectedDataType (value) {
+      this.$q.notify('selectedDataType: ' + value)
     }
   }
 }
