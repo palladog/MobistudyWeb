@@ -260,7 +260,7 @@
                   </div>
                 </div>
               </div>
-              <div id=repeat-after-Investigator></div>
+              <div id="repeat-after-Investigator"></div>
             </q-card-main>
           </q-card>
           <q-card class="bg-cyan-2 q-ma-xl">
@@ -299,7 +299,7 @@
                   </div>
                 </div>
               </div>
-              <div id=repeat-after-Investigator></div>
+              <div id="repeat-after-Investigator"></div>
             </q-card-main>
           </q-card>
         </q-tab-pane>
