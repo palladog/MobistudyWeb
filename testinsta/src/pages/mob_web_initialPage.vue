@@ -161,6 +161,36 @@
         </q-tab-pane>
         <!-- Tasks Tab -->
         <q-tab-pane name="tasks">Tasks tab
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>
+              <q-btn-dropdown label="Add a task" class="q-ma-md">
+                <q-list link>
+                  <q-item @click.native="selectedForm">
+                    <q-item-main>
+                      <q-item-tile label>Form</q-item-tile>
+                    </q-item-main>
+                  </q-item>
+                  <q-item @click.native='selectedDataQuery'>
+                    <q-item-main>
+                      <q-item-tile label>Data query</q-item-tile>
+                    </q-item-main>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </q-card-title>
+          </q-card>
+            <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
+              <q-card-title>
+                <q-option-group
+                  color="secondary"
+                  v-model="selectDataTypeForQuery"
+                  :options="[
+                    { label: 'steps', value: 'valSteps', color: 'black' },
+                    { label: 'weight', value: 'valWeight', color: 'secondary' }
+                  ]"
+                />
+              </q-card-title>
+            </q-card>
         </q-tab-pane>
         <!-- Consent Tab -->
         <q-tab-pane name="consent">Consent tab
@@ -290,7 +320,10 @@ export default {
       dateStart: null,
       dateEnd: null,
       radio_1: 'Active',
-      inputs: ['one']
+      inputs: ['one'],
+      showDataQuery: true,
+      showForm: true,
+      selectDataTypeForQuery: ''
     }
   },
   methods: {
@@ -307,6 +340,12 @@ export default {
     },
     removeRowInvestigator (index) {
       this.inputs.splice(index, 1)
+    },
+    selectedDataQuery () {
+      this.$q.notify('selectedData Query')
+    },
+    selectedForm () {
+      this.$q.notify('selectedData Form')
     }
   }
 }
