@@ -96,7 +96,7 @@
                         <q-input v-model="ageMin" type="number" placeholder="Min Age1" clearable/>
                     </div>
                     <div class="col-xs-4 col-md-4">
-                        <q-input v-model="ageMin" type="number" placeholder="Max Age1" clearable/>
+                        <q-input v-model="ageMax" type="number" placeholder="Max Age1" clearable/>
                     </div>
                     <div class="col-xs-4 col-md-4">
                       <q-field label="Sex" />
