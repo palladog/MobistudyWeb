@@ -15,10 +15,10 @@
             </q-card-title>
             <q-card-main>
               <q-field label="Title" helper="Short name of the study">
-                <q-input v-model="text" clearable />
+                <q-input v-model="studyTitle" clearable />
               </q-field>
               <q-field label="Description" helper="Layman's description of the study">
-                <q-input v-model="area" type="textarea" rows="7" clearable />
+                <q-input v-model="studyDescription" type="textarea" rows="7" clearable />
               </q-field>
             </q-card-main>
           </q-card>
@@ -59,7 +59,7 @@
                 </q-field>
                 <q-field class="q-mt-md" label="Data Access:" helper="Data access per institution. Please select the level of access to grant or not.">
                   <q-radio v-model="institution.radioDataAccessInstitution" val="no" color="secondary" label="NO" />
-                  <q-radio v-model="institution.radioDataAccessInstitution" val="anon" color="anon" label="ANON" />
+                  <q-radio class="q-ml-md q-mr-md" v-model="institution.radioDataAccessInstitution" val="anon" color="anon" label="ANON" />
                   <q-radio v-model="institution.radioDataAccessInstitution" val="full" color="full" label="FULL" />
                 </q-field>
                 <q-btn class="q-ml-md q-mt-lg" v-show="showRemoveButton" round size="sm" color="negative" icon="remove" @click="removeRowInstitution(index)" />
