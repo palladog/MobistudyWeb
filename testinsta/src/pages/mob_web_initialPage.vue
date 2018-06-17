@@ -331,11 +331,13 @@ export default {
       var currentDate = new Date()
       if (Date.parse(dateStart) < currentDate) {
         this.$q.notify('The Start Date of the study is before today. Please re-enter the Start Date.')
+        this.dateStart = ''
       }
     },
     checkEndDate (dateStart, dateEnd) {
       if (Date.parse(dateStart) > Date.parse(dateEnd)) {
         this.$q.notify('The End Date of the study is after the Start Date. Please re-enter the End Date.')
+        this.dateEnd = ''
       }
     },
     selectedDataQuery () {
