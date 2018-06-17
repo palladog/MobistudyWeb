@@ -7,7 +7,7 @@
         <q-tab slot="title" name="consent" icon="verified_user" label="Consent"/>
         <q-tab slot="title" name="test" icon="verified_user" label="Test"/>
         <!-- General Tab -->
-        <q-tab-pane name="generalities">Gen tab
+        <q-tab-pane name="generalities">
           <!-- General Information Tab Card -->
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-title>Generalities
@@ -29,7 +29,9 @@
             </q-card-title>
             <q-card-main>
               <div v-for="(principalInvestigator, index) in principalInvestigators" :key="principalInvestigator.id">
-                <q-btn class="vertical-top" v-show="showRemoveButton" round size="sm" color="negative" icon="remove" @click="removeRowInvestigator(index)" />
+                <div>
+                  <q-btn class="vertical-top" v-show="index !==0" round size="sm" color="negative" icon="remove" @click="removeRowInvestigator(index)" />
+                </div>
                 <q-field label="Name & Title:" helper="Principal Investigator Name & Title">
                   <q-input v-model="principalInvestigator.nameTitleOfInvestigator" type="text" clearable />
                 </q-field>
@@ -51,7 +53,7 @@
             </q-card-title>
             <q-card-main>
               <div v-for="(institution, index) in institutions" :key="institution.id">
-                <q-btn class="vertical-top" v-show="showRemoveButton" round size="sm" color="negative" icon="remove" @click="removeRowInstitution(index)" />
+                <q-btn class="vertical-top" v-show="index !==0" round size="sm" color="negative" icon="remove" @click="removeRowInstitution(index)" />
                 <q-field label="Name of Institution:" helper="Please enter the name of the institution">
                   <q-input v-model="institution.nameOfInstitution" type="text" clearable />
                 </q-field>
@@ -102,7 +104,7 @@
           </q-card>
         </q-tab-pane>
         <!-- Criteria Tab -->
-        <q-tab-pane name="criteria">Crit tab
+        <q-tab-pane name="criteria">
           <!-- Inclusion Criteria Tab Card -->
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-title>Inclusion Criteria
@@ -184,7 +186,7 @@
           </q-card>
         </q-tab-pane>
         <!-- Tasks Tab -->
-        <q-tab-pane name="tasks">Tasks tab
+        <q-tab-pane name="tasks">
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-title>
               <q-btn-dropdown label="Add a task" class="q-ma-md">
@@ -217,7 +219,7 @@
             </q-card>
         </q-tab-pane>
         <!-- Consent Tab -->
-        <q-tab-pane name="consent">Consent tab
+        <q-tab-pane name="consent">
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-title>
               Consent
@@ -226,13 +228,13 @@
             <!-- Consent Tab: Invitation Message Card -->
             <q-card-main>
               <q-field label="Invitation Message" helper="The invitation message sent for the study">
-                <q-input v-model="area" readonly type="textarea" rows="7"/>
+                <q-input v-model="consentInvitationMessage" type="textarea" rows="7"/>
               </q-field>
               <q-field label="Lay Description" helper="Layman's description of the study">
-                <q-input v-model="area" readonly type="textarea" rows="7"/>
+                <q-input v-model="consentLayDescription" type="textarea" rows="7"/>
               </q-field>
               <p class="caption">Consent Question:</p>
-              <q-checkbox v-model="check1" color="positive" label="Dynamic" left-label />
+              <q-checkbox v-model="dynamicConsentCheck" color="positive" label="Dynamic" left-label />
             </q-card-main>
           </q-card>
           <!-- Consent Tab: Privacy Policy Card -->
@@ -266,7 +268,6 @@
 export default {
   data () {
     return {
-      showRemoveButton: true,
       studyTitle: '',
       studyDescription: '',
       dateStart: null,
@@ -295,7 +296,9 @@ export default {
       selectOptionsDataTypeForQuery: [
         { label: 'Steps', value: 'valSteps', color: 'black' },
         { label: 'Weight', value: 'valWeight', color: 'secondary' }
-      ]
+      ],
+      consentInvitationMessage: '',
+      consentLayDescription: ''
     }
   },
   methods: {
