@@ -29,6 +29,7 @@
             </q-card-title>
             <q-card-main>
               <div v-for="(principalInvestigator, index) in principalInvestigators" :key="principalInvestigator.id">
+                <q-btn class="vertical-top" v-show="showRemoveButton" round size="sm" color="negative" icon="remove" @click="removeRowInvestigator(index)" />
                 <q-field label="Name & Title:" helper="Principal Investigator Name & Title">
                   <q-input v-model="principalInvestigator.nameTitleOfInvestigator" type="text" clearable />
                 </q-field>
@@ -38,9 +39,8 @@
                 <q-field label="Institution:" helper="Name of Institution involved in study">
                   <q-input v-model="principalInvestigator.institutionOfInvestigator" type="textarea" rows="2"  clearable />
                 </q-field>
-                <q-btn class="q-ml-md q-mt-lg" v-show="showRemoveButton" round size="sm" color="negative" icon="remove" @click="removeRowInvestigator(index)" />
-                <q-btn class="float-right q-mt-lg" round size="sm" color="primary" icon="add" @click="addRowInvestigator(index)" />
-                <q-card-separator class="q-mb-md q-mt-md"/>
+                <q-btn class="float-right q-mt-sm" round size="sm" color="primary" icon="add" @click="addRowInvestigator(index)" />
+                <q-card-separator class="q-mb-md q-mt-xl"/>
               </div>
             </q-card-main>
           </q-card>
@@ -51,6 +51,7 @@
             </q-card-title>
             <q-card-main>
               <div v-for="(institution, index) in institutions" :key="institution.id">
+                <q-btn class="vertical-top" v-show="showRemoveButton" round size="sm" color="negative" icon="remove" @click="removeRowInstitution(index)" />
                 <q-field label="Name of Institution:" helper="Please enter the name of the institution">
                   <q-input v-model="institution.nameOfInstitution" type="text" clearable />
                 </q-field>
@@ -62,9 +63,8 @@
                   <q-radio class="q-ml-md q-mr-md" v-model="institution.radioDataAccessInstitution" val="anon" color="anon" label="ANON" />
                   <q-radio v-model="institution.radioDataAccessInstitution" val="full" color="full" label="FULL" />
                 </q-field>
-                <q-btn class="q-ml-md q-mt-lg" v-show="showRemoveButton" round size="sm" color="negative" icon="remove" @click="removeRowInstitution(index)" />
-                <q-btn class="float-right q-mt-lg" round size="sm" color="primary" icon="add" @click="addRowInstitution(index)" />
-                <q-card-separator class="q-mb-md q-mt-md"/>
+                <q-btn class="float-right q-mt-sm" round size="sm" color="primary" icon="add" @click="addRowInstitution(index)" />
+                <q-card-separator class="q-mb-md q-mt-xl"/>
               </div>
             </q-card-main>
           </q-card>
