@@ -15,16 +15,16 @@
             </q-card-title>
             <q-card-main>
               <q-field label="Title" helper="Short name of the study">
-              <q-input v-model="studyTitle" @input="$v.studyTitle.$touch()" clearable />
+               <q-input v-model="studyTitle" @input="$v.studyTitle.$touch()" clearable />
                 <div v-if="$v.studyTitle.$dirty">
-                  <p v-if="!$v.studyTitle.required" class="q-mt-sm text-negative">The title field is required. Please fill it.</p>
+                  <p v-if="!$v.studyTitle.required" class="q-mt-sm text-negative"> A title is required for the study. Please enter it.</p>
                 </div>
               </q-field>
               <q-field label="Description" helper="Layman's description of the study">
                 <q-input v-model="studyDescription" @input="$v.studyDescription.$touch()" type="textarea" rows="7" clearable />
-                <div v-if="$v.studyDescription.$dirty">
-                  <p v-if="!$v.studyDescription.required" class="q-mt-sm text-negative">The description field is required. Please fill it.</p>
-                </div>
+                 <div v-if="$v.studyDescription.$dirty">
+                  <p v-if="!$v.studyDescription.required" class="q-mt-sm text-negative">A description is required for the study. Please enter it.</p>
+                 </div>
               </q-field>
             </q-card-main>
           </q-card>
