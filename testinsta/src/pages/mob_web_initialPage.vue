@@ -15,10 +15,16 @@
             </q-card-title>
             <q-card-main>
               <q-field label="Title" helper="Short name of the study">
-                <q-input v-model="studyTitle" clearable />
+              <q-input v-model="studyTitle" @input="$v.studyTitle.$touch()" clearable />
+                <div v-if="$v.studyTitle.$dirty">
+                  <p v-if="!$v.studyTitle.required" class="q-mt-sm text-negative">The title field is required. Please fill it.</p>
+                </div>
               </q-field>
               <q-field label="Description" helper="Layman's description of the study">
-                <q-input v-model="studyDescription" type="textarea" rows="7" clearable />
+                <q-input v-model="studyDescription" @input="$v.studyDescription.$touch()" type="textarea" rows="7" clearable />
+                <div v-if="$v.studyDescription.$dirty">
+                  <p v-if="!$v.studyDescription.required" class="q-mt-sm text-negative">The description field is required. Please fill it.</p>
+                </div>
               </q-field>
             </q-card-main>
           </q-card>
@@ -83,7 +89,10 @@
                         <q-field label="Start Date" />
                         </div>
                         <div class="col-xs-4 col-md-4">
-                          <q-datetime class="q-ml-xl q-mb-lg" v-model="dateStart" type="date" format="D-MMM-YYYY" clearable />
+                          <q-datetime class="q-ml-xl q-mb-lg" v-model="dateStart" @input="$v.dateStart.$touch()" type="date" format="D-MMM-YYYY" clearable />
+                          <div v-if="$v.dateStart.$dirty">
+                            <p v-if="!$v.dateStart.required" class="q-mt-sm text-negative">The Start Date is required. Please enter it.</p>
+                          </div>
                         </div>
                     </div>
                   </div>
@@ -262,8 +271,7 @@
 </template>
 
 <script>
-
-// var globalGridRowId = 0
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -300,6 +308,11 @@ export default {
       consentInvitationMessage: '',
       consentLayDescription: ''
     }
+  },
+  validations: {
+    studyTitle: { required },
+    studyDescription: { required },
+    dateStart: { required }
   },
   methods: {
     showNotification () {
