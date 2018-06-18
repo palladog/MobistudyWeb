@@ -83,7 +83,7 @@
                         <q-field label="Start Date" />
                         </div>
                         <div class="col-xs-4 col-md-4">
-                          <q-datetime class="q-ml-xl q-mb-lg" v-model="dateStart" type="date" @input="checkStartDate(dateStart)" format="D-MMM-YYYY" clearable />
+                          <q-datetime class="q-ml-xl q-mb-lg" v-model="dateStart" type="date" format="D-MMM-YYYY" clearable />
                         </div>
                     </div>
                   </div>
@@ -327,16 +327,9 @@ export default {
     removeRowInstitution (index) {
       this.institutions.splice(index, 1)
     },
-    checkStartDate (dateStart) {
-      var currentDate = new Date()
-      if (Date.parse(dateStart) < currentDate) {
-        this.$q.notify('The Start Date of the study is before today. Please re-enter the Start Date.')
-        this.dateStart = ''
-      }
-    },
     checkEndDate (dateStart, dateEnd) {
       if (Date.parse(dateStart) > Date.parse(dateEnd)) {
-        this.$q.notify('The End Date of the study is after the Start Date. Please re-enter the End Date.')
+        this.$q.notify('The End Date of the study is before the Start Date. Please re-enter the End Date.')
         this.dateEnd = ''
       }
     },
