@@ -48,7 +48,7 @@
           </li>
         </ul>
       </form>
-      <div id=repeat-after-Investigator></div>
+      <div id="repeat-after-Investigator"></div>
     </div>
     <div class="institution-section-container">
         <ul class="flex-outer" id="list-institution-form">
@@ -80,7 +80,7 @@
           </li>
         </ul>
       </form>
-      <div id=repeat-after-Institution></div>
+      <div id="repeat-after-Institution"></div>
     </div>
     <div class="dates-section-container">
         <form action="">

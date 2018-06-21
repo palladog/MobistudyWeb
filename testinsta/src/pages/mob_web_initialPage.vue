@@ -268,9 +268,17 @@
         <q-tab-pane name="test">Test tab
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-main>
+              <q-chips-input v-model="diseasesVue" placeholder="Select from list or add new one" stack-label="List of diseases" @duplicate="duplicatedDisease">
+                <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
+              </q-chips-input>
+            </q-card-main>
+          </q-card>
+          <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-main>
               <div>
                     <div>
                       <div class="row gutter-lg">
+
                         <div class="col-xs-4 col-md-4">
                           <q-field label="Disease Choice" />
                         </div>
@@ -334,7 +342,7 @@ export default {
         }
       ],
       diseaseDescription: '',
-      diseasesQueryResults: [],
+      diseases: [],
       select: '',
       selectOptions: '',
       inputs: ['one'],
@@ -355,7 +363,63 @@ export default {
     ageRangeMin: { between: between(0, 140) },
     ageRangeMax: { between: between(0, 140) }
   },
+  computed: {
+    diseasesVue: {
+      get: function () {
+        var keys = []
+        for (let key in this.diseases) {
+          keys.push(key)
+        }
+        console.log('GET', this.diseases)
+        return keys
+      },
+      set: function (keys) {
+        for (let key in this.diseases) {
+          // if key is not in keys, delete
+          if (!keys.includes(key)) delete this.diseases[key]
+        }
+        console.log('SET', this.diseases)
+      }
+    }
+  },
   methods: {
+    searchDisease (diseaseDescription, done) {
+      // Declare top level URL vars
+      var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
+      var edition = 'en-edition'
+      var version = '20180131'
+      // Construct Disease Query URL
+      var diseaseQueryURL = baseUrl + '/' + edition + '/v' + version + '/descriptions?query=' + encodeURIComponent(diseaseDescription) + '&limit=50&searchMode=partialMatching' + '&lang=english&statusFilter=activeOnly&skipTo=0' + '&semanticFilter=disorder' + '&returnLimit=100&normalize=true'
+      this.loading = true
+      // axios.get('http://browser.ihtsdotools.org/api/v1/snomed//en-edition/v20180131/descriptions?query=heart%20attack&limit=50&searchMode=partialMatching&lang=english&statusFilter=activeOnly&skipTo=0&returnLimit=100&normalize=true')
+      axios.get(diseaseQueryURL)
+        .then((response) => {
+          this.loading = false
+          // this.diseasesQueryResults = response.data
+          const dataDis = response.data
+          // needs to filter out those already selected
+          const result = dataDis.matches.map((item) => {
+            return {
+              label: item.term,
+              value: item.term,
+              conceptId: item.conceptId
+            }
+          })
+          done(result)
+          console.log(result)
+        }, (error) => {
+          console.log(error)
+          this.loading = false
+        })
+    },
+    selectedDisease (item) {
+      this.$q.notify(`Selected suggestion "${item.label}"`)
+      this.diseases[item.label] = item.conceptId
+      console.log('SELECTED', this.diseases)
+    },
+    duplicatedDisease (label) {
+      this.$q.notify(`"${label}" already in list`)
+    },
     getDiseaseQuery (diseaseDescription) {
       // Declare top level URL vars
       var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
