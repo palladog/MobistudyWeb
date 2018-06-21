@@ -72,6 +72,7 @@ module.exports = function (ctx) {
         'QPage',
         'QRadio',
         'QSelect',
+        'QSpinner',
         'QTab',
         'QTabs',
         'QTabPane',

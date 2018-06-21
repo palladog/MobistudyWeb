@@ -268,6 +268,29 @@
         <q-tab-pane name="test">Test tab
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-main>
+              <div>
+                    <div>
+                      <div class="row gutter-lg">
+                        <div class="col-xs-4 col-md-4">
+                          <q-field label="Disease Choice" />
+                        </div>
+                        <div class="col-xs-4 col-md-6">
+                          <q-input type="text" v-model="diseaseDescription" id="disease-form" placeholder="Disease" />
+                          <q-btn class="q-mt-md bg-white" label="Add Disease" @click="getDiseaseQuery(diseaseDescription)" />
+                        </div>
+                        <p> These are the displayed results: {{diseasesQueryResults}}</p>
+                        <q-list>
+                          <q-list-header inset>Please select:</q-list-header>
+                          <q-item>
+                            <q-item-side icon="folder" inverted color="primary" />
+                            <q-item-main>
+                              <q-select class="q-ma-none full-width" v-model="select" :options="selectOptions" />
+                            </q-item-main>
+                          </q-item>
+                        </q-list>
+                      </div>
+                    </div>
+                  </div>
             </q-card-main>
           </q-card>
         </q-tab-pane>
@@ -277,7 +300,7 @@
 
 <script>
 import { required, between } from 'vuelidate/lib/validators'
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   data () {
@@ -310,6 +333,10 @@ export default {
           criteriaQAnswer: ''
         }
       ],
+      diseaseDescription: '',
+      diseasesQueryResults: [],
+      select: '',
+      selectOptions: '',
       inputs: ['one'],
       showDataQuery: true,
       selectDataTypeForQuery: [],
@@ -329,6 +356,34 @@ export default {
     ageRangeMax: { between: between(0, 140) }
   },
   methods: {
+    getDiseaseQuery (diseaseDescription) {
+      // Declare top level URL vars
+      var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
+      var edition = 'en-edition'
+      var version = '20180131'
+      // Construct Disease Query URL
+      var diseaseQueryURL = baseUrl + '/' + edition + '/v' + version + '/descriptions?query=' + encodeURIComponent(diseaseDescription) + '&limit=50&searchMode=partialMatching' + '&lang=english&statusFilter=activeOnly&skipTo=0' + '&semanticFilter=disorder' + '&returnLimit=100&normalize=true'
+      this.loading = true
+      // axios.get('http://browser.ihtsdotools.org/api/v1/snomed//en-edition/v20180131/descriptions?query=heart%20attack&limit=50&searchMode=partialMatching&lang=english&statusFilter=activeOnly&skipTo=0&returnLimit=100&normalize=true')
+      axios.get(diseaseQueryURL)
+        .then((response) => {
+          this.loading = false
+          // this.diseasesQueryResults = response.data
+          const dataDis = response.data
+          const result = dataDis.matches.map((item) => {
+            return {
+              term: item.term,
+              conceptId: item.conceptId
+            }
+          })
+          this.diseasesQueryResults = result
+          this.selectOptions = result
+          console.log(result)
+        }, (error) => {
+          console.log(error)
+          this.loading = false
+        })
+    },
     showNotification () {
       this.$q.notify('Option selected')
     },
