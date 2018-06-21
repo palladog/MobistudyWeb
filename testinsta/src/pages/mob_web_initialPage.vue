@@ -128,18 +128,20 @@
                         <q-field label="Age Range"/>
                     </div>
                     <div class="col-xs-4 col-md-4">
-                        <q-input v-model="ageMin" type="number" placeholder="Min Age1" clearable/>
+                        <q-input v-model="ageRangeMin" type="number" min="0" oninput="validity.valid||(value='')" placeholder="Minimum Age of participants" clearable/>
+                         <div v-if="!$v.ageRangeMin.between" class="q-mt-sm text-negative"> The age is between 0 and 140.</div>
                     </div>
                     <div class="col-xs-4 col-md-4">
-                        <q-input v-model="ageMax" type="number" placeholder="Max Age1" clearable/>
+                        <q-input v-model="ageRangeMax" type="number" min="0" oninput="validity.valid||(value='')" placeholder="Maximum Age of participants" @input="checkMaxAge(ageRangeMin, ageRangeMax)" clearable/>
+                          <div v-if="!$v.ageRangeMax.between" class="q-mt-sm text-negative"> The age is between 0 and 140.</div>
                     </div>
                     <div class="col-xs-4 col-md-4">
                       <q-field label="Sex" />
                     </div>
                     <div class="col-xs-4 col-md-4">
-                      <q-checkbox class="q-mr-lg" v-model="checkArrayAge" label="M" color="secondary" val="one" />
-                      <q-checkbox class="q-mr-lg" v-model="checkArrayAge" label="F" val="two" color="secondary" />
-                      <q-checkbox v-model="checkArrayAge" label="OTHER" val="three" color="secondary" />
+                      <q-checkbox class="q-mr-lg" v-model="checkArrayGender" label="M" color="secondary" val="genderMale" />
+                      <q-checkbox class="q-mr-lg" v-model="checkArrayGender" label="F" color="secondary" val="genderFemale" />
+                      <q-checkbox v-model="checkArrayGender" label="OTHER" color="secondary" val="genderOther" />
                     </div>
                   </div>
                 </div>
@@ -163,7 +165,7 @@
                     </div>
                     <div class="col-xs-4 col-md-6">
                       <q-radio v-model="radio_lifestyle" val="active" color="secondary" label="Active" />
-                      <q-radio v-model="radio_lifestyle" val="not active" color="amber" label="Not Active" style="margin-left: 10px" />
+                      <q-radio v-model="radio_lifestyle" val="notActive" color="secondary" label="Not Active" style="margin-left: 10px" />
                     </div>
                     <div class="col-xs-4 col-md-4">
                       <q-field label="Meds" />
@@ -176,20 +178,23 @@
               </div>
             </q-card-main>
           </q-card>
+          <!-- Custom Criteria Questions -->
           <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>Custom Criteria Question(s)
+              <span slot="subtitle">Please enter additional criteria questions to filter the eligibility of the participants. The answers are yes/no.</span>
+            </q-card-title>
             <q-card-main>
-              <div>
-                <div>
-                  <!-- Custom Criteria Questions -->
-                  <div class="row gutter-lg">
-                    <div class="col-xs-4 col-md-4">
-                      <q-field label="Custom Criteria:" />
-                    </div>
-                    <div class="col-xs-4 col-md-6">
-                      <q-input type="text" id="disease-form" placeholder="Question Example:" />
-                    </div>
-                  </div>
-                </div>
+                 <div v-for="(criteriaQuestion, index) in criteriaQuestions" :key="criteriaQuestion.id">
+                <q-btn class="vertical-top" v-show="index !==0" round size="sm" color="negative" icon="remove" @click="removeRowCriteriaQuestion(index)" />
+                <q-field label="Criteria Question:" helper="Please enter a question. (e.g. Are you a smoker?)">
+                  <q-input v-model="criteriaQuestion.titleOfCriteriaQuestion" type="text" clearable />
+                </q-field>
+                <q-field class="q-mt-md" label="Participant Answer:" helper="Please select either yes or no.">
+                  <q-radio class="q-mr-lg" v-model="criteriaQuestion.criteriaQAnswer" val="yes" color="secondary" label="Yes" />
+                  <q-radio v-model="criteriaQuestion.criteriaQAnswer" val="no" color="full" label="No" />
+                </q-field>
+                <q-btn class="float-right q-mt-sm" round size="sm" color="primary" icon="add" @click="addRowCriteriaQuestion(index)" />
+                <q-card-separator class="q-mb-md q-mt-xl"/>
               </div>
             </q-card-main>
           </q-card>
@@ -271,7 +276,7 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
+import { required, between } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -296,8 +301,14 @@ export default {
       ],
       ageMin: null,
       ageMax: null,
-      checkArrayAge: ['one'],
+      checkArrayGender: ['genderMale'],
       radio_lifestyle: 'Active',
+      criteriaQuestions: [
+        {
+          titleOfCriteriaQuestion: '',
+          criteriaQAnswer: ''
+        }
+      ],
       inputs: ['one'],
       showDataQuery: true,
       selectDataTypeForQuery: [],
@@ -312,7 +323,9 @@ export default {
   validations: {
     studyTitle: { required },
     studyDescription: { required },
-    dateStart: { required }
+    dateStart: { required },
+    ageRangeMin: { between: between(0, 140) },
+    ageRangeMax: { between: between(0, 140) }
   },
   methods: {
     showNotification () {
@@ -340,10 +353,25 @@ export default {
     removeRowInstitution (index) {
       this.institutions.splice(index, 1)
     },
+    addRowCriteriaQuestion (index) {
+      // increment the id
+      this.criteriaQuestions.push({
+        criteriaQuestion: ''
+      })
+    },
+    removeRowCriteriaQuestion (index) {
+      this.criteriaQuestions.splice(index, 1)
+    },
     checkEndDate (dateStart, dateEnd) {
       if (Date.parse(dateStart) > Date.parse(dateEnd)) {
         this.$q.notify('The End Date of the study is before the Start Date. Please re-enter the End Date.')
         this.dateEnd = ''
+      }
+    },
+    checkMaxAge (ageRangeMin, ageRangeMax) {
+      if (ageRangeMax < ageRangeMin) {
+        this.$q.notify('The maximum age of the participant is less than the minimum age. Please re-enter the maximum age.')
+        this.ageRangeMax = ''
       }
     },
     selectedDataQuery () {
