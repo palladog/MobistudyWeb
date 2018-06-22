@@ -259,7 +259,7 @@
             </q-card-title>
             <q-card-main>
               <q-field label="Privacy Message" helper="This the privacy policy for the study. It includes...">
-                <q-input v-model="area" readonly type="textarea" rows="7"/>
+                <q-input v-model="privacyMessage" readonly type="textarea" rows="7"/>
               </q-field>
             </q-card-main>
           </q-card>
@@ -303,8 +303,8 @@ export default {
           radioDataAccessInstitution: ''
         }
       ],
-      ageMin: null,
-      ageMax: null,
+      ageRangeMin: null,
+      ageRangeMax: null,
       checkArrayGender: ['genderMale'],
       radio_lifestyle: 'Active',
       criteriaQuestions: [
@@ -325,7 +325,9 @@ export default {
         { label: 'Weight', value: 'valWeight', color: 'secondary' }
       ],
       consentInvitationMessage: '',
-      consentLayDescription: ''
+      consentLayDescription: '',
+      dynamicConsentCheck: '',
+      privacyMessage: ''
     }
   },
   validations: {
