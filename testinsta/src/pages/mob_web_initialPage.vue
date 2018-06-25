@@ -324,10 +324,12 @@ export default {
         { label: 'Steps', value: 'valSteps', color: 'black' },
         { label: 'Weight', value: 'valWeight', color: 'secondary' }
       ],
-      consentInvitationMessage: '',
+      consentInvitationMessage: 'We would like to invite you to take part in our research study. ' +
+      'Before you decide, it is important that you understand why the research is being done and what it would involve for you. Please take time to read this information, and discuss it with others if you wish. If there is anything that is not clear, or if you would like more information, please ask us.',
       consentLayDescription: '',
       dynamicConsentCheck: '',
-      privacyMessage: ''
+      privacyMessage: 'The ways in which we use your information are governed by law. The principal legislation that applies is the EU General Data Protection Regulation (GDPR), which come into force on 25th May 2018 and is being incorporated into a new Data Protection Bill currently going through parliament. In addition, confidential information about you that you give to our staff to enable them to provide your care is governed by the common law duty of confidentiality' +
+      'Research' + 'In most instances we will rely on Article 6(1)e and Article 9(2)j of the GDPR if and when we use your information for research. If you have formally consented to take part in research, this will satisfy the common law duty of confidentiality. Where it has been impracticable to obtain your consent we will seek approval from the Secretary of State via the Confidentiality Advisory Group under Section 251 of the National Health Service Act 2006.'
     }
   },
   validations: {
