@@ -207,7 +207,7 @@
         <q-tab-pane name="tasks">
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-title>
-              <q-btn-dropdown label="Add a task" class="q-ma-md">
+              <q-btn-dropdown label="Select a task" class="q-ma-md">
                 <q-list link>
                   <q-item @click.native="selectedForm">
                     <q-item-main>
@@ -223,7 +223,7 @@
               </q-btn-dropdown>
             </q-card-title>
           </q-card>
-            <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
+          <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
               <q-card-title style="width: 300px; max-width: 90vw;">
               <q-select
                   color="secondary"
@@ -232,9 +232,17 @@
                   :options="selectOptionsDataTypeForQuery"
                 />
               </q-card-title>
-              <q-card-main>
-              </q-card-main>
-            </q-card>
+            <q-card-main>
+              <scheduler></scheduler>
+            </q-card-main>
+          </q-card>
+          <!-- Form part -->
+          <q-card class="bg-cyan-2 q-ma-xl" v-show="showForm">
+              <q-card-title style="width: 300px; max-width: 90vw;"> Form </q-card-title>
+            <q-card-main>
+              <scheduler></scheduler>
+            </q-card-main>
+          </q-card>
         </q-tab-pane>
         <!-- Consent Tab -->
         <q-tab-pane name="consent">
@@ -328,7 +336,8 @@ export default {
       select: '',
       selectOptions: '',
       inputs: ['one'],
-      showDataQuery: true,
+      showDataQuery: false,
+      showForm: false,
       selectDataTypeForQuery: [],
       selectOptionsDataTypeForQuery: [
         { label: 'Steps', value: 'valSteps', color: 'black' },
@@ -506,9 +515,11 @@ export default {
       }
     },
     selectedDataQuery () {
+      this.showDataQuery = true
       this.$q.notify('selectedData Query')
     },
     selectedForm () {
+      this.showForm = true
       this.$q.notify('selectedData Form')
     },
     selectedDataType (value) {
