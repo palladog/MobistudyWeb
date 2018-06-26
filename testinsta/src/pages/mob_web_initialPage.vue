@@ -375,8 +375,8 @@ export default {
           // this.diseasesQueryResults = response.data
           const dataDis = response.data
           // TODO: needs to filter out those already selected
-          // TODO: filter out those already there
-          const result = dataDis.matches.map((item) => {
+          let resultFilterByNumberChars = dataDis.matches.filter(entry => entry['term'].length < 50)
+          const result = resultFilterByNumberChars.map((item) => {
             return {
               label: item.term,
               value: item.term,
@@ -385,7 +385,7 @@ export default {
           })
           done(result)
         }, (error) => {
-          // TODO: warn the user
+          this.$q.notify('There has been an error during the retrieval of this query. Please Try again.')
           console.error(error)
           this.loading = false
         })
