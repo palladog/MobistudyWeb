@@ -155,10 +155,12 @@
                   <!-- Disease, Lifestyle and Meds -->
                   <div class="row gutter-lg">
                     <div class="col-xs-4 col-md-4">
-                      <q-field label="Disease Choice" />
+                      <q-field label="List of Diseases" />
                     </div>
                     <div class="col-xs-4 col-md-6">
-                      <q-input type="text" id="disease-form" placeholder="Disease" />
+                      <q-chips-input v-model="diseasesVue" placeholder="Select from list or add new one" @duplicate="duplicatedDisease">
+                        <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
+                      </q-chips-input>
                     </div>
                     <div class="col-xs-4 col-md-4">
                       <q-field label="Lifestyle" />
