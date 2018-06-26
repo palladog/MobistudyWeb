@@ -271,10 +271,10 @@
                 <!-- TESTING Tab -->
         <q-tab-pane name="test">Test tab
           <q-card class="bg-cyan-2 q-ma-xl">
+            <q-card-title>Component Testing</q-card-title>
+              <q-card-separator class="q-mb-md q-mt-xl"/>
             <q-card-main>
-              <q-chips-input v-model="medsVue" placeholder="Select from list or add new one" stack-label="List of Meds" @duplicate="duplicatedMeds">
-                <q-autocomplete @search="searchMeds" @selected="selectedMeds" />
-              </q-chips-input>
+              <scheduler></scheduler>
             </q-card-main>
           </q-card>
         </q-tab-pane>
@@ -285,8 +285,12 @@
 <script>
 import { required, between } from 'vuelidate/lib/validators'
 import axios from 'axios'
+import Scheduler from 'components/Scheduler.vue'
 
 export default {
+  components: {
+    'scheduler': Scheduler
+  },
   data () {
     return {
       studyTitle: '',
