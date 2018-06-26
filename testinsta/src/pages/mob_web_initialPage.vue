@@ -158,7 +158,7 @@
                       <q-field label="List of Diseases" />
                     </div>
                     <div class="col-xs-4 col-md-6">
-                      <q-chips-input v-model="diseasesVue" placeholder="Select from list or add new one" @duplicate="duplicatedDisease">
+                      <q-chips-input v-model="diseasesVue" placeholder="Select from list" @duplicate="duplicatedDisease">
                         <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
                       </q-chips-input>
                     </div>
@@ -170,10 +170,12 @@
                       <q-radio v-model="radio_lifestyle" val="notActive" color="secondary" label="Not Active" style="margin-left: 10px" />
                     </div>
                     <div class="col-xs-4 col-md-4">
-                      <q-field label="Meds" />
+                      <q-field label="List of Meds" />
                     </div>
                     <div class="col-xs-4 col-md-6">
-                      <q-input type="text" id="meds-form" placeholder="Meds" />
+                      <q-chips-input v-model="medsVue" placeholder="Select from list" @duplicate="duplicatedMeds">
+                        <q-autocomplete @search="searchMeds" @selected="selectedMeds" />
+                      </q-chips-input>
                     </div>
                   </div>
                 </div>
@@ -270,8 +272,8 @@
         <q-tab-pane name="test">Test tab
           <q-card class="bg-cyan-2 q-ma-xl">
             <q-card-main>
-              <q-chips-input v-model="diseasesVue" placeholder="Select from list or add new one" stack-label="List of diseases" @duplicate="duplicatedDisease">
-                <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
+              <q-chips-input v-model="medsVue" placeholder="Select from list or add new one" stack-label="List of Meds" @duplicate="duplicatedMeds">
+                <q-autocomplete @search="searchMeds" @selected="selectedMeds" />
               </q-chips-input>
             </q-card-main>
           </q-card>
@@ -317,6 +319,8 @@ export default {
       ],
       diseaseDescription: '',
       diseases: {},
+      medDescription: '',
+      meds: {},
       select: '',
       selectOptions: '',
       inputs: ['one'],
@@ -359,6 +363,24 @@ export default {
         }
         console.log('SET', this.diseases)
       }
+    },
+    medsVue: {
+      get: function () {
+        console.log('GET')
+        var keys = []
+        for (let key in this.meds) {
+          keys.push(key)
+        }
+        console.log('GET', this.meds)
+        return keys
+      },
+      set: function (keys) {
+        for (let key in this.meds) {
+          // if key is not in keys, delete
+          if (!keys.includes(key)) delete this.meds[key]
+        }
+        console.log('SET', this.meds)
+      }
     }
   },
   methods: {
@@ -374,11 +396,10 @@ export default {
       axios.get(diseaseQueryURL)
         .then((response) => {
           this.loading = false
-          // this.diseasesQueryResults = response.data
           const dataDis = response.data
           // TODO: needs to filter out those already selected
-          let resultFilterByNumberChars = dataDis.matches.filter(entry => entry['term'].length < 50)
-          const result = resultFilterByNumberChars.map((item) => {
+          let resultsFilterByNumberChars = dataDis.matches.filter(entry => entry['term'].length < 50)
+          const result = resultsFilterByNumberChars.map((item) => {
             return {
               label: item.term,
               value: item.term,
@@ -397,6 +418,41 @@ export default {
       console.log('SELECTED', this.diseases)
     },
     duplicatedDisease (label) {
+      this.$q.notify(`"${label}" already in list`)
+    },
+    searchMeds (medDescription, done) {
+      // Declare top level URL vars
+      var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
+      var edition = 'en-edition'
+      var version = '20180131'
+      // Construct Meds Query URL
+      var medQueryURL = baseUrl + '/' + edition + '/v' + version + '/descriptions?query=' + encodeURIComponent(medDescription) + '&limit=50&searchMode=partialMatching' + '&lang=english&statusFilter=activeOnly&skipTo=0' + '&semanticFilter=clinical%20drug' + '&returnLimit=100&normalize=true'
+      this.loading = true
+      axios.get(medQueryURL)
+        .then((response) => {
+          this.loading = false
+          const dataMed = response.data
+          // needs to filter out those already selected
+          let resultsFilteredByNumberChars = dataMed.matches.filter(entry => entry['term'].length < 40)
+          const result = resultsFilteredByNumberChars.map((item) => {
+            return {
+              label: item.term,
+              value: item.term,
+              conceptId: item.conceptId
+            }
+          })
+          done(result)
+          console.log(result)
+        }, (error) => {
+          console.log(error)
+          this.loading = false
+        })
+    },
+    selectedMeds (item) {
+      this.meds[item.label] = item.conceptId
+      console.log('SELECTED', this.meds)
+    },
+    duplicatedMeds (label) {
       this.$q.notify(`"${label}" already in list`)
     },
     showNotification () {
