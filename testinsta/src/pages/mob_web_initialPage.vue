@@ -439,7 +439,7 @@ export default {
       var edition = 'en-edition'
       var version = '20180131'
       // Construct Meds Query URL
-      var medQueryURL = baseUrl + '/' + edition + '/v' + version + '/descriptions?query=' + encodeURIComponent(medDescription) + '&limit=50&searchMode=partialMatching' + '&lang=english&statusFilter=activeOnly&skipTo=0' + '&semanticFilter=clinical%20drug' + '&returnLimit=100&normalize=true'
+      var medQueryURL = baseUrl + '/' + edition + '/v' + version + '/descriptions?query=' + encodeURIComponent(medDescription) + '&limit=50&searchMode=partialMatching' + '&lang=english&statusFilter=activeOnly&skipTo=0' + '&semanticFilter=substance' + '&returnLimit=100&normalize=true'
       this.loading = true
       axios.get(medQueryURL)
         .then((response) => {
