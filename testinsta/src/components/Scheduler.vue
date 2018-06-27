@@ -1,5 +1,4 @@
 <template>
-  <q-page>
     <q-card style="width: 400px; max-width: 90vw;">
       <q-card-title>
         Scheduler
@@ -119,7 +118,6 @@
         </div>
       </q-card-main>
     </q-card>
-  </q-page>
 </template>
 
 <style>
