@@ -225,11 +225,13 @@
           </q-card>
           <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
               <q-card-title style="width: 300px; max-width: 90vw;">
+              Data Type
               <q-select
                   color="secondary"
                   v-model="selectDataTypeForQuery"
                   @input="selectedDataType"
                   :options="selectOptionsDataTypeForQuery"
+                  placeholder="Please select a data type"
                 />
               </q-card-title>
             <q-card-main>

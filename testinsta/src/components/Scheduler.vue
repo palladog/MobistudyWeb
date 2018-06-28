@@ -98,21 +98,23 @@
                 @input="checkSchedulerOption"
                 :options="[
                   { label: 'Repeat Forever', value: 'valRepeatForever', color: 'black' },
-                  { label: 'Until', value: 'valUntil', color: 'secondary' },
-                  { label: 'Occurrence(s)', value: 'valOccur', color: 'red' }
+                  { label: 'Until', value: 'valUntil', color: 'black' },
+                  { label: 'Occurrence(s)', value: 'valOccur', color: 'black' }
                 ]"
               />
               </q-field>
               <br>
               <br>
               <div id="divFreqUntil" v-show="showDivFreqUntil">
-                <q-field label="chose a valid end date" >
-                  <q-datetime class="q-ml-xl" v-model="inputFreqUntilDate" type="date" format="D-MMM-YYYY" clearable />
-                </q-field>
+                  <q-input v-model="inputFreqUntilDate" type="number" placeholder="Please enter the number of days." clearable />
               </div>
               <div id="divFreqOccur" v-show="showDivFreqOccur">
                 <q-input v-model="inputFreqOccurrences" type="text" placeholder="# of occurrences" />
               </div>
+            </div>
+            <!-- Always Available -->
+            <div id="divAlwaysAvailable" class="q-mt-md">
+              <q-checkbox v-model="alwaysAvailable" color="black" label="Please check to ensure that you receive communications related to the study."/>
             </div>
         </div>
         </div>
@@ -130,7 +132,7 @@ export default {
     return {
       group: '',
       inputFreqOccurrences: '',
-      inputFreqUntilDate: null,
+      inputFreqUntilDate: '',
       // Define divs
       showDivRepeatType: true,
       showDivIntervalDaily: true,
@@ -143,6 +145,7 @@ export default {
       showDivRepeatMonthlyday: false,
       showDivFreqOccur: false,
       showDivFreqUntil: false,
+      alwaysAvailable: false,
       // OPTION REPEAT TYPE
       selectOptionRepeatType: 'd',
       optionRepeatType: [
