@@ -224,25 +224,34 @@
             </q-card-title>
           </q-card>
           <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
-              <q-card-title style="width: 300px; max-width: 90vw;">
+            <q-card-title style="width: 300px; max-width: 90vw;">
               Data Type
+            </q-card-title>
+            <q-card-main>
               <q-select
+                  style="width: 300px; max-width: 90vw;"
                   color="secondary"
                   v-model="selectDataTypeForQuery"
                   @input="selectedDataType"
                   :options="selectOptionsDataTypeForQuery"
                   placeholder="Please select a data type"
-                />
-              </q-card-title>
-            <q-card-main>
-              <scheduler></scheduler>
+              />
+              <q-field class="q-mt-lg" label="Please schedule the events." />
+                <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdDT"/>
+                  <div v-show="showSchdDT">
+                    <scheduler class="bg-white"></scheduler>
+                  </div>
             </q-card-main>
           </q-card>
           <!-- Form part -->
           <q-card class="bg-cyan-2 q-ma-xl" v-show="showForm">
-              <q-card-title style="width: 300px; max-width: 90vw;"> Form </q-card-title>
+            <q-card-title style="width: 300px; max-width: 90vw;"> Form </q-card-title>
             <q-card-main>
-              <scheduler></scheduler>
+              <q-field class="q-mt-lg" label="Please schedule the events." />
+                <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdForm"/>
+                  <div v-show="showSchdForm">
+                    <scheduler class="bg-white"></scheduler>
+                  </div>
             </q-card-main>
           </q-card>
         </q-tab-pane>
@@ -340,6 +349,8 @@ export default {
       inputs: ['one'],
       showDataQuery: false,
       showForm: false,
+      showSchdDT: false,
+      showSchdForm: false,
       selectDataTypeForQuery: [],
       selectOptionsDataTypeForQuery: [
         { label: 'Steps', value: 'valSteps', color: 'black' },
@@ -526,6 +537,20 @@ export default {
     },
     selectedDataType (value) {
       this.$q.notify('selectedDataType: ' + value)
+    },
+    displaySchdDT () {
+      if (this.showSchdDT === false) {
+        this.showSchdDT = true
+      } else {
+        this.showSchdDT = false
+      }
+    },
+    displaySchdForm () {
+      if (this.showSchdForm === false) {
+        this.showSchdForm = true
+      } else {
+        this.showSchdForm = false
+      }
     }
   }
 }
