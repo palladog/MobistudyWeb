@@ -423,16 +423,21 @@ export default {
         .then((response) => {
           this.loading = false
           const dataDis = response.data
-          // TODO: needs to filter out those already selected
-          let resultsFilterByNumberChars = dataDis.matches.filter(entry => entry['term'].length < 50)
-          const result = resultsFilterByNumberChars.map((item) => {
+          // Filter out already selected diseases
+          let resFiltByLen = dataDis.matches.filter(entry => entry['term'].length < 50)
+          const selDis = Object.keys(this.diseases)
+          var disFil = resFiltByLen.filter((entry) => !selDis.includes(entry.term))
+          if (disFil.length === 0) {
+            this.$q.notify('There are no more matching items with the current terms. Please search for other diseases.')
+          }
+          const resultD = disFil.map((item) => {
             return {
               label: item.term,
               value: item.term,
               conceptId: item.conceptId
             }
           })
-          done(result)
+          done(resultD)
         }, (error) => {
           this.$q.notify('There has been an error during the retrieval of this query. Please Try again.')
           console.error(error)
@@ -458,17 +463,21 @@ export default {
         .then((response) => {
           this.loading = false
           const dataMed = response.data
-          // needs to filter out those already selected
-          let resultsFilteredByNumberChars = dataMed.matches.filter(entry => entry['term'].length < 40)
-          const result = resultsFilteredByNumberChars.map((item) => {
+          // Filter out already selected meds
+          let resMedsFiltByLen = dataMed.matches.filter(entry => entry['term'].length < 40)
+          const selMeds = Object.keys(this.meds)
+          var medsFil = resMedsFiltByLen.filter((entry) => !selMeds.includes(entry.term))
+          if (medsFil.length === 0) {
+            this.$q.notify('There are no more matching items with the current terms. Please search for other meds.')
+          }
+          const resultM = medsFil.map((item) => {
             return {
               label: item.term,
               value: item.term,
               conceptId: item.conceptId
             }
           })
-          done(result)
-          console.log(result)
+          done(resultM)
         }, (error) => {
           console.log(error)
           this.loading = false
