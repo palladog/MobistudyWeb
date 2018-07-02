@@ -228,12 +228,14 @@
               Data Type
             </q-card-title>
             <q-card-main>
+            <div v-for="(dataQuery, index) in dataQueries" :key=dataQuery.id>
+                <q-btn class="q-mb-md float-right" round size="sm" color="amber" icon="add" @click="addDT(index)" />
               <q-select
                   style="width: 300px; max-width: 90vw;"
                   color="secondary"
-                  v-model="selectDataTypeForQuery"
+                  v-model="dataQuery.selectDataTypeForQuery"
                   @input="selectedDataType"
-                  :options="selectOptionsDataTypeForQuery"
+                  :options="dataQuery.selectOptionsDataTypeForQuery"
                   placeholder="Please select a data type"
               />
               <q-field class="q-mt-lg" label="Please schedule the events." />
@@ -241,6 +243,7 @@
                   <div v-show="showSchdDT">
                     <scheduler class="bg-white"></scheduler>
                   </div>
+            </div>
             </q-card-main>
           </q-card>
           <!-- Form part -->
@@ -351,10 +354,14 @@ export default {
       showForm: false,
       showSchdDT: false,
       showSchdForm: false,
-      selectDataTypeForQuery: [],
-      selectOptionsDataTypeForQuery: [
-        { label: 'Steps', value: 'valSteps', color: 'black' },
-        { label: 'Weight', value: 'valWeight', color: 'secondary' }
+      dataQueries: [
+        {
+          selectDataTypeForQuery: {},
+          selectOptionsDataTypeForQuery: [
+            { label: 'Steps', value: 'valSteps', color: 'black' },
+            { label: 'Weight', value: 'valWeight', color: 'secondary' }
+          ]
+        }
       ],
       consentInvitationMessage: 'We would like to invite you to take part in our research study. ' +
       'Before you decide, it is important that you understand why the research is being done and what it would involve for you. Please take time to read this information, and discuss it with others if you wish. If there is anything that is not clear, or if you would like more information, please ask us.',
@@ -523,6 +530,15 @@ export default {
     },
     removeRowCriteriaQuestion (index) {
       this.criteriaQuestions.splice(index, 1)
+    },
+    addDT (index) {
+      this.dataQueries.push({
+        selectDataTypeForQuery: {},
+        selectOptionsDataTypeForQuery: [
+          { label: 'Steps', value: 'valSteps', color: 'black' },
+          { label: 'Weight', value: 'valWeight', color: 'secondary' }
+        ]
+      })
     },
     checkEndDate (dateStart, dateEnd) {
       if (Date.parse(dateStart) > Date.parse(dateEnd)) {
