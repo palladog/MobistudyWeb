@@ -13,10 +13,10 @@
             <div id="divValidityDays" class="q-mb-md">
               <q-field label="Validity" />
               <q-field label="From:" helper="Enter the number of days from the start">
-              <q-input v-model="validFrom" type="number" />
+              <q-input v-model="startTask" type="number" />
               </q-field>
               <q-field label="To:" helper="Enter the number of days from the start">
-              <q-input v-model="validTill" type="number" />
+              <q-input v-model="endTask" type="number" />
               </q-field>
             </div>
             <q-card-separator />
@@ -105,7 +105,6 @@
                 v-model="group"
                 @input="checkSchedulerOption"
                 :options="[
-                  { label: 'Repeat Forever', value: 'valRepeatForever', color: 'black' },
                   { label: 'Until', value: 'valUntil', color: 'black' },
                   { label: 'Occurrence(s)', value: 'valOccur', color: 'black' }
                 ]"
@@ -122,7 +121,7 @@
             </div>
             <!-- Always Available -->
             <div id="divAlwaysAvailable" class="q-mt-md">
-              <q-checkbox v-model="alwaysAvailable" color="black" label="Please check to ensure that you receive communications related to the study."/>
+              <q-checkbox v-model="alwaysAvailable" color="black" label="Please check to send data in the background."/>
             </div>
         </div>
         </div>
@@ -145,8 +144,8 @@ export default {
       group: '',
       inputFreqOccurrences: '',
       inputFreqUntilDate: '',
-      validFrom: '',
-      validTill: '',
+      startTask: '',
+      endTask: '',
       // Define divs
       showDivRepeatType: true,
       showDivIntervalDaily: true,

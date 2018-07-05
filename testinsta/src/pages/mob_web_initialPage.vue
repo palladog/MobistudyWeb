@@ -139,9 +139,9 @@
                       <q-field label="Sex" />
                     </div>
                     <div class="col-xs-4 col-md-4">
-                      <q-checkbox class="q-mr-lg" v-model="checkArrayGender" label="M" color="secondary" val="genderMale" />
-                      <q-checkbox class="q-mr-lg" v-model="checkArrayGender" label="F" color="secondary" val="genderFemale" />
-                      <q-checkbox v-model="checkArrayGender" label="OTHER" color="secondary" val="genderOther" />
+                      <q-checkbox class="q-mr-lg" v-model="checkGender" label="M" color="secondary" val="genderMale" />
+                      <q-checkbox class="q-mr-lg" v-model="checkGender" label="F" color="secondary" val="genderFemale" />
+                      <q-checkbox v-model="checkGender" label="OTHER" color="secondary" val="genderOther" />
                     </div>
                   </div>
                 </div>
@@ -229,7 +229,8 @@
             </q-card-title>
             <q-card-main>
             <div v-for="(dataQuery, index) in dataQueries" :key=dataQuery.id>
-                <q-btn class="q-mb-md float-right" round size="sm" color="amber" icon="add" @click="addDT(index)" />
+                <q-btn class="q-mb-md q-mr-sm float-right" round size="sm" color="amber" icon="add" @click="addDT(index)" />
+                <q-btn class="q-mb-md q-mr-md float-right" round size="sm" color="red" icon="remove" @click="removeDT(index)" />
               <q-select
                   style="width: 300px; max-width: 90vw;"
                   color="secondary"
@@ -243,6 +244,7 @@
                   <div v-show="showSchdDT">
                     <scheduler class="bg-white"></scheduler>
                   </div>
+              <q-card-separator class="q-mb-md q-mt-md"/>
             </div>
             </q-card-main>
           </q-card>
@@ -255,6 +257,7 @@
                   <div v-show="showSchdForm">
                     <scheduler class="bg-white"></scheduler>
                   </div>
+                  <q-card-separator class="q-mb-md q-mt-md"/>
             </q-card-main>
           </q-card>
         </q-tab-pane>
@@ -335,8 +338,8 @@ export default {
       ],
       ageRangeMin: null,
       ageRangeMax: null,
-      checkArrayGender: ['genderMale'],
-      radio_lifestyle: 'Active',
+      checkGender: [],
+      radio_lifestyle: '',
       criteriaQuestions: [
         {
           titleOfCriteriaQuestion: '',
@@ -366,7 +369,7 @@ export default {
       consentInvitationMessage: 'We would like to invite you to take part in our research study. ' +
       'Before you decide, it is important that you understand why the research is being done and what it would involve for you. Please take time to read this information, and discuss it with others if you wish. If there is anything that is not clear, or if you would like more information, please ask us.',
       consentLayDescription: '',
-      dynamicConsentCheck: '',
+      dynamicConsentCheck: false,
       privacyMessage: 'The ways in which we use your information are governed by law. The principal legislation that applies is the EU General Data Protection Regulation (GDPR), which come into force on 25th May 2018 and is being incorporated into a new Data Protection Bill currently going through parliament. In addition, confidential information about you that you give to our staff to enable them to provide your care is governed by the common law duty of confidentiality' +
       'Research' + 'In most instances we will rely on Article 6(1)e and Article 9(2)j of the GDPR if and when we use your information for research. If you have formally consented to take part in research, this will satisfy the common law duty of confidentiality. Where it has been impracticable to obtain your consent we will seek approval from the Secretary of State via the Confidentiality Advisory Group under Section 251 of the National Health Service Act 2006.'
     }
@@ -539,6 +542,9 @@ export default {
           { label: 'Weight', value: 'valWeight', color: 'secondary' }
         ]
       })
+    },
+    removeDT (index) {
+      this.dataQueries.splice(index, 1)
     },
     checkEndDate (dateStart, dateEnd) {
       if (Date.parse(dateStart) > Date.parse(dateEnd)) {
