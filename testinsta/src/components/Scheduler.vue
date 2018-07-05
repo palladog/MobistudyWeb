@@ -105,6 +105,7 @@
                 v-model="group"
                 @input="checkSchedulerOption"
                 :options="[
+                  { label: 'None', value: 'valNone', color: 'black' },
                   { label: 'Until', value: 'valUntil', color: 'black' },
                   { label: 'Occurrence(s)', value: 'valOccur', color: 'black' }
                 ]"
@@ -984,6 +985,9 @@ export default {
             this.ruleGen = this.ruleGen + ';UNTIL=' + this.inputFreqUntilDate
           }
           break
+        case 'valNone':
+          this.ruleGen = this.ruleGen
+          break
       }
     },
     repeatTypeChosen (selectOptionRepeatType) {
@@ -1061,10 +1065,13 @@ export default {
         this.showDivFreqUntil = false
         this.showDivFreqOccur = true
         this.buildRule()
-      } else if (value === 'valRepeatForever') {
+      } else if (value === 'valNone') {
         // HIDE Both Date Until and Occurrences
         this.showDivFreqUntil = false
         this.showDivFreqOccur = false
+        this.inputFreqOccurrences = ''
+        this.inputFreqUntilDate = ''
+        this.buildRule()
       }
     }
   }
