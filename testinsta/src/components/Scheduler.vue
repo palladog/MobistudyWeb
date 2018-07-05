@@ -113,10 +113,10 @@
               <br>
               <br>
               <div id="divFreqUntil" v-show="showDivFreqUntil">
-                  <q-input v-model="inputFreqUntilDate" type="number" placeholder="Please enter the number of days." clearable />
+                  <q-input v-model="inputFreqUntilDate" type="number" @input="buildRule()" placeholder="Please enter the number of days." clearable />
               </div>
               <div id="divFreqOccur" v-show="showDivFreqOccur">
-                <q-input v-model="inputFreqOccurrences" type="text" placeholder="# of occurrences" />
+                <q-input v-model="inputFreqOccurrences" type="text" @input="buildRule()" placeholder="# of occurrences" />
               </div>
             </div>
             <!-- Always Available -->
@@ -980,8 +980,8 @@ export default {
           }
           break
         case 'valUntil':
-          if (this.inputFreqUntil > 0) {
-            this.ruleGen = this.ruleGen + ';UNTIL=' + this.inputFreqUntil
+          if (this.inputFreqUntilDate > 0) {
+            this.ruleGen = this.ruleGen + ';UNTIL=' + this.inputFreqUntilDate
           }
           break
       }
