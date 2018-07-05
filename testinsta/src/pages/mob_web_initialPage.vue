@@ -528,7 +528,8 @@ export default {
     addRowCriteriaQuestion (index) {
       // increment the id
       this.criteriaQuestions.push({
-        criteriaQuestion: ''
+        titleOfCriteriaQuestion: '',
+        criteriaQAnswer: ''
       })
     },
     removeRowCriteriaQuestion (index) {
