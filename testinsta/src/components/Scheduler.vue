@@ -13,10 +13,10 @@
             <div id="divValidityDays" class="q-mb-md">
               <q-field label="Validity" />
               <q-field label="From:" helper="Enter the number of days from the start">
-              <q-input type="number" />
+              <q-input v-model="validFrom" type="number" />
               </q-field>
               <q-field label="To:" helper="Enter the number of days from the start">
-              <q-input type="number" />
+              <q-input v-model="validTill" type="number" />
               </q-field>
             </div>
             <q-card-separator />
@@ -145,6 +145,8 @@ export default {
       group: '',
       inputFreqOccurrences: '',
       inputFreqUntilDate: '',
+      validFrom: '',
+      validTill: '',
       // Define divs
       showDivRepeatType: true,
       showDivIntervalDaily: true,
