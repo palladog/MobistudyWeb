@@ -242,7 +242,7 @@
               <q-field class="q-mt-lg" label="Please schedule the events." />
                 <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdDT"/>
                   <div v-show="showSchdDT">
-                    <scheduler class="bg-white"></scheduler>
+                    <scheduler @schedChild="schedulerData = $event" class="bg-white"></scheduler>
                   </div>
               <q-card-separator class="q-mb-md q-mt-md"/>
             </div>
@@ -318,6 +318,7 @@ export default {
   },
   data () {
     return {
+      schedulerData: '',
       studyTitle: '',
       studyDescription: '',
       dateStart: null,

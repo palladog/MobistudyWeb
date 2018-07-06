@@ -145,7 +145,7 @@
 import { required } from 'vuelidate/lib/validators'
 
 export default {
-  data () {
+  data: function () {
     return {
       ruleGen: '',
       group: '',
@@ -1084,7 +1084,7 @@ export default {
         this.buildRule()
       }
     },
-    schedulerConfirmation () {
+    schedulerConfirmation: function () {
       this.schedInfo = this.ruleGen
       this.$q.notify('sched confo: ' + this.schedInfo)
       this.$emit('schedChild', this.schedInfo)
