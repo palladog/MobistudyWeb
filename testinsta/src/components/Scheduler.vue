@@ -130,9 +130,11 @@
         </div>
         </div>
       </q-card-main>
-      <q-field label="RULE Generated">
+      <q-field class="q-mt-sm" label="Recurring Rule Generated">
         <q-input v-model="ruleGen" type="text" placeholder="rule generated" />
       </q-field>
+      <q-btn color="black" class="q-mt-md q-mb-md q-ml-xl" label="Confirm Scheduler Changes"
+       align="center" icon-right="checked" @click="schedulerConfirmation" />
     </q-card>
 </template>
 
@@ -151,6 +153,7 @@ export default {
       inputFreqUntilDate: '',
       startTask: '',
       endTask: '',
+      schedInfo: '',
       // Define divs
       showDivRepeatType: true,
       showDivIntervalDaily: true,
@@ -1080,6 +1083,11 @@ export default {
         this.inputFreqUntilDate = ''
         this.buildRule()
       }
+    },
+    schedulerConfirmation () {
+      this.schedInfo = this.ruleGen
+      this.$q.notify('sched confo: ' + this.schedInfo)
+      this.$emit('schedChild', this.schedInfo)
     }
   }
 }
