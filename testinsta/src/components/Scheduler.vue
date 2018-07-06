@@ -12,11 +12,14 @@
             <!-- Validity  -->
             <div id="divValidityDays" class="q-mb-md">
               <q-field label="Validity" />
-              <q-field label="From:" helper="Enter the number of days from the start">
-              <q-input v-model="startTask" type="number" />
+              <q-field label="From:" helper="Enter the number of days from the start of the patient recruitment">
+              <q-input v-model="startTask" type="number" min="0" oninput="validity.valid||(value='')" @input="$v.startTask.$touch()"/>
+                <div v-if="$v.startTask.$dirty">
+                  <p v-if="!$v.startTask.required" class="q-mt-sm text-negative">The number of days from the start of the patient recruitment is required. Please enter it.</p>
+                </div>
               </q-field>
               <q-field label="To:" helper="Enter the number of days from the start">
-              <q-input v-model="endTask" type="number" />
+              <q-input v-model="endTask" type="number" oninput="validity.valid||(value='')" />
               </q-field>
             </div>
             <q-card-separator />
@@ -114,10 +117,10 @@
               <br>
               <br>
               <div id="divFreqUntil" v-show="showDivFreqUntil">
-                  <q-input v-model="inputFreqUntilDate" type="number" @input="buildRule()" placeholder="Please enter the number of days." clearable />
+                  <q-input v-model="inputFreqUntilDate" type="number" oninput="validity.valid||(value='')" @input="buildRule()" placeholder="Please enter the number of days." clearable />
               </div>
               <div id="divFreqOccur" v-show="showDivFreqOccur">
-                <q-input v-model="inputFreqOccurrences" type="text" @input="buildRule()" placeholder="# of occurrences" />
+                <q-input v-model="inputFreqOccurrences" type="text" oninput="validity.valid||(value='')" @input="buildRule()" placeholder="# of occurrences" />
               </div>
             </div>
             <!-- Always Available -->
@@ -137,6 +140,7 @@
 </style>
 
 <script>
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -925,6 +929,9 @@ export default {
         }
       ]
     }
+  },
+  validations: {
+    startTask: { required }
   },
   methods: {
     buildRule () {
