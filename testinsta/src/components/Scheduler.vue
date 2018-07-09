@@ -130,9 +130,7 @@
         </div>
         </div>
       </q-card-main>
-      <q-field class="q-mt-sm" label="Recurring Rule Generated">
-        <q-input v-model="ruleGen" type="text" placeholder="rule generated" />
-      </q-field>
+        <q-input v-model="ruleGen" align="center" type="text" placeholder="Recurring rule generated" read-only />
       <q-btn color="black" class="q-mt-md q-mb-md q-ml-xl" label="Confirm Scheduler Changes"
        align="center" icon-right="checked" @click="schedulerConfirmation" />
     </q-card>
@@ -1086,7 +1084,6 @@ export default {
     },
     schedulerConfirmation: function () {
       this.schedInfo = this.ruleGen
-      this.$q.notify('sched confo: ' + this.schedInfo)
       this.$emit('schedChild', this.schedInfo)
     }
   }

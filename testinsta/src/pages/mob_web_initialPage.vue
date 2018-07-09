@@ -206,31 +206,21 @@
         <!-- Tasks Tab -->
         <q-tab-pane name="tasks">
           <q-card class="bg-cyan-2 q-ma-xl">
-            <q-card-title>
-              <q-btn-dropdown label="Select a task" class="q-ma-md">
-                <q-list link>
-                  <q-item @click.native="selectedForm">
-                    <q-item-main>
-                      <q-item-tile label>Form</q-item-tile>
-                    </q-item-main>
-                  </q-item>
-                  <q-item @click.native='selectedDataQuery'>
-                    <q-item-main>
-                      <q-item-tile label>Data query</q-item-tile>
-                    </q-item-main>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
-            </q-card-title>
+            <q-card-title> Add a task </q-card-title>
+            <q-card-main>
+              <q-field class="q-mt-md q-mb-lg" label="Please click on data type or form:">
+                <q-btn class="q-mr-lg" color="white" text-color="black" icon-right="add" label="Add a data type" @click="addDataQuery" />
+                <q-btn color="white" text-color="black" icon-right="add" label="Add a form" @click="addForm" />
+              </q-field>
+            </q-card-main>
           </q-card>
+          <div v-for="(dataQuery, index) in dataQueries" :key=dataQuery.id>
           <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
             <q-card-title style="width: 300px; max-width: 90vw;">
               Data Type
             </q-card-title>
             <q-card-main>
-            <div v-for="(dataQuery, index) in dataQueries" :key=dataQuery.id>
-                <q-btn class="q-mb-md q-mr-sm float-right" round size="sm" color="amber" icon="add" @click="addDT(index)" />
-                <q-btn class="q-mb-md q-mr-md float-right" round size="sm" color="red" icon="remove" @click="removeDT(index)" />
+                <q-btn class="q-mb-md q-mr-md float-right" v-show="index !==0" round size="sm" color="red" icon="remove" @click="removeDT(index)" />
               <q-select
                   style="width: 300px; max-width: 90vw;"
                   color="secondary"
@@ -240,14 +230,14 @@
                   placeholder="Please select a data type"
               />
               <q-field class="q-mt-lg" label="Please schedule the events." />
-                <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdDT"/>
-                  <div v-show="showSchdDT">
+                <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdDT(index)"/>
+                  <div v-show="dataQuery.showSchdDT">
                     <scheduler @schedChild="schedulerData = $event" class="bg-white"></scheduler>
                   </div>
               <q-card-separator class="q-mb-md q-mt-md"/>
-            </div>
             </q-card-main>
           </q-card>
+          </div>
           <!-- Form part -->
           <q-card class="bg-cyan-2 q-ma-xl" v-show="showForm">
             <q-card-title style="width: 300px; max-width: 90vw;"> Form </q-card-title>
@@ -356,10 +346,11 @@ export default {
       inputs: ['one'],
       showDataQuery: false,
       showForm: false,
-      showSchdDT: false,
+      counterSchDt: null,
       showSchdForm: false,
       dataQueries: [
         {
+          showSchdDT: false,
           selectDataTypeForQuery: {},
           selectOptionsDataTypeForQuery: [
             { label: 'Steps', value: 'valSteps', color: 'black' },
@@ -538,6 +529,7 @@ export default {
     },
     addDT (index) {
       this.dataQueries.push({
+        showSchdDT: false,
         selectDataTypeForQuery: {},
         selectOptionsDataTypeForQuery: [
           { label: 'Steps', value: 'valSteps', color: 'black' },
@@ -560,23 +552,18 @@ export default {
         this.ageRangeMax = ''
       }
     },
-    selectedDataQuery () {
+    addDataQuery () {
+      this.counterSchDt++
       this.showDataQuery = true
-      this.$q.notify('selectedData Query')
-    },
-    selectedForm () {
-      this.showForm = true
-      this.$q.notify('selectedData Form')
-    },
-    selectedDataType (value) {
-      this.$q.notify('selectedDataType: ' + value)
-    },
-    displaySchdDT () {
-      if (this.showSchdDT === false) {
-        this.showSchdDT = true
-      } else {
-        this.showSchdDT = false
+      if (this.counterSchDt > 1) {
+        this.addDT()
       }
+    },
+    addForm () {
+      this.showForm = true
+    },
+    displaySchdDT (index) {
+      this.dataQueries[index].showSchdDT = !this.dataQueries[index].showSchdDT
     },
     displaySchdForm () {
       if (this.showSchdForm === false) {
