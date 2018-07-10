@@ -225,14 +225,13 @@
                   style="width: 300px; max-width: 90vw;"
                   color="secondary"
                   v-model="dataQuery.selectDataTypeForQuery"
-                  @input="selectedDataType"
                   :options="dataQuery.selectOptionsDataTypeForQuery"
                   placeholder="Please select a data type"
               />
               <q-field class="q-mt-lg" label="Please schedule the events." />
                 <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdDT(index)"/>
                   <div v-show="dataQuery.showSchdDT">
-                    <scheduler @schedChild="schedulerData = $event" class="bg-white"></scheduler>
+                    <scheduler @schedChild="dataQuery.schedulerData = $event" class="bg-white"></scheduler>
                   </div>
               <q-card-separator class="q-mb-md q-mt-md"/>
             </q-card-main>
@@ -308,7 +307,6 @@ export default {
   },
   data () {
     return {
-      schedulerData: '',
       studyTitle: '',
       studyDescription: '',
       dateStart: null,
@@ -350,6 +348,7 @@ export default {
       showSchdForm: false,
       dataQueries: [
         {
+          schedulerData: '',
           showSchdDT: false,
           selectDataTypeForQuery: {},
           selectOptionsDataTypeForQuery: [
@@ -529,6 +528,7 @@ export default {
     },
     addDT (index) {
       this.dataQueries.push({
+        schedulerData: '',
         showSchdDT: false,
         selectDataTypeForQuery: {},
         selectOptionsDataTypeForQuery: [

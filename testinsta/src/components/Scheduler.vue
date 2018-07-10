@@ -4,6 +4,8 @@
         Scheduler
       <span slot="subtitle">Please select when the event will be scheduled</span>
       </q-card-title>
+      <q-field class="q-ml-md q-mb-sm" label="Rule Generated:" />
+        <q-input v-model="ruleGen" align="right" type="textarea" rows="2" read-only />
       <q-card-separator />
       <!-- Option Repeat Types -->
       <q-card-main>
@@ -12,13 +14,13 @@
             <!-- Validity  -->
             <div id="divValidityDays" class="q-mb-md">
               <q-field label="Validity" />
-              <q-field label="From:" helper="Enter the number of days from the start of the patient recruitment">
+              <q-field label="From:" helper="Enter the number of days from the start of patient recruitment">
               <q-input v-model="startTask" type="number" min="0" oninput="validity.valid||(value='')" @input="$v.startTask.$touch()"/>
                 <div v-if="$v.startTask.$dirty">
                   <p v-if="!$v.startTask.required" class="q-mt-sm text-negative">The number of days from the start of the patient recruitment is required. Please enter it.</p>
                 </div>
               </q-field>
-              <q-field label="To:" helper="Enter the number of days from the start">
+              <q-field label="To:" helper="Enter the number of days from the start of patient recruitment">
               <q-input v-model="endTask" type="number" oninput="validity.valid||(value='')" />
               </q-field>
             </div>
@@ -130,7 +132,7 @@
         </div>
         </div>
       </q-card-main>
-        <q-input v-model="ruleGen" align="center" type="text" placeholder="Recurring rule generated" read-only />
+      <q-card-separator />
       <q-btn color="black" class="q-mt-md q-mb-md q-ml-xl" label="Confirm Scheduler Changes"
        align="center" icon-right="checked" @click="schedulerConfirmation" />
     </q-card>
@@ -997,6 +999,8 @@ export default {
           this.ruleGen = this.ruleGen
           break
       }
+      this.schedInfo = this.ruleGen
+      this.$emit('schedChild', this.schedInfo)
     },
     repeatTypeChosen (selectOptionRepeatType) {
       if (this.selectOptionRepeatType === 'd') {
@@ -1083,8 +1087,8 @@ export default {
       }
     },
     schedulerConfirmation: function () {
-      this.schedInfo = this.ruleGen
-      this.$emit('schedChild', this.schedInfo)
+      // this.schedInfo = this.ruleGen
+      // this.$emit('schedChild', this.schedInfo)
     }
   }
 }
