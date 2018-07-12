@@ -128,11 +128,11 @@
                         <q-field label="Age Range"/>
                     </div>
                     <div class="col-xs-4 col-md-4">
-                        <q-input v-model="ageRangeMin" type="number" min="0" oninput="validity.valid||(value='')" placeholder="Minimum Age of participants" clearable/>
+                        <q-input v-model="ageRangeMin" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
                          <div v-if="!$v.ageRangeMin.between" class="q-mt-sm text-negative"> The age is between 0 and 140.</div>
                     </div>
                     <div class="col-xs-4 col-md-4">
-                        <q-input v-model="ageRangeMax" type="number" min="0" oninput="validity.valid||(value='')" placeholder="Maximum Age of participants" @input="checkMaxAge(ageRangeMin, ageRangeMax)" clearable/>
+                        <q-input v-model="ageRangeMax" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" @input="checkMaxAge(ageRangeMin, ageRangeMax)" clearable/>
                           <div v-if="!$v.ageRangeMax.between" class="q-mt-sm text-negative"> The age is between 0 and 140.</div>
                     </div>
                     <div class="col-xs-4 col-md-4">

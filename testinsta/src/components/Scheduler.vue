@@ -15,13 +15,13 @@
             <div id="divValidityDays" class="q-mb-md">
               <q-field label="Validity" />
               <q-field label="From:" helper="Enter the number of days from the start of patient recruitment">
-              <q-input v-model.trim="$v.startTask.$model" type="number" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()"/>
+              <q-input v-model.trim="$v.startTask.$model" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" clearable/>
                 <div v-if="$v.startTask.$dirty">
                   <p v-if="!$v.startTask.required" class="q-mt-sm text-negative">The number of days from the start of the patient recruitment is required. Please enter it.</p>
                 </div>
               </q-field>
               <q-field label="To:" helper="Enter the number of days from the start of patient recruitment">
-              <q-input v-model="endTask" type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()"/>
+              <q-input v-model="endTask" type="number" align="center" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" clearable/>
               </q-field>
             </div>
             <q-card-separator />
@@ -119,10 +119,10 @@
               <br>
               <br>
               <div id="divFreqUntil" v-show="showDivFreqUntil">
-                  <q-input v-model="inputFreqUntilDate" type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="Please enter the number of days." clearable />
+                  <q-input v-model="inputFreqUntilDate" type="number" align="center" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="Please enter the number of days." clearable />
               </div>
               <div id="divFreqOccur" v-show="showDivFreqOccur">
-                <q-input v-model="inputFreqOccurrences" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="# of occurrences" />
+                <q-input v-model="inputFreqOccurrences" type="text" align="center" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="# of occurrences" clearable />
               </div>
             </div>
             <!-- Always Available -->
