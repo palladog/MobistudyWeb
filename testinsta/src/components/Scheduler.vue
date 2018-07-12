@@ -5,7 +5,7 @@
       <span slot="subtitle">Please select when the event will be scheduled</span>
       </q-card-title>
       <q-field class="q-ml-md q-mb-sm" label="Rule Generated:" />
-        <q-input v-model="ruleGen" align="right" type="textarea" rows="2" read-only />
+        <q-input v-model="ruleGen" align="right" type="textarea" rows="2" readonly />
       <q-card-separator />
       <!-- Option Repeat Types -->
       <q-card-main>
@@ -15,13 +15,13 @@
             <div id="divValidityDays" class="q-mb-md">
               <q-field label="Validity" />
               <q-field label="From:" helper="Enter the number of days from the start of patient recruitment">
-              <q-input v-model="startTask" type="number" min="0" oninput="validity.valid||(value='')" @input="$v.startTask.$touch()"/>
+              <q-input v-model.trim="$v.startTask.$model" type="number" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()"/>
                 <div v-if="$v.startTask.$dirty">
                   <p v-if="!$v.startTask.required" class="q-mt-sm text-negative">The number of days from the start of the patient recruitment is required. Please enter it.</p>
                 </div>
               </q-field>
               <q-field label="To:" helper="Enter the number of days from the start of patient recruitment">
-              <q-input v-model="endTask" type="number" oninput="validity.valid||(value='')" />
+              <q-input v-model="endTask" type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()"/>
               </q-field>
             </div>
             <q-card-separator />
@@ -119,10 +119,10 @@
               <br>
               <br>
               <div id="divFreqUntil" v-show="showDivFreqUntil">
-                  <q-input v-model="inputFreqUntilDate" type="number" oninput="validity.valid||(value='')" @input="buildRule()" placeholder="Please enter the number of days." clearable />
+                  <q-input v-model="inputFreqUntilDate" type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="Please enter the number of days." clearable />
               </div>
               <div id="divFreqOccur" v-show="showDivFreqOccur">
-                <q-input v-model="inputFreqOccurrences" type="text" oninput="validity.valid||(value='')" @input="buildRule()" placeholder="# of occurrences" />
+                <q-input v-model="inputFreqOccurrences" type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="# of occurrences" />
               </div>
             </div>
             <!-- Always Available -->
@@ -133,8 +133,6 @@
         </div>
       </q-card-main>
       <q-card-separator />
-      <q-btn color="black" class="q-mt-md q-mb-md q-ml-xl" label="Confirm Scheduler Changes"
-       align="center" icon-right="checked" @click="schedulerConfirmation" />
     </q-card>
 </template>
 
@@ -950,6 +948,9 @@ export default {
       var repeatMonthlyDay = this.selectOptionRepeatMonthlyday
       var repeatYearlyMonth = this.selectOptionRepeatYearlyMonth
 
+      var startTime = this.startTask
+      var endTime = this.endTask
+      var checkAlways = this.alwaysAvailable
       var currDate = new Date()
       // User has selected today's month
       if (repeatYearlyMonth === '0') {
@@ -959,27 +960,28 @@ export default {
       if (repeatMonthlyDate === '0') {
         repeatMonthlyDate = ('0' + currDate.getDate()).slice(-2)
       }
+      this.ruleGen = 'STARTTASK=' + startTime + ';ENDTASK=' + endTime + ';DATABG=' + checkAlways
       // For different repeat Types
       switch (repeatType) {
         case 'd':
-          this.ruleGen = 'FREQ=DAILY;INTERVAL=' + intervalDaily
+          this.ruleGen = this.ruleGen + ';FREQ=DAILY;INTERVAL=' + intervalDaily
           break
         case 'w':
-          this.ruleGen = 'FREQ=WEEKLY;INTERVAL=' + intervalWeekly + ';BYDAY=' + repeatWeeklyDay
+          this.ruleGen = this.ruleGen + ';FREQ=WEEKLY;INTERVAL=' + intervalWeekly + ';BYDAY=' + repeatWeeklyDay
           break
         // monthly by date
         case 'mdate':
-          this.ruleGen = 'FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYMONTHDAY=' + repeatMonthlyDate
+          this.ruleGen = this.ruleGen + ';FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYMONTHDAY=' + repeatMonthlyDate
           break
         // monthly by day
         case 'mday':
-          this.ruleGen = 'FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYDAY=' + repeatMonthlyDay
+          this.ruleGen = this.ruleGen + ';FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYDAY=' + repeatMonthlyDay
           break
         case 'ydate':
-          this.ruleGen = 'FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYMONTHDAY=' + repeatMonthlyDate
+          this.ruleGen = this.ruleGen + ';FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYMONTHDAY=' + repeatMonthlyDate
           break
         case 'yday':
-          this.ruleGen = 'FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYDAY=' + repeatMonthlyDay
+          this.ruleGen = this.ruleGen + ';FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYDAY=' + repeatMonthlyDay
           break
       }
       // For different frequency Types
@@ -1085,10 +1087,6 @@ export default {
         this.inputFreqUntilDate = ''
         this.buildRule()
       }
-    },
-    schedulerConfirmation: function () {
-      // this.schedInfo = this.ruleGen
-      // this.$emit('schedChild', this.schedInfo)
     }
   }
 }
