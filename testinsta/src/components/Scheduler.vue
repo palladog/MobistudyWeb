@@ -127,7 +127,7 @@
             </div>
             <!-- Always Available -->
             <div id="divAlwaysAvailable" class="q-mt-md">
-              <q-checkbox v-model="alwaysAvailable" color="black" label="Please check to send data in the background."/>
+              <q-checkbox v-model="alwaysAvailable" color="black" label="Please check to send data in the background." @input="buildRule()"/>
             </div>
         </div>
         </div>
@@ -948,9 +948,6 @@ export default {
       var repeatMonthlyDay = this.selectOptionRepeatMonthlyday
       var repeatYearlyMonth = this.selectOptionRepeatYearlyMonth
 
-      var startTime = this.startTask
-      var endTime = this.endTask
-      var checkAlways = this.alwaysAvailable
       var currDate = new Date()
       // User has selected today's month
       if (repeatYearlyMonth === '0') {
@@ -960,28 +957,27 @@ export default {
       if (repeatMonthlyDate === '0') {
         repeatMonthlyDate = ('0' + currDate.getDate()).slice(-2)
       }
-      this.ruleGen = 'STARTTASK=' + startTime + ';ENDTASK=' + endTime + ';DATABG=' + checkAlways
       // For different repeat Types
       switch (repeatType) {
         case 'd':
-          this.ruleGen = this.ruleGen + ';FREQ=DAILY;INTERVAL=' + intervalDaily
+          this.ruleGen = 'FREQ=DAILY;INTERVAL=' + intervalDaily
           break
         case 'w':
-          this.ruleGen = this.ruleGen + ';FREQ=WEEKLY;INTERVAL=' + intervalWeekly + ';BYDAY=' + repeatWeeklyDay
+          this.ruleGen = 'FREQ=WEEKLY;INTERVAL=' + intervalWeekly + ';BYDAY=' + repeatWeeklyDay
           break
         // monthly by date
         case 'mdate':
-          this.ruleGen = this.ruleGen + ';FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYMONTHDAY=' + repeatMonthlyDate
+          this.ruleGen = 'FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYMONTHDAY=' + repeatMonthlyDate
           break
         // monthly by day
         case 'mday':
-          this.ruleGen = this.ruleGen + ';FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYDAY=' + repeatMonthlyDay
+          this.ruleGen = 'FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYDAY=' + repeatMonthlyDay
           break
         case 'ydate':
-          this.ruleGen = this.ruleGen + ';FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYMONTHDAY=' + repeatMonthlyDate
+          this.ruleGen = 'FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYMONTHDAY=' + repeatMonthlyDate
           break
         case 'yday':
-          this.ruleGen = this.ruleGen + ';FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYDAY=' + repeatMonthlyDay
+          this.ruleGen = 'FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYDAY=' + repeatMonthlyDay
           break
       }
       // For different frequency Types
@@ -1001,7 +997,7 @@ export default {
           this.ruleGen = this.ruleGen
           break
       }
-      this.schedInfo = this.ruleGen
+      this.schedInfo = {rule: this.ruleGen, start: this.startTask, end: this.endTask, isBackground: this.alwaysAvailable}
       this.$emit('schedChild', this.schedInfo)
     },
     repeatTypeChosen (selectOptionRepeatType) {
