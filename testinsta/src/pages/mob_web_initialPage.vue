@@ -214,6 +214,7 @@
               </q-field>
             </q-card-main>
           </q-card>
+          <!-- Data Queries -->
           <div v-for="(dataQuery, index) in dataQueries" :key=dataQuery.id>
           <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
             <q-card-title style="width: 300px; max-width: 90vw;">
@@ -263,6 +264,12 @@
                           </div>
                         </div>
                       </div>
+                      <!-- Scheduler Part of Form -->
+                      <q-field class="q-mt-lg" label="Please schedule the events." />
+                      <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdForm"/>
+                      <div v-show="showSchdForm">
+                        <scheduler class="bg-white"></scheduler>
+                      </div>
                 <!-- Form Builder Section -->
                     <!-- Get flag from emitOpenFormViewer in Form Builder to show formViewer. -->
                     <div v-show="formG.openedBu">
@@ -296,13 +303,6 @@
                   </div>
                 </div>
               </div>
-              <!-- Scheduler Part of Form -->
-              <q-field class="q-mt-lg" label="Please schedule the events." />
-                <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdForm"/>
-                  <div v-show="showSchdForm">
-                    <scheduler class="bg-white"></scheduler>
-                  </div>
-                  <q-card-separator class="q-mb-md q-mt-md"/>
             </q-card-main>
           </q-card>
         </q-tab-pane>
@@ -652,6 +652,7 @@ export default {
     // Form Builder Section
     // Form Row section
     addFormTapped () {
+      this.showForm = true
       var formInd = this.formsGen.length - 1
       if (this.removedAllForms === true) {
         this.addFormRow()
