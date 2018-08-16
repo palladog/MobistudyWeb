@@ -751,7 +751,8 @@ export default {
           color: 'secondary',
           preventClose: true}).then(() => {
           this.formsGen[index].openedBu = false
-          this.$q.notify('Agreed!')
+          this.removeForm(index)
+          this.showForm = false
         })
       } else {
         this.formsGen[index].openedBu = false
