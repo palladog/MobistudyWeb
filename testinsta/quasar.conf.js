@@ -67,6 +67,7 @@ module.exports = function (ctx) {
         'QLayoutDrawer',
         'QList',
         'QListHeader',
+        'QModal',
         'QOptionGroup',
         'QPageContainer',
         'QPage',
@@ -81,11 +82,11 @@ module.exports = function (ctx) {
         'QRouteTab'
       ],
       directives: [
-        'Ripple'
+        'Ripple', 'CloseOverlay'
       ],
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify', 'Dialog'
       ],
       iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     },
