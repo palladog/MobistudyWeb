@@ -207,7 +207,7 @@ export default {
     finishForm () {
       this.$q.notify('You have completed this form.')
       // Inform the parent that the formViewer has completed
-      this.$emit('returnToParent')
+      this.$emit('exitViewerFormFinished')
     },
     // This function is called when the user clicks on the next button.  --> Pos-VIE 4
     nextTapped (quType) {

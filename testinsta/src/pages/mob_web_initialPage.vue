@@ -289,7 +289,7 @@
                             <q-btn class="float-right q-mr-sm q-mt-sm" color = "red" icon="home" label="Exit All" @click="exitViewer(formInd)"/>
                           </div>
                         </div>
-                        <coView :valFromParent='formG' @returnToParent="backToBuilder(formInd)"></coView>
+                        <coView :valFromParent='formG' @returnToParent="backToBuilder(formInd)" @exitViewerFormFinished="exitViewer(formInd)"></coView>
                       </q-modal>
                     </div>
                     <q-card-separator class="q-mb-md q-mt-lg"/>
