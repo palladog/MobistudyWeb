@@ -6,10 +6,10 @@
       </q-card-title>
       <q-card-main>
         <q-field label="Title" helper="Short name of the study">
-          <q-input v-model="gens.title" clearable />
+          <q-input v-model="generalities.title" clearable />
         </q-field>
         <q-field label="Description" helper="Layman's description of the study">
-          <q-input v-model="gens.description" type="textarea" rows="7" clearable />
+          <q-input v-model="generalities.description" type="textarea" rows="7" clearable />
         </q-field>
       </q-card-main>
     </q-card>
@@ -19,7 +19,7 @@
         <span slot="subtitle">Information concerning the principal investigators:</span>
       </q-card-title>
       <q-card-main>
-        <div v-for="(principalInvestigator, index) in gens.principalInvestigators" :key="principalInvestigator.id">
+        <div v-for="(principalInvestigator, index) in generalities.principalInvestigators" :key="index">
           <q-field label="Name & Title:" helper="Principal Investigator Name & Title">
             <q-input v-model="principalInvestigator.name" type="text" clearable />
           </q-field>
@@ -34,10 +34,10 @@
               <q-btn v-show="index !==0" label="Remove this Principal Investigator" color="negative" icon="remove" @click="removeRowInvestigator(index)"/>
             </div>
             <div class="col">
-              <q-btn v-show="index == gens.principalInvestigators.length-1" label="Add Principal Investigator" color="primary" icon="add" @click="addRowInvestigator(index)"/>
+              <q-btn v-show="index == generalities.principalInvestigators.length-1" label="Add Principal Investigator" color="primary" icon="add" @click="addRowInvestigator(index)"/>
             </div>
           </div>
-          <q-card-separator v-show="index != gens.principalInvestigators.length-1"/>
+          <q-card-separator v-show="index != generalities.principalInvestigators.length-1"/>
         </div>
       </q-card-main>
     </q-card>
@@ -47,7 +47,7 @@
         <span slot="subtitle">Involved institutions and data access rules:</span>
       </q-card-title>
       <q-card-main>
-        <div v-for="(institution, index) in gens.institutions" :key="institution.id">
+        <div v-for="(institution, index) in generalities.institutions" :key="index">
           <q-field label="Name of Institution:" helper="Please enter the name of the institution">
             <q-input v-model="institution.name" type="text" clearable />
           </q-field>
@@ -64,11 +64,11 @@
               <q-btn v-show="index !==0" label="Remove this Institution" color="negative" icon="remove" @click="removeRowInstitution(index)" />
             </div>
             <div class="col">
-              <q-btn v-show="index == gens.institutions.length-1" label="Add Institution" color="primary" icon="add" @click="addRowInstitution(index)" />
+              <q-btn v-show="index == generalities.institutions.length-1" label="Add Institution" color="primary" icon="add" @click="addRowInstitution(index)" />
             </div>
           </div>
 
-          <q-card-separator v-show="index != gens.institutions.length-1"/>
+          <q-card-separator v-show="index != generalities.institutions.length-1"/>
         </div>
       </q-card-main>
     </q-card>
@@ -79,10 +79,10 @@
       </q-card-title>
       <q-card-main>
         <q-field label="Start date:" helper="Starting date of the study">
-          <q-datetime class="q-ml-xl q-mb-lg" v-model="gens.startDate" type="date" format="D-MMM-YYYY" clearable />
+          <q-datetime class="q-ml-xl q-mb-lg" v-model="generalities.startDate" type="date" format="D-MMM-YYYY" clearable />
         </q-field>
         <q-field label="End date:" helper="Ending date of the study">
-          <q-datetime class="q-ml-xl" v-model="gens.endDate" type="date"  @input="checkEndDate(gens.startDate, gens.endDate)" format="D-MMM-YYYY" clearable />
+          <q-datetime class="q-ml-xl" v-model="generalities.endDate" type="date"  @input="checkEndDate(generalities.startDate, generalities.endDate)" format="D-MMM-YYYY" clearable />
         </q-field>
       </q-card-main>
     </q-card>
@@ -93,39 +93,33 @@
 export default {
   name: 'TabPaneStudyGeneralities',
   props: ['generalities'],
-  computed: {
-    gens: {
-      get () { return this.generalities },
-      set (value) { this.$emit('update', value) }
-    }
-  },
   methods: {
     addRowInvestigator (index) {
       // increment the id
-      this.gens.principalInvestigators.push({
+      this.generalities.principalInvestigators.push({
         name: '',
         contact: '',
         institution: ''
       })
     },
     removeRowInvestigator (index) {
-      this.gens.principalInvestigators.splice(index, 1)
+      this.generalities.principalInvestigators.splice(index, 1)
     },
     addRowInstitution (index) {
       // increment the id
-      this.gens.institutions.push({
+      this.generalities.institutions.push({
         name: '',
         contact: '',
         dataAccess: ''
       })
     },
     removeRowInstitution (index) {
-      this.gens.institutions.splice(index, 1)
+      this.generalities.institutions.splice(index, 1)
     },
     checkEndDate (dateStart, dateEnd) {
       if (Date.parse(dateStart) > Date.parse(dateEnd)) {
         this.$q.notify('The End Date of the study is before the Start Date. Please re-enter the End Date.')
-        this.gens.endDate = ''
+        this.generalities.endDate = ''
       }
     }
   }

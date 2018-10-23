@@ -1,126 +1,91 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-<!-- Inclusion Criteria Tab Card -->
-        <q-card class="bg-cyan-2 q-ma-xl">
-            <q-card-title>Inclusion Criteria
-                <span slot="subtitle">Criteria to filter participants in the study</span>
-            </q-card-title>
-            <q-card-main>
-                <div>
-                    <div>
-                    <!-- Age Range & Sex -->
-                        <div class="row gutter-lg">
-                            <div class="col-xs-4 col-md-4">
-                                <q-field label="Age Range"/>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <q-input v-model="crit.minAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <q-input v-model="crit.maxAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" @input="checkMaxAge(crit.minAge, crit.maxAge)" clearable/>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <q-field label="Sex" />
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <q-checkbox class="q-mr-lg" v-model="crit.gender" label="M" color="secondary" val="genderMale" />
-                                <q-checkbox class="q-mr-lg" v-model="crit.gender" label="F" color="secondary" val="genderFemale" />
-                                <q-checkbox v-model="crit.gender" label="OTHER" color="secondary" val="genderOther" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </q-card-main>
-        </q-card>
-    <!-- Disease, Lifestyle and Meds -->
-        <q-card class="bg-cyan-2 q-ma-xl">
-            <q-card-main>
-                <div>
-                    <div>
-                        <div class="row gutter-lg">
-                            <div class="col-xs-4 col-md-4">
-                                <q-field label="List of Diseases" />
-                            </div>
-                            <div class="col-xs-4 col-md-6">
-                                <q-chips-input v-model="diseasesVue" placeholder="Select from list" @duplicate="duplicatedDisease">
-                                <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
-                                </q-chips-input>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <q-field label="Lifestyle" />
-                            </div>
-                            <div class="col-xs-4 col-md-6">
-                                <q-radio v-model="crit.lifestyle" val="active" color="secondary" label="Active" />
-                                <q-radio v-model="crit.lifestyle" val="notActive" color="secondary" label="Not Active" style="margin-left: 10px" />
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <q-field label="List of Meds" />
-                            </div>
-                            <div class="col-xs-4 col-md-6">
-                                <q-chips-input v-model="medsVue" placeholder="Select from list" @duplicate="duplicatedMeds">
-                                <q-autocomplete @search="searchMeds" @selected="selectedMeds" />
-                                </q-chips-input>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </q-card-main>
-        </q-card>
-  <!-- Custom Criteria Questions -->
-        <q-card class="bg-cyan-2 q-ma-xl">
-          <q-card-title>Custom Criteria Question(s)
-            <span slot="subtitle">Please enter additional criteria questions to filter the eligibility of the participants. The answers are yes/no.</span>
-          </q-card-title>
-          <q-card-main>
-              <div v-for="(criteriaQuestion, index) in crit.criteriaQuestions" :key="criteriaQuestion.id">
-              <q-btn class="vertical-top" v-show="index !==0" label="Remove this Question" color="negative" icon="remove" @click="removeRowCriteriaQuestion(index)" />
-              <q-field label="Criteria Question:" helper="Please enter a question. (e.g. Are you a smoker?)">
-                <q-input v-model="criteriaQuestion.title" type="text" clearable />
-              </q-field>
-              <q-field class="q-mt-md" label="Participant Answer:" helper="Please select either yes or no.">
-                <q-radio class="q-mr-lg" v-model="criteriaQuestion.answer" val="yes" color="secondary" label="Yes" />
-                <q-radio v-model="criteriaQuestion.answer" val="no" color="full" label="No" />
-              </q-field>
-              <q-btn class="float-right q-mt-sm" label="Add Question" color="primary" icon="add" @click="addRowCriteriaQuestion(index)" />
-              <q-card-separator class="q-mb-md q-mt-xl"/>
-            </div>
-          </q-card-main>
-        </q-card>
- <!-- Disease, Lifestyle and Meds -->
-    <!-- <q-card class="bg-cyan-2 q-ma-xl">
+  <q-tab-pane name="tab-crit">
+    <!-- Inclusion Criteria Tab Card -->
+    <q-card class="form-card">
+      <q-card-title>Inclusion Criteria
+        <span slot="subtitle">Criteria to filter participants in the study</span>
+      </q-card-title>
       <q-card-main>
-        <div>
-          <div>
-            <div class="row gutter-lg">
-              <div class="col-xs-4 col-md-4">
-                <q-field label="List of Diseases" />
-              </div>
-              <div class="col-xs-4 col-md-6">
-                <q-chips-input v-model="diseasesVue" placeholder="Select from list" @duplicate="duplicatedDisease">
-                  <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
-                </q-chips-input>
-              </div>
-              <div class="col-xs-4 col-md-4">
-                <q-field label="Lifestyle" />
-              </div>
-              <div class="col-xs-4 col-md-6">
-                <q-radio v-model="lifestyle" val="active" color="secondary" label="Active" />
-                <q-radio v-model="lifestyle" val="notActive" color="secondary" label="Not Active" style="margin-left: 10px" />
-              </div>
-              <div class="col-xs-4 col-md-4">
-                <q-field label="List of Meds" />
-              </div>
-              <div class="col-xs-4 col-md-6">
-                <q-chips-input v-model="medsVue" placeholder="Select from list" @duplicate="duplicatedMeds">
-                  <q-autocomplete @search="searchMeds" @selected="selectedMeds" />
-                </q-chips-input>
-              </div>
-            </div>
+        <!-- Age Range & Sex -->
+        <div class="row gutter-lg justify-center">
+          <div class="col-4">
+            <q-field label="Age Range"/>
+          </div>
+          <div class="col-4">
+            <q-input v-model="criteria.minAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
+          </div>
+          <div class="col-4">
+            <q-input v-model="criteria.maxAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" clearable/>
+          </div>
+        </div>
+        <div class="row justify-center">
+          <div class="col-4">
+            <q-field label="Gender" />
+          </div>
+          <div class="col-8">
+            <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Male" color="secondary" val="male" />
+            <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Female" color="secondary" val="female" />
+            <q-checkbox v-model="criteria.gender" label="Other" color="secondary" val="other" />
           </div>
         </div>
       </q-card-main>
-    </q-card> -->
-  </q-layout>
+    </q-card>
+    <!-- Disease, Lifestyle and Meds -->
+    <q-card class="form-card">
+      <q-card-main>
+        <q-field label="List of Diseases" helper="Type in and select the list of diseases that the patient will need to have">
+          <q-chips-input v-model="diseasesVue" placeholder="Select from list" @duplicate="duplicatedDisease">
+            <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
+          </q-chips-input>
+        </q-field>
+
+        <q-field label="Medications" helper="Type in and select the list of needed medications (only generics)">
+          <q-chips-input v-model="medsVue" placeholder="Select from list" @duplicate="duplicatedMeds">
+            <q-autocomplete @search="searchMeds" @selected="selectedMeds" />
+          </q-chips-input>
+        </q-field>
+
+        <q-field label="Lifestyle" helper="Select the applicable lifestyle criteria, they will all be matched">
+          <div class="row">
+            <q-radio class="col" v-model="criteria.lifestyle.active" val="yes" color="secondary" label="Active" />
+            <q-radio class="col" v-model="criteria.lifestyle.active" val="no" color="secondary" label="Not active" style="margin-left: 10px" />
+            <q-radio class="col" v-model="criteria.lifestyle.active" val="notrequired" color="secondary" label="Not required" style="margin-left: 10px" />
+          </div>
+          <div class="row">
+            <q-radio class="col" v-model="criteria.lifestyle.smoker" val="yes" color="secondary" label="Smoker" />
+            <q-radio class="col" v-model="criteria.lifestyle.smoker" val="no" color="secondary" label="Non smoker" style="margin-left: 10px" />
+            <q-radio class="col" v-model="criteria.lifestyle.smoker" val="notrequired" color="secondary" label="Not required" style="margin-left: 10px" />
+          </div>
+        </q-field>
+      </q-card-main>
+    </q-card>
+    <!-- Custom Criteria Questions -->
+    <q-card class="form-card">
+      <q-card-title>Custom Criteria Question(s)
+        <span slot="subtitle">Please enter additional criteria questions. Questions only allow yes/no answers.</span>
+      </q-card-title>
+      <q-card-main>
+        <div v-for="(criteriaQuestion, index) in criteria.criteriaQuestions" :key="index">
+          <q-field label="Criteria Question:" helper="Please enter a question. (e.g. Are you a smoker?)">
+            <q-input v-model="criteriaQuestion.title" type="text" clearable />
+          </q-field>
+          <q-field class="q-mt-md" label="Participant Answer:" helper="This is the answer that make the patient eligible.">
+            <q-radio class="q-mr-lg" v-model="criteriaQuestion.answer" val="yes" color="secondary" label="Yes" />
+            <q-radio v-model="criteriaQuestion.answer" val="no" color="full" label="No" />
+          </q-field>
+          <div class="row justify-center">
+            <div class="col">
+              <q-btn class="vertical-top" v-show="index !==0" label="Remove this Question" color="negative" icon="remove" @click="removeRowCriteriaQuestion(index)" />
+            </div>
+            <div class="col">
+              <q-btn v-show="index == criteria.criteriaQuestions.length-1" label="Add Question" color="primary" icon="add" @click="addRowCriteriaQuestion(index)" />
+            </div>
+          </div>
+          <q-card-separator v-show="index != criteria.criteriaQuestions.length-1"/>
+        </div>
+      </q-card-main>
+    </q-card>
+  </q-tab-pane>
 </template>
 
 <script>
@@ -129,18 +94,12 @@ export default {
   name: 'TabPaneStudyCriteria',
   props: ['criteria'],
   computed: {
-    crit: {
-      get () { return this.criteria },
-      set (value) { this.$emit('updateCrit', value) }
-    },
     diseasesVue: {
       get: function () {
-        console.log('GET')
         var keys = []
         for (let key in this.criteria.diseases) {
           keys.push(key)
         }
-        console.log('GET', this.criteria.diseases)
         return keys
       },
       set: function (keys) {
@@ -148,17 +107,14 @@ export default {
           // if key is not in keys, delete
           if (!keys.includes(key)) delete this.criteria.diseases[key]
         }
-        console.log('SET', this.criteria.diseases)
       }
     },
     medsVue: {
       get: function () {
-        console.log('GET')
         var keys = []
-        for (let key in this.criteria.meds) {
+        for (let key in this.criteria.medications) {
           keys.push(key)
         }
-        console.log('GET', this.criteria.meds)
         return keys
       },
       set: function (keys) {
@@ -166,17 +122,10 @@ export default {
           // if key is not in keys, delete
           if (!keys.includes(key)) delete this.criteria.meds[key]
         }
-        console.log('SET', this.criteria.meds)
       }
     }
   },
   methods: {
-    checkMaxAge (minAge, maxAge) {
-      if (maxAge < minAge) {
-        this.$q.notify('The maximum age of the participant is less than the minimum age. Please re-enter the maximum age.')
-        this.maxAge = ''
-      }
-    },
     searchDisease (diseaseDescription, done) {
       // Declare top level URL vars
       var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
@@ -213,7 +162,6 @@ export default {
     },
     selectedDisease (item) {
       this.criteria.diseases[item.label] = item.conceptId
-      console.log('SELECTED', this.criteria.diseases)
     },
     duplicatedDisease (label) {
       this.$q.notify(`"${label}" already in list`)
@@ -246,26 +194,24 @@ export default {
           })
           done(resultM)
         }, (error) => {
-          console.log(error)
+          console.error(error)
           this.loading = false
         })
     },
     selectedMeds (item) {
       this.criteria.meds[item.label] = item.conceptId
-      console.log('SELECTED', this.criteria.meds)
     },
     duplicatedMeds (label) {
       this.$q.notify(`"${label}" already in list`)
     },
     addRowCriteriaQuestion (index) {
-      // increment the id
-      this.crit.criteriaQuestions.push({
+      this.criteria.criteriaQuestions.push({
         title: '',
         answer: ''
       })
     },
     removeRowCriteriaQuestion (index) {
-      this.crit.criteriaQuestions.splice(index, 1)
+      this.criteria.criteriaQuestions.splice(index, 1)
     }
   }
 }
