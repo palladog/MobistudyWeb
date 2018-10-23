@@ -4,7 +4,6 @@ module.exports = function (ctx) {
   return {
     // app plugins (/src/plugins)
     plugins: [
-      'vuelidate',
       'axios'
     ],
     css: [
@@ -13,7 +12,7 @@ module.exports = function (ctx) {
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
       'material-icons',
-      ctx.theme.ios ? 'ionicons' : null,
+      ctx.theme.ios ? 'ionicons' : null
       // 'mdi',
       // 'fontawesome'
     ],
@@ -35,9 +34,16 @@ module.exports = function (ctx) {
       }
     },
     devServer: {
+      open: true, // opens browser window automatically,
       // https: true,
-      // port: 8080,
-      open: true // opens browser window automatically
+      port: 8181,
+      proxy: {
+        // proxy all requests starting with /api to jsonplaceholder
+        '/api': {
+          target: 'http://127.0.0.1:3000',
+          changeOrigin: true
+        }
+      }
     },
     // framework: 'all' --- includes everything; for dev only!
     framework: {

@@ -1,11 +1,10 @@
 <template>
+  <q-page>
     <q-card style="width: 400px; max-width: 90vw;">
       <q-card-title>
         Scheduler
       <span slot="subtitle">Please select when the event will be scheduled</span>
       </q-card-title>
-      <q-field class="q-ml-md q-mb-sm" label="Rule Generated:" />
-        <q-input v-model="ruleGen" align="right" type="textarea" rows="2" readonly />
       <q-card-separator />
       <!-- Option Repeat Types -->
       <q-card-main>
@@ -14,14 +13,11 @@
             <!-- Validity  -->
             <div id="divValidityDays" class="q-mb-md">
               <q-field label="Validity" />
-              <q-field label="From:" helper="Enter the number of days from the start of patient recruitment">
-              <q-input v-model.trim="$v.startTask.$model" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" clearable/>
-                <div v-if="$v.startTask.$dirty">
-                  <p v-if="!$v.startTask.required" class="q-mt-sm text-negative">The number of days from the start of the patient recruitment is required. Please enter it.</p>
-                </div>
+              <q-field label="From:" helper="Enter the number of days from the start">
+              <q-input type="number" />
               </q-field>
-              <q-field label="To:" helper="Enter the number of days from the start of patient recruitment">
-              <q-input v-model="endTask" type="number" align="center" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" clearable/>
+              <q-field label="To:" helper="Enter the number of days from the start">
+              <q-input type="number" />
               </q-field>
             </div>
             <q-card-separator />
@@ -37,7 +33,6 @@
             <div id="divIntervalDaily" class="q-mb-sm" v-show="showDivIntervalDaily">
               <q-select
               v-model="selectOptionIntervalDaily"
-              @input="buildRule()"
               :options="optionIntervalDaily"
               />
             </div>
@@ -45,7 +40,6 @@
             <div id="divRepeatWeeklyday" class="q-mb-sm" v-show="showDivRepeatWeeklyday">
               <q-select
               v-model="selectOptionRepeatWeeklyday"
-              @input="buildRule()"
               :options="optionRepeatWeeklyday"
               />
             </div>
@@ -53,7 +47,6 @@
             <div id="divIntervalMonthly" class="q-mb-sm" v-show="showDivIntervalMonthly">
               <q-select
               v-model="selectOptionIntervalMonthly"
-              @input="buildRule()"
               :options="optionIntervalMonthly"
               />
             </div>
@@ -61,7 +54,6 @@
             <div id="divIntervalWeekly" class="q-mb-sm" v-show="showDivIntervalWeekly">
               <q-select
               v-model="selectOptionIntervalWeekly"
-              @input="buildRule()"
               :options="optionIntervalWeekly"
               />
             </div>
@@ -69,7 +61,6 @@
             <div id="divIntervalYearly" class="q-mb-sm"  v-show="showDivIntervalYearly">
               <q-select
               v-model="selectOptionIntervalYearly"
-              @input="buildRule()"
               :options="optionIntervalYearly"
               />
             </div>
@@ -77,7 +68,6 @@
             <div id="divRepeatYearlyMonth" class="q-mb-sm" v-show="showDivRepeatYearlyMonth">
               <q-select
               v-model="selectOptionRepeatYearlyMonth"
-              @input="buildRule()"
               :options="optionRepeatYearlyMonth"
               />
             </div>
@@ -85,7 +75,6 @@
             <div id="divRepeatYearlyMonthdate" class="q-mb-sm" v-show="showDivRepeatYearlyMonthdate">
               <q-select
               v-model="selectOptionRepeatYearlyMonthdate"
-              @input="buildRule()"
               :options="optionRepeatYearlyMonthdate"
               />
             </div>
@@ -93,7 +82,6 @@
             <div id="divRrepeatMonthlyday" class="q-mb-sm" v-show="showDivRepeatMonthlyday">
               <q-select
               v-model="selectOptionRepeatMonthlyday"
-              @input="buildRule()"
               :options="optionRepeatMonthlyday"
               />
             </div>
@@ -110,48 +98,41 @@
                 v-model="group"
                 @input="checkSchedulerOption"
                 :options="[
-                  { label: 'None', value: 'valNone', color: 'black' },
-                  { label: 'Until', value: 'valUntil', color: 'black' },
-                  { label: 'Occurrence(s)', value: 'valOccur', color: 'black' }
+                  { label: 'Repeat Forever', value: 'valRepeatForever', color: 'black' },
+                  { label: 'Until', value: 'valUntil', color: 'secondary' },
+                  { label: 'Occurrence(s)', value: 'valOccur', color: 'red' }
                 ]"
               />
               </q-field>
               <br>
               <br>
               <div id="divFreqUntil" v-show="showDivFreqUntil">
-                  <q-input v-model="inputFreqUntilDate" type="number" align="center" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="Please enter the number of days." clearable />
+                <q-field label="chose a valid end date" >
+                  <q-datetime class="q-ml-xl" v-model="inputFreqUntilDate" type="date" format="D-MMM-YYYY" clearable />
+                </q-field>
               </div>
               <div id="divFreqOccur" v-show="showDivFreqOccur">
-                <q-input v-model="inputFreqOccurrences" type="text" align="center" onkeypress="return event.charCode >= 48 && event.charCode <= 57" @input="buildRule()" placeholder="# of occurrences" clearable />
+                <q-input v-model="inputFreqOccurrences" type="text" placeholder="# of occurrences" />
               </div>
-            </div>
-            <!-- Always Available -->
-            <div id="divAlwaysAvailable" class="q-mt-md">
-              <q-checkbox v-model="alwaysAvailable" color="black" label="Please check to send data in the background." @input="buildRule()"/>
             </div>
         </div>
         </div>
       </q-card-main>
-      <q-card-separator />
     </q-card>
+  </q-page>
 </template>
 
 <style>
 </style>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
 
 export default {
-  data: function () {
+  data () {
     return {
-      ruleGen: '',
       group: '',
       inputFreqOccurrences: '',
-      inputFreqUntilDate: '',
-      startTask: '',
-      endTask: '',
-      schedInfo: '',
+      inputFreqUntilDate: null,
       // Define divs
       showDivRepeatType: true,
       showDivIntervalDaily: true,
@@ -164,7 +145,6 @@ export default {
       showDivRepeatMonthlyday: false,
       showDivFreqOccur: false,
       showDivFreqUntil: false,
-      alwaysAvailable: false,
       // OPTION REPEAT TYPE
       selectOptionRepeatType: 'd',
       optionRepeatType: [
@@ -931,77 +911,19 @@ export default {
       ]
     }
   },
-  validations: {
-    startTask: { required }
-  },
   methods: {
-    buildRule () {
-      // Check for repeat type. Create Freq/Interval into rule generated
-      var repeatType = this.selectOptionRepeatType
-      var intervalDaily = this.selectOptionIntervalDaily
-      var intervalWeekly = this.selectOptionIntervalWeekly
-      var intervalMonthly = this.selectOptionIntervalMonthly
-      var intervalYearly = this.selectOptionIntervalYearly
-
-      var repeatWeeklyDay = this.selectOptionRepeatWeeklyday
-      var repeatMonthlyDate = this.selectOptionRepeatYearlyMonthdate
-      var repeatMonthlyDay = this.selectOptionRepeatMonthlyday
-      var repeatYearlyMonth = this.selectOptionRepeatYearlyMonth
-
-      var currDate = new Date()
-      // User has selected today's month
-      if (repeatYearlyMonth === '0') {
-        repeatYearlyMonth = ('0' + (currDate.getMonth() + 1)).slice(-2)
-      }
-      // User has selected today's date
-      if (repeatMonthlyDate === '0') {
-        repeatMonthlyDate = ('0' + currDate.getDate()).slice(-2)
-      }
-      // For different repeat Types
-      switch (repeatType) {
-        case 'd':
-          this.ruleGen = 'FREQ=DAILY;INTERVAL=' + intervalDaily
-          break
-        case 'w':
-          this.ruleGen = 'FREQ=WEEKLY;INTERVAL=' + intervalWeekly + ';BYDAY=' + repeatWeeklyDay
-          break
-        // monthly by date
-        case 'mdate':
-          this.ruleGen = 'FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYMONTHDAY=' + repeatMonthlyDate
-          break
-        // monthly by day
-        case 'mday':
-          this.ruleGen = 'FREQ=MONTHLY;INTERVAL=' + intervalMonthly + ';BYDAY=' + repeatMonthlyDay
-          break
-        case 'ydate':
-          this.ruleGen = 'FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYMONTHDAY=' + repeatMonthlyDate
-          break
-        case 'yday':
-          this.ruleGen = 'FREQ=YEARLY;INTERVAL=' + intervalYearly + ';BYMONTH=' + repeatYearlyMonth + ';BYDAY=' + repeatMonthlyDay
-          break
-      }
-      // For different frequency Types
-      var freqType = this.group
-      switch (freqType) {
-        case 'valOccur':
-          if (this.inputFreqOccurrences > 0) {
-            this.ruleGen = this.ruleGen + ';COUNT=' + this.inputFreqOccurrences
-          }
-          break
-        case 'valUntil':
-          if (this.inputFreqUntilDate > 0) {
-            this.ruleGen = this.ruleGen + ';UNTIL=' + this.inputFreqUntilDate
-          }
-          break
-        case 'valNone':
-          this.ruleGen = this.ruleGen
-          break
-      }
-      this.schedInfo = {rule: this.ruleGen, start: this.startTask, end: this.endTask, isBackground: this.alwaysAvailable}
-      this.$emit('schedChild', this.schedInfo)
-    },
     repeatTypeChosen (selectOptionRepeatType) {
+      // var dfield = document.getElementById('div_interval_daily')d
+      // var wfield = document.getElementById('div_intervalWeekly')w
+      // var wdfield = document.getElementById('div_repeat_weeklyday')w
+      // var mfield = document.getElementById('div_interval_monthly')m
+      // var mdayfield = document.getElementById('div_repeat_monthlyday')mday
+      // var mdatefield = document.getElementById('div_repeat_monthlydate')mdate
+      // var yfield = document.getElementById('div_interval_yearly')y
+      // var ymfield = document.getElementById('div_repeat_yearlyMonth')ym
+      // Depending on the repeat type chosen, hide non-corresponding fields
       if (this.selectOptionRepeatType === 'd') {
+        // this.$q.notify('The value of selectOptionRepeatType in switch is: ' + selectOptionRepeatType)
         // if the selected option type is d (i.e daily), show only interval daily, hide others
         this.showDivIntervalDaily = true
         this.showDivIntervalWeekly = false
@@ -1012,6 +934,7 @@ export default {
         this.showDivIntervalYearly = false
         this.showDivRepeatYearlyMonth = false
       } else if (this.selectOptionRepeatType === 'w') {
+        // this.$q.notify('The value of selectOptionRepeatType in switch is: ' + selectOptionRepeatType)
         // if the selected option type is w (i.e weekly)
         this.showDivIntervalDaily = false
         this.showDivIntervalWeekly = true
@@ -1022,6 +945,7 @@ export default {
         this.showDivIntervalYearly = false
         this.showDivRepeatYearlyMonth = false
       } else if (this.selectOptionRepeatType === 'mday') {
+        // this.$q.notify('The value of selectOptionRepeatType in switch is: ' + selectOptionRepeatType)
         // if the selected option type is mday (i.e monthly by day)
         this.showDivIntervalDaily = false
         this.showDivIntervalWeekly = false
@@ -1032,6 +956,7 @@ export default {
         this.showDivIntervalYearly = false
         this.showDivRepeatYearlyMonth = false
       } else if (this.selectOptionRepeatType === 'mdate') {
+        // this.$q.notify('The value of selectOptionRepeatType in switch is: ' + selectOptionRepeatType)
         // if the selected option type is mdate (i.e monthly by date)
         this.showDivIntervalDaily = false
         this.showDivIntervalWeekly = false
@@ -1042,6 +967,7 @@ export default {
         this.showDivIntervalYearly = false
         this.showDivRepeatYearlyMonth = false
       } else if (this.selectOptionRepeatType === 'yday') {
+        // this.$q.notify('The value of selectOptionRepeatType in switch is: ' + selectOptionRepeatType)
         // if the selected option type is yday (i.e Yearly by day)
         this.showDivIntervalDaily = false
         this.showDivIntervalWeekly = false
@@ -1052,6 +978,7 @@ export default {
         this.showDivIntervalYearly = true
         this.showDivRepeatYearlyMonth = true
       } else if (this.selectOptionRepeatType === 'ydate') {
+        // this.$q.notify('The value of selectOptionRepeatType in switch is: ' + selectOptionRepeatType)
         // if the selected option type is ydate (i.e Yearly by date)
         this.showDivIntervalDaily = false
         this.showDivIntervalWeekly = false
@@ -1062,26 +989,22 @@ export default {
         this.showDivIntervalYearly = true
         this.showDivRepeatYearlyMonth = true
       }
-      this.buildRule()
     },
     checkSchedulerOption (value) {
       if (value === 'valUntil') {
+        // this.$q.notify('The Scheduler Opt_chosen is valUntil --> ' + value)
         // Show Date Until and HIDE Occurrences
         this.showDivFreqUntil = true
         this.showDivFreqOccur = false
-        this.buildRule()
       } else if (value === 'valOccur') {
+        // this.$q.notify('The Scheduler Opt_chosen is valOccur --> ' + value)
         // HIDE Date Until and SHOW Occurrences
         this.showDivFreqUntil = false
         this.showDivFreqOccur = true
-        this.buildRule()
-      } else if (value === 'valNone') {
+      } else if (value === 'valRepeatForever') {
         // HIDE Both Date Until and Occurrences
         this.showDivFreqUntil = false
         this.showDivFreqOccur = false
-        this.inputFreqOccurrences = ''
-        this.inputFreqUntilDate = ''
-        this.buildRule()
       }
     }
   }
