@@ -55,9 +55,9 @@
             <q-input v-model="institution.contact" type="textarea" rows="4" clearable />
           </q-field>
           <q-field class="q-mt-md" label="Data Access:" helper="Data access per institution. Please select the level of access to grant or not.">
-            <q-radio v-model="institution.dataAccess" val="no" color="secondary" label="NO" />
-            <q-radio class="q-ml-md q-mr-md" v-model="institution.dataAccess" val="anon" color="anon" label="ANON" />
-            <q-radio v-model="institution.dataAccess" val="full" color="full" label="FULL" />
+            <q-radio v-model="institution.dataAccess" val="no" color="secondary" label="No" />
+            <q-radio class="q-ml-md q-mr-md" v-model="institution.dataAccess" val="anonymised" color="secondary" label="Anonymised" />
+            <q-radio v-model="institution.dataAccess" val="full" color="secondary" label="Full" />
           </q-field>
           <div class="row justify-center">
             <div class="col">

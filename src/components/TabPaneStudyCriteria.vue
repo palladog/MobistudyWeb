@@ -7,45 +7,40 @@
       </q-card-title>
       <q-card-main>
         <!-- Age Range & Sex -->
-        <div class="row gutter-lg justify-center">
-          <div class="col-4">
-            <q-field label="Age Range"/>
+        <q-field label="Age range:" helper="Desired age range of the participants.">
+          <div class="row gutter-lg justify-center">
+            <div class="col-6">
+              <q-input v-model="criteria.minAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
+            </div>
+            <div class="col-6">
+              <q-input v-model="criteria.maxAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" clearable/>
+            </div>
           </div>
-          <div class="col-4">
-            <q-input v-model="criteria.minAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
-          </div>
-          <div class="col-4">
-            <q-input v-model="criteria.maxAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" clearable/>
-          </div>
-        </div>
-        <div class="row justify-center">
-          <div class="col-4">
-            <q-field label="Gender" />
-          </div>
-          <div class="col-8">
-            <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Male" color="secondary" val="male" />
-            <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Female" color="secondary" val="female" />
-            <q-checkbox v-model="criteria.gender" label="Other" color="secondary" val="other" />
-          </div>
-        </div>
+        </q-field>
+
+        <q-field label="Gender:" helper="Desired gender.">
+          <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Male" color="secondary" val="male" />
+          <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Female" color="secondary" val="female" />
+          <q-checkbox v-model="criteria.gender" label="Other" color="secondary" val="other" />
+        </q-field>
       </q-card-main>
     </q-card>
     <!-- Disease, Lifestyle and Meds -->
     <q-card class="form-card">
       <q-card-main>
-        <q-field label="List of Diseases" helper="Type in and select the list of diseases that the patient will need to have">
+        <q-field label="List of Diseases:" helper="Type in and select the list of diseases that the patient will need to have">
           <q-chips-input v-model="diseasesVue" placeholder="Select from list" @duplicate="duplicatedDisease">
             <q-autocomplete @search="searchDisease" @selected="selectedDisease" />
           </q-chips-input>
         </q-field>
 
-        <q-field label="Medications" helper="Type in and select the list of needed medications (only generics)">
+        <q-field label="Medications:" helper="Type in and select the list of needed medications (only generics)">
           <q-chips-input v-model="medsVue" placeholder="Select from list" @duplicate="duplicatedMeds">
             <q-autocomplete @search="searchMeds" @selected="selectedMeds" />
           </q-chips-input>
         </q-field>
 
-        <q-field label="Lifestyle" helper="Select the applicable lifestyle criteria, they will all be matched">
+        <q-field label="Lifestyle:" helper="Select the applicable lifestyle criteria, they will all be matched">
           <div class="row">
             <q-radio class="col" v-model="criteria.lifestyle.active" val="yes" color="secondary" label="Active" />
             <q-radio class="col" v-model="criteria.lifestyle.active" val="no" color="secondary" label="Not active" style="margin-left: 10px" />
