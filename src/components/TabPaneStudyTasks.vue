@@ -1,70 +1,70 @@
 <template>
-    <q-tab-pane name="tab-tasks">
-        <q-card class="bg-cyan-2 q-ma-xl">
-            <q-card-title> Add a task </q-card-title>
-            <q-card-main>
-                <q-field class="q-mt-md q-mb-lg" label="Please click on data type or form:">
-                <q-btn class="q-mr-lg" color="white" text-color="black" icon-right="add" label="Add a data type" @click="addDataQuery" />
-                <!-- <q-btn color="white" text-color="black" icon-right="add" label="Add a form" @click="addFormTapped" /> -->
-                </q-field>
-            </q-card-main>
-        </q-card>
+  <q-tab-pane name="tab-tasks">
+    <q-card class="form-card">
+      <q-card-title> Add a task </q-card-title>
+      <q-card-main>
+        <q-field class="q-mt-md q-mb-lg" label="Please click on data type or form:">
+          <q-btn class="q-mr-lg" color="white" text-color="black" icon-right="add" label="Add a Data Query" @click="addDT()" />
+          <!-- <q-btn color="white" text-color="black" icon-right="add" label="Add a form" @click="addFormTapped" /> -->
+        </q-field>
+      </q-card-main>
+    </q-card>
     <!-- Data Queries -->
-      <div v-for="(dataQuery, index) in tasks.type" :key=index>
-        <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
-          <q-card-title style="width: 300px; max-width: 90vw;">
-            Data Type
-          </q-card-title>
-          <q-card-main>
-              <q-btn class="q-mb-md q-mr-md float-right" v-show="index !==0" round size="sm" color="red" icon="remove" @click="removeDT(index)" />
-            <q-select
-                style="width: 300px; max-width: 90vw;"
-                color="secondary"
-                v-model="dataQuery.selectDataTypeForQuery"
-                :options="dataQuery.selectOptionsDataTypeForQuery"
-                placeholder="Please select a data type"
-            />
-            <q-field class="q-mt-lg" label="Please schedule the events." />
-              <q-btn class="q-mb-sm" style="background: white" icon="schedule" size="small" @click="displaySchdDT(index)"/>
-                <div v-show="dataQuery.showSchdDT">
-                  <scheduler @schedChild="dataQuery.schedulerData = $event" class="bg-white"></scheduler>
-                </div>
-            <q-card-separator class="q-mb-md q-mt-md"/>
-          </q-card-main>
-        </q-card>
-      </div>
-    </q-tab-pane>
+    <q-card  v-for="(task, index) in tasks" :key="index" class="form-card">
+      <q-card-title v-if="task.type === 'dataQuery'">
+        Data Query Task
+      </q-card-title>
+      <q-card-title v-if="task.type === 'form'">
+        Form Task
+      </q-card-title>
+      <q-card-main>
+        <q-field v-if="task.type === 'dataQuery'" label="Data type:">
+          <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery" placeholder="Please select the data type to be collected."/>
+        </q-field>
+        <q-field class="q-mt-lg" label="Scheduling:">
+          <q-collapsible icon="calendar_today" label="Scheduling" opened>
+            <scheduler v-model="task.scheduling"></scheduler>
+          </q-collapsible>
+        </q-field>
+        <q-btn label="Remove this task" color="negative" icon="remove" @click="removeTask(index)"/>
+
+        <q-card-separator v-if="index !== tasks.length-1"/>
+      </q-card-main>
+    </q-card>
+  </q-tab-pane>
 </template>
 
 <script>
-import Scheduler from 'components/Scheduler.vue'
+import Scheduler from 'components/SchedulerCard.vue'
 export default {
   components: {
     'scheduler': Scheduler
   },
   name: 'TabPaneStudyTasks',
-  props: ['tasks'],
+  props: [ 'tasks' ],
+  data () {
+    return {
+      selectOptionsDataTypeForQuery: [
+        { label: 'Steps', value: 'valSteps', color: 'black' },
+        { label: 'Weight', value: 'valWeight', color: 'secondary' }
+      ]
+    }
+  },
   methods: {
-    addDT (index) {
-      this.dataQueries.push({
-        schedulerData: '',
-        showSchdDT: false,
-        selectDataTypeForQuery: {},
-        selectOptionsDataTypeForQuery: [
-          { label: 'Steps', value: 'valSteps', color: 'black' },
-          { label: 'Weight', value: 'valWeight', color: 'secondary' }
-        ]
+    addDT () {
+      this.tasks.push({
+        type: 'dataQuery',
+        scheduling: {
+          recurring: undefined
+        },
+        dataType: undefined,
+        aggregated: undefined
       })
+      console.log(this.tasks)
     },
-    removeDT (index) {
-      this.dataQueries.splice(index, 1)
-    },
-    addDataQuery () {
-      this.counterSchDt++
-      this.showDataQuery = true
-      if (this.counterSchDt > 1) {
-        this.addDT()
-      }
+    removeTask (index) {
+      this.tasks.splice(index, 1)
+      console.log(this.tasks)
     },
     displaySchdDT (index) {
       this.dataQueries[index].showSchdDT = !this.dataQueries[index].showSchdDT

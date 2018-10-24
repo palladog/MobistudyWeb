@@ -59,6 +59,7 @@ module.exports = function (ctx) {
         'QCardActions',
         'QCheckbox',
         'QChipsInput',
+        'QCollapsible',
         'QDatetime',
         'QField',
         'QIcon',
