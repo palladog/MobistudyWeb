@@ -19,12 +19,12 @@
       <q-tabs color="secondary">
         <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" />
         <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria" />
-        <!-- <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/> -->
+        <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/>
         <!-- <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent"/> -->
 
         <tab-pane-study-generalities name="tab-gen" :generalities="studyDesign.generalities"></tab-pane-study-generalities>
         <tab-pane-study-criteria name="tab-crit" :criteria="studyDesign.inclusionCriteria" ></tab-pane-study-criteria>
-        <!-- <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" ></tab-pane-study-tasks> -->
+        <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" ></tab-pane-study-tasks>
         <!-- <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent"></tab-pane-study-consent> -->
       </q-tabs>
     </q-page-container>
@@ -82,15 +82,32 @@ export default {
           ],
           diseases: { },
           medications: { }
-        }
+        },
+        tasks: [
+          {
+            type: '',
+            scheduling: {
+              recurring: ''
+            },
+            dataType: '',
+            aggregated: undefined
+          },
+          {
+            type: '',
+            scheduling: {
+              recurring: ''
+            },
+            formKey: ''
+          }
+        ]
       }
     }
   },
-  // async beforeCreate () {
-  //   // TODO: use the studyId
-  //   let resp = await this.$axios.get('/api/studies/32922302')
-  //   this.studyDesign = resp.data
-  // },
+  async beforeCreate () {
+    // TODO: use the studyId
+    let resp = await this.$axios.get('/api/studies/32922302')
+    this.studyDesign = resp.data
+  },
   methods: {
     publish () {
       // TODO: set completed to true or a date

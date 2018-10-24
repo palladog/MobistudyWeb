@@ -10,7 +10,7 @@
             </q-card-main>
         </q-card>
     <!-- Data Queries -->
-      <div v-for="(dataQuery, index) in tsk.dataQueries" :key=dataQuery.id>
+      <div v-for="(dataQuery, index) in tasks.type" :key=index>
         <q-card class="bg-cyan-2 q-ma-xl" v-show="showDataQuery">
           <q-card-title style="width: 300px; max-width: 90vw;">
             Data Type
@@ -44,12 +44,6 @@ export default {
   },
   name: 'TabPaneStudyTasks',
   props: ['tasks'],
-  computed: {
-    tsk: {
-      get () { return this.tasks.tasks },
-      set (value) { this.$emit('updateTasks', value) }
-    }
-  },
   methods: {
     addDT (index) {
       this.dataQueries.push({
