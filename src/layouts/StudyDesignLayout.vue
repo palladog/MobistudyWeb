@@ -54,26 +54,43 @@ export default {
           description: '',
           startDate: undefined,
           endDate: undefined,
-          principalInvestigators: [ ],
-          institutions: [ ]
+          principalInvestigators: [
+            {
+              name: '',
+              contact: '',
+              institution: ''
+            }
+          ],
+          institutions: [
+            {
+              name: '',
+              contact: '',
+              dataAccess: ''
+            }
+          ]
         },
         inclusionCriteria: {
           minAge: undefined,
           maxAge: undefined,
           gender: [],
           lifestyle: { active: 'notrequired', smoker: 'notrequired' },
-          criteriaQuestions: [ ],
+          criteriaQuestions: [
+            {
+              title: '',
+              answer: ''
+            }
+          ],
           diseases: { },
           medications: { }
         }
       }
     }
   },
-  async beforeCreate () {
-    // TODO: use the studyId
-    let resp = await this.$axios.get('/api/studies/32922302')
-    this.studyDesign = resp.data
-  },
+  // async beforeCreate () {
+  //   // TODO: use the studyId
+  //   let resp = await this.$axios.get('/api/studies/32922302')
+  //   this.studyDesign = resp.data
+  // },
   methods: {
     publish () {
       // TODO: set completed to true or a date

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "The web interface of MobiStudy",
   "productName": "MobiStudy",
-  "author": "oxgob <rish.goburdhun@eng.ox.ac.uk>, Dario Salvi <dario.salvi@eng.ox.ac.uk>",
+  "author": "oxgob <rishi.goburdhun@eng.ox.ac.uk>, Dario Salvi <dario.salvi@eng.ox.ac.uk>",
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
