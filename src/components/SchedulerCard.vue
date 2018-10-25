@@ -68,13 +68,13 @@
 <script>
 export default {
   name: 'Scheduler',
-  props: ['scheduling'],
+  props: ['value'],
   data () {
     return {
-      startDelaySecs: undefined,
-      validitySecs: undefined,
-      occurrences: undefined,
-      intervalType: 'd',
+      startDelaySecs: this.value.startDelaySecs,
+      validitySecs: this.value.untilSecs,
+      occurrences: this.value.occurrences,
+      intervalType: this.value.intervalType,
       intervalTypeOptions: [
         {
           label: 'Daily',
@@ -94,7 +94,7 @@ export default {
         }
       ],
 
-      dailyInterval: undefined,
+      dailyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       dailyIntervalOptions: [
         {
           label: 'Every day',
@@ -218,7 +218,7 @@ export default {
         }
       ],
 
-      weeklyInterval: undefined,
+      weeklyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       weeklyIntervalOptions: [
         {
           label: 'Every week',
@@ -326,7 +326,7 @@ export default {
         }
       ],
 
-      monthlyInterval: undefined,
+      monthlyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       monthlyIntervalOptions: [
         {
           label: 'Every month',
@@ -394,7 +394,7 @@ export default {
         }
       ],
 
-      yearlyInterval: undefined,
+      yearlyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       yearlyIntervalOptions: [
         {
           label: 'Every year',
@@ -438,13 +438,11 @@ export default {
         }
       ],
 
-      interval: '1',
+      weekDays: this.value.weekDays,
 
-      weekDays: [],
+      months: this.value.months,
 
-      months: [],
-
-      monthDays: []
+      monthDays: this.value.monthDays
     }
   },
   computed: {

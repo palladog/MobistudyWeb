@@ -32,7 +32,7 @@
         <q-field v-if="task.type === 'dataQuery'" label="Data type:">
           <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery" placeholder="Please select the data type to be collected."/>
         </q-field>
-        <q-btn v-if="task.type === 'form'" label="Create new Form" @click="newForm()"/>
+        <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
         <q-field v-if="task.type === 'form'" label="Form:" helper="Please select the form to be shown.">
           <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList"/>
         </q-field>
@@ -46,6 +46,9 @@
         <q-card-separator v-if="index !== tasks.length-1"/>
       </q-card-main>
     </q-card>
+
+    <formbuilder ref="formbuilder" v-model="newForm" @formview="viewForm()"></formbuilder>
+    <formviewer ref="formviewer" form="newForm" @closed="openFormBuilder()"></formviewer>
   </q-tab-pane>
 </template>
 
@@ -53,16 +56,23 @@
 import Scheduler from 'components/SchedulerCard.vue'
 import { schedulingToString } from '../data/Scheduling.js'
 import API from '../data/API.js'
+import FormBuilder from 'components/FormBuilderModal.vue'
+import FormViewer from 'components/FormViewerModal.vue'
 
 export default {
   components: {
-    'scheduler': Scheduler
+    'scheduler': Scheduler,
+    'formbuilder': FormBuilder,
+    'formviewer': FormViewer
   },
   name: 'TabPaneStudyTasks',
   props: [ 'tasks' ],
   data () {
     return {
       selectOptionsFormsList: [],
+      newForm: {
+        name: undefined
+      },
       selectOptionsDataTypeForQuery: [
         { label: 'Steps', value: 'valSteps', color: 'black' },
         { label: 'Weight', value: 'valWeight', color: 'secondary' }
@@ -90,7 +100,15 @@ export default {
         id: this.tasks.length,
         type: 'dataQuery',
         scheduling: {
-          recurring: undefined
+          startEvent: 'consent',
+          startDelaySecs: undefined,
+          untilSecs: undefined,
+          occurrences: undefined,
+          intervalType: 'd',
+          interval: 1,
+          months: [],
+          monthDays: [],
+          weekDays: []
         },
         dataType: undefined,
         aggregated: undefined
@@ -104,13 +122,28 @@ export default {
         id: this.tasks.length,
         type: 'form',
         scheduling: {
-          recurring: undefined
+          startEvent: 'consent',
+          startDelaySecs: undefined,
+          untilSecs: undefined,
+          occurrences: undefined,
+          intervalType: 'd',
+          interval: 1,
+          months: [],
+          monthDays: [],
+          weekDays: []
         },
         formKey: undefined
       })
     },
-    newForm () {
-
+    createForm () {
+      // TODO: reset the current form
+      this.$refs.formbuilder.show()
+    },
+    openFormBuilder () {
+      this.$refs.formbuilder.show()
+    },
+    viewForm () {
+      this.$refs.formviewer.show()
     }
   }
 }
