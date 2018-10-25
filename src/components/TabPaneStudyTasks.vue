@@ -1,12 +1,23 @@
 <template>
   <q-tab-pane name="tab-tasks">
     <q-card class="form-card">
-      <q-card-title> Add a task </q-card-title>
+      <q-card-title>Tasks</q-card-title>
       <q-card-main>
-        <q-field class="q-mt-md q-mb-lg" label="Please click on data type or form:">
-          <q-btn class="q-mr-lg" color="white" text-color="black" icon-right="add" label="Add a Data Query" @click="addDT()" />
-          <!-- <q-btn color="white" text-color="black" icon-right="add" label="Add a form" @click="addFormTapped" /> -->
-        </q-field>
+        <q-btn-dropdown split label="Add task">
+          <!-- dropdown content -->
+          <q-list link>
+            <q-item v-close-overlay @click.native="addDT()">
+              <q-item-main>
+                <q-item-tile label>Data query Task</q-item-tile>
+              </q-item-main>
+            </q-item>
+            <q-item v-close-overlay @click.native="addFormT()">
+              <q-item-main>
+                <q-item-tile label>Form</q-item-tile>
+              </q-item-main>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-card-main>
     </q-card>
     <!-- Data Queries -->
@@ -21,7 +32,11 @@
         <q-field v-if="task.type === 'dataQuery'" label="Data type:">
           <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery" placeholder="Please select the data type to be collected."/>
         </q-field>
-        <q-field class="q-mt-lg" label="Scheduling:">
+        <q-btn v-if="task.type === 'form'" label="Create new Form" @click="newForm()"/>
+        <q-field v-if="task.type === 'form'" label="Form:" helper="Please select the form to be shown.">
+          <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList"/>
+        </q-field>
+        <q-field class="q-mt-lg" label="Scheduling:" helper="Use the triangle to show or hide the information.">
           <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)" opened>
             <scheduler v-model="task.scheduling"></scheduler>
           </q-collapsible>
@@ -37,6 +52,7 @@
 <script>
 import Scheduler from 'components/SchedulerCard.vue'
 import { schedulingToString } from '../data/Scheduling.js'
+import API from '../data/API.js'
 
 export default {
   components: {
@@ -46,18 +62,32 @@ export default {
   props: [ 'tasks' ],
   data () {
     return {
+      selectOptionsFormsList: [],
       selectOptionsDataTypeForQuery: [
         { label: 'Steps', value: 'valSteps', color: 'black' },
         { label: 'Weight', value: 'valWeight', color: 'secondary' }
       ]
     }
   },
+  async created () {
+    this.getForms()
+  },
   methods: {
+    async getForms () {
+      let forms = await API.getFormsList()
+      this.selectOptionsFormsList = forms.map((f) => {
+        return {
+          label: f.name,
+          value: f._key
+        }
+      })
+    },
     schedulingToString (sc) {
       return schedulingToString(sc)
     },
     addDT () {
       this.tasks.push({
+        id: this.tasks.length,
         type: 'dataQuery',
         scheduling: {
           recurring: undefined
@@ -65,21 +95,22 @@ export default {
         dataType: undefined,
         aggregated: undefined
       })
-      console.log(this.tasks)
     },
     removeTask (index) {
       this.tasks.splice(index, 1)
-      console.log(this.tasks)
     },
-    displaySchdDT (index) {
-      this.dataQueries[index].showSchdDT = !this.dataQueries[index].showSchdDT
+    addFormT () {
+      this.tasks.push({
+        id: this.tasks.length,
+        type: 'form',
+        scheduling: {
+          recurring: undefined
+        },
+        formKey: undefined
+      })
     },
-    displaySchdForm () {
-      if (this.showSchdForm === false) {
-        this.showSchdForm = true
-      } else {
-        this.showSchdForm = false
-      }
+    newForm () {
+
     }
   }
 }

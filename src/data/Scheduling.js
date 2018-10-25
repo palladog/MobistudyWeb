@@ -1,5 +1,4 @@
 export function schedulingToString (sc) {
-  console.log(sc)
   if (!sc.startEvent) return 'Not defined yet'
 
   let s = ''
