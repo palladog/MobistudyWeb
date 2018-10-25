@@ -73,12 +73,6 @@
   </q-modal>
 </template>
 
-<style>
-.spacedField {
-  margin: 10px;
-}
-</style>
-
 <script>
 export default {
   name: 'FormBuilder',
