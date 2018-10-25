@@ -71,7 +71,19 @@ export default {
     return {
       selectOptionsFormsList: [],
       newForm: {
-        name: undefined
+        name: undefined,
+        description: undefined,
+        questions: [{
+          id: 'Q1',
+          text: undefined,
+          type: 'singleChoice',
+          nextDefaultId: undefined,
+          answerChoices: [{
+            id: 'Q1A1',
+            text: undefined,
+            nextQuestionId: undefined
+          }]
+        }]
       },
       selectOptionsDataTypeForQuery: [
         { label: 'Steps', value: 'valSteps', color: 'black' },
