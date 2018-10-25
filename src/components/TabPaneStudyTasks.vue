@@ -22,7 +22,7 @@
           <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery" placeholder="Please select the data type to be collected."/>
         </q-field>
         <q-field class="q-mt-lg" label="Scheduling:">
-          <q-collapsible icon="calendar_today" label="Scheduling" opened>
+          <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)" opened>
             <scheduler v-model="task.scheduling"></scheduler>
           </q-collapsible>
         </q-field>
@@ -36,6 +36,8 @@
 
 <script>
 import Scheduler from 'components/SchedulerCard.vue'
+import { schedulingToString } from '../data/Scheduling.js'
+
 export default {
   components: {
     'scheduler': Scheduler
@@ -51,6 +53,9 @@ export default {
     }
   },
   methods: {
+    schedulingToString (sc) {
+      return schedulingToString(sc)
+    },
     addDT () {
       this.tasks.push({
         type: 'dataQuery',

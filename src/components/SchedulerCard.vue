@@ -27,13 +27,13 @@
         Recurrence:
       </p>
       <q-field label="Frequency:" helper="Enter the desired frequency.">
-        <q-select v-model="intervalType" :options="intervalTypeOptions"/>
+        <q-select  @input="update()" v-model="intervalType" :options="intervalTypeOptions"/>
       </q-field>
       <q-field label="Interval:" helper="Enter the desired interval.">
-        <q-select @change="update()" v-show="intervalType == 'd'"   v-model="dailyInterval" :options="dailyIntervalOptions" />
-        <q-select @change="update()" v-show="intervalType == 'w'"   v-model="weeklyInterval" :options="weeklyIntervalOptions" />
-        <q-select @change="update()" v-show="intervalType == 'm'"   v-model="monthlyInterval" :options="monthlyIntervalOptions" />
-        <q-select @change="update()" v-show="intervalType == 'y'"   v-model="yearlyInterval" :options="yearlyIntervalOptions" />
+        <q-select @input="update()" v-show="intervalType == 'd'"   v-model="dailyInterval" :options="dailyIntervalOptions" />
+        <q-select @input="update()" v-show="intervalType == 'w'"   v-model="weeklyInterval" :options="weeklyIntervalOptions" />
+        <q-select @input="update()" v-show="intervalType == 'm'"   v-model="monthlyInterval" :options="monthlyIntervalOptions" />
+        <q-select @input="update()" v-show="intervalType == 'y'"   v-model="yearlyInterval" :options="yearlyIntervalOptions" />
       </q-field>
       <q-field label="Week days:" helper="Optional. Specify week days.">
         <q-checkbox @input="update()" v-model="weekDays" val="mo" label="Monday" />
@@ -438,6 +438,8 @@ export default {
         }
       ],
 
+      interval: '1',
+
       weekDays: [],
 
       months: [],
@@ -467,18 +469,18 @@ export default {
     update () {
       let v = {
         startEvent: 'consent',
-        startDelaySecs: this.startDelaySecs,
-        untilSecs: this.validitySecs,
-        occurrences: this.occurrences,
+        startDelaySecs: isNaN(this.startDelaySecs) ? undefined : this.startDelaySecs,
+        untilSecs: isNaN(this.validitySecs) ? undefined : this.validitySecs,
+        occurrences: isNaN(this.occurrences) ? undefined : this.occurrences,
         intervalType: this.intervalType,
         months: this.months,
         monthDays: this.monthDays,
         weekDays: this.weekDays
       }
-      if (v.intervalType === 'd') v.interal = this.dailyInterval
-      if (v.intervalType === 'w') v.interal = this.weeklyInterval
-      if (v.intervalType === 'm') v.interal = this.monthlyInterval
-      if (v.intervalType === 'y') v.interal = this.yearlyInterval
+      if (v.intervalType === 'd') v.interval = isNaN(this.dailyInterval) ? undefined : parseInt(this.dailyInterval)
+      if (v.intervalType === 'w') v.interval = isNaN(this.weeklyInterval) ? undefined : parseInt(this.weeklyInterval)
+      if (v.intervalType === 'm') v.interval = isNaN(this.monthlyInterval) ? undefined : parseInt(this.monthlyInterval)
+      if (v.intervalType === 'y') v.interval = isNaN(this.yearlyInterval) ? undefined : parseInt(this.yearlyInterval)
       this.$emit('input', v)
     }
   }
