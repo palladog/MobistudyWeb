@@ -73,12 +73,13 @@ export default {
     return {
       selectOptionsFormsList: [],
       newForm: {
-        name: 'TEST',
+        name: undefined,
         description: undefined,
         questions: [{
           id: 'Q1',
           text: undefined,
-          type: 'singleChoice',
+          helper: undefined,
+          type: 'freetext',
           nextDefaultId: undefined,
           answerChoices: [{
             id: 'Q1A1',

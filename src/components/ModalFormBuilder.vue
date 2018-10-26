@@ -6,7 +6,7 @@
         <q-input v-model="value.name" type="text" clearable @input="update()"/>
       </q-field>
       <q-field class="q-mb-sm" label="Description: " helper="Short description for the form. This is displayed to the user.">
-        <q-input v-model="value.description" type="textarea" rows="3" align="center" clearable @input="update()"/>
+        <q-input v-model="value.description" type="textarea" rows="3" clearable @input="update()"/>
       </q-field>
 
       <!-- Question -->
@@ -33,9 +33,9 @@
             <q-input v-model="answerChoice.id" type="text" readonly style="max-width: 80px"/>
           </q-field>
           <q-field label="Answer Text: " helper="Answer text (e.g. Yes or No). This is displayed to the user.">
-            <q-input v-model="answerChoice.text" type="text" align="center" clearable />
+            <q-input v-model="answerChoice.text" type="text" clearable />
           </q-field>
-          <q-field label="Next Question ID: " helper="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM' or -1." >
+          <q-field v-show="question.type !== 'multiChoice'" label="Next Question ID: " helper="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM' or -1." >
             <q-input v-model="answerChoice.nextQuestionId" type="text" clearable style="max-width: 150px"/>
           </q-field>
           <div class="row">
