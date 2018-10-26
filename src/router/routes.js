@@ -2,7 +2,14 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/StudyDesignLayout.vue')
+    component: () => import('layouts/StudyDesignLayout.vue'),
+    children: [
+      {
+        path: '/',
+        component: () => import('pages/StudyDesign.vue'),
+        props: { studyKey: 32922302 }
+      }
+    ]
   }
 ]
 

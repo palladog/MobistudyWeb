@@ -60,7 +60,7 @@
 
       <div class="row q-ma-md">
         <div class="col-4">
-          <q-btn color="secondary" @click="viewForm()" label="Simulate" />
+          <q-btn color="secondary" @click="openFormSimulator()" label="Simulate" />
         </div>
         <div class="col-4">
           <q-btn color="primary" @click="opened = false" label="Publish" />
@@ -99,12 +99,11 @@ export default {
       console.log('props', this.value)
       this.opened = true
     },
-    viewForm () {
+    openFormSimulator () {
       this.opened = false
-      this.$emit('formview', this.value)
+      this.$emit('simulateForm', this.value)
     },
     update () {
-      console.log(this.value)
       this.$emit('input', this.value)
     },
     addQuestion () {
@@ -121,24 +120,41 @@ export default {
         }]
       })
     },
+    // removes a question and updates all question IDs, answerChoiceIDs and nextQuestionIDs
     removeQuestion (qIndex) {
       this.value.questions.splice(qIndex, 1)
+
+      // update all indexes
       for (let qi = 0; qi < this.value.questions.length; qi++) {
+        // update the indexes after the one that has been removed
         if (qi >= qIndex) this.value.questions[qi].id = 'Q' + (qi + 1)
-        if (this.value.questions[qi].nextDefaultId && this.value.questions[qi].nextDefaultId === 'Q' + (qIndex + 1)) {
-          this.value.questions[qi].nextDefaultId = 'REMOVED'
+        // update the nextDefaultIds
+        if (this.value.questions[qi].nextDefaultId && this.value.questions[qi].nextDefaultId.startsWith('Q')) {
+          if (this.value.questions[qi].nextDefaultId === 'Q' + (qIndex + 1)) {
+            this.value.questions[qi].nextDefaultId = 'REMOVED'
+          } else {
+            let qid = parseInt(this.value.questions[qi].nextDefaultId.split(/Q/)[1])
+            if (qid > qIndex + 1) this.value.questions[qi].nextDefaultId = 'Q' + (qid - 1)
+          }
         }
+        // update the answer choices IDs
         if (this.value.questions[qi].type === 'singleChoice' || this.value.questions[qi].type === 'multipleChoice') {
           for (let ai = 0; ai < this.value.questions[qi].answerChoices.length; ai++) {
             this.value.questions[qi].answerChoices[ai].id = this.value.questions[qi].id + 'A' + (ai + 1)
-            if (this.value.questions[qi].answerChoices[ai].nextQuestionId === 'Q' + (qIndex + 1)) {
-              this.value.questions[qi].answerChoices[ai].nextQuestionId = 'REMOVED'
+            // update the nextQuestionIds
+            if (this.value.questions[qi].answerChoices[ai].nextQuestionId && this.value.questions[qi].answerChoices[ai].nextQuestionId.startsWith('Q')) {
+              if (this.value.questions[qi].answerChoices[ai].nextQuestionId === 'Q' + (qIndex + 1)) {
+                this.value.questions[qi].answerChoices[ai].nextQuestionId = 'REMOVED'
+              } else {
+                let qid = parseInt(this.value.questions[qi].answerChoices[ai].nextQuestionId.split(/Q/)[1])
+                if (qid > qIndex + 1) this.value.questions[qi].answerChoices[ai].nextQuestionId = 'Q' + (qid - 1)
+              }
             }
           }
         }
       }
     },
-    // This function allows answer choices per question to be added.
+    // add an answer choice
     addAnswerChoice (qIndex) {
       if (!this.value.questions[qIndex].answerChoices) this.value.questions[qIndex].answerChoices = []
       this.value.questions[qIndex].answerChoices.push({
@@ -147,6 +163,7 @@ export default {
         nextQuestionId: undefined
       })
     },
+    // removes an answer choice
     removeAnswerChoice (qIndex, aIndex) {
       this.value.questions[qIndex].answerChoices.splice(aIndex, 1)
       for (let i = aIndex; i < this.value.questions[qIndex].answerChoices.length; i++) {
