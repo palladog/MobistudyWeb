@@ -48,7 +48,7 @@
     </q-card>
 
     <formbuilder ref="formbuilder" v-model="newForm" @formview="viewForm()"></formbuilder>
-    <formviewer ref="formviewer" form="newForm" @closed="openFormBuilder()"></formviewer>
+    <formviewer ref="formviewer" :formViewerProp='newForm' @closed="openFormBuilder()"></formviewer>
   </q-tab-pane>
 </template>
 
