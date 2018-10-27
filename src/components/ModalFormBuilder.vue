@@ -12,10 +12,10 @@
       <!-- Question -->
       <div class="shadow-1 q-pa-sm q-mt-lg" v-for="(question, qIndex) in value.questions" :key="qIndex">
         <q-field label="Question ID: ">
-          <q-input v-model="question.id" type="text" style="max-width: 50px" readonly/>
+          <q-input v-model="question.id" type="text" style="max-width: 60px" readonly/>
         </q-field>
         <q-field label="Question Type: " helper="Select a question type.">
-          <q-select v-model="question.type" :options="questionTypeOptions" @input="update()"/>
+          <q-select style="width: 200px" v-model="question.type" :options="questionTypeOptions" @input="update()"/>
         </q-field>
         <q-field label="Question: " helper="Text of the question. This is displayed to the user.">
           <q-input v-model="question.text" type="text" clearable @input="update()"/>
@@ -23,8 +23,8 @@
         <q-field label="Help: " helper="Short description or helper. This is displayed to the user.">
           <q-input v-model="question.helper" type="text" clearable @input="update()"/>
         </q-field>
-        <q-field label="Default/Next Question ID: " helper="Default question ID that is asked after this. Terminate the form with 'ENDFORM' or -1.">
-          <q-input v-model="question.nextDefaultId" type="text" clearable @input="update()" style="max-width: 150px"/>
+        <q-field label="Default/Next Question ID: " helper="If not specified, the next available question will be used. Terminate the form with 'ENDFORM'.">
+          <q-select style="width: 110px" color="secondary" v-model="question.nextDefaultId" :options="defaultIdSelection" @input="update()" />
         </q-field>
 
         <!-- Answers -->
@@ -35,7 +35,7 @@
           <q-field label="Answer Text: " helper="Answer text (e.g. Yes or No). This is displayed to the user.">
             <q-input v-model="answerChoice.text" type="text" clearable />
           </q-field>
-          <q-field v-show="question.type !== 'multiChoice'" label="Next Question ID: " helper="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM' or -1." >
+          <q-field v-show="question.type !== 'multiChoice'" label="Next Question ID: " helper="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM'." >
             <q-input v-model="answerChoice.nextQuestionId" type="text" clearable style="max-width: 150px"/>
           </q-field>
           <div class="row">
@@ -91,12 +91,20 @@ export default {
         label: 'Multiple choice',
         value: 'multiChoice'
       }],
-      opened: false
+      opened: false,
+      defaultIdSelection: [{
+        label: 'ENDFORM',
+        value: 'ENDFORM'
+      },
+      {
+        label: 'Q1',
+        value: 'Q1'
+      }
+      ]
     }
   },
   methods: {
     show () {
-      console.log('props', this.value)
       this.opened = true
     },
     openFormSimulator () {
@@ -119,10 +127,13 @@ export default {
           nextQuestionId: undefined
         }]
       })
+      this.defaultIdSelection.push({label: qid, value: qid})
     },
     // removes a question and updates all question IDs, answerChoiceIDs and nextQuestionIDs
     removeQuestion (qIndex) {
       this.value.questions.splice(qIndex, 1)
+      // Remove last element from Default Question ID selection. Keep ID only for first question.
+      if (this.defaultIdSelection.length > 2) this.defaultIdSelection.pop()
 
       // update all indexes
       for (let qi = 0; qi < this.value.questions.length; qi++) {
