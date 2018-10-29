@@ -12,12 +12,12 @@
       <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" />
       <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria" />
       <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/>
-      <!-- <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent"/> -->
+      <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent"/>
 
       <tab-pane-study-generalities name="tab-gen" :generalities="studyDesign.generalities"></tab-pane-study-generalities>
       <tab-pane-study-criteria name="tab-crit" :criteria="studyDesign.inclusionCriteria" ></tab-pane-study-criteria>
       <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" ></tab-pane-study-tasks>
-      <!-- <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent"></tab-pane-study-consent> -->
+      <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent" :generalities="studyDesign.generalities" ></tab-pane-study-consent>
     </q-tabs>
   </q-page>
 </template>
@@ -75,7 +75,17 @@ export default {
           diseases: { },
           medications: { }
         },
-        tasks: []
+        tasks: [],
+        consent: {
+          invitation: '',
+          privacyPolicy: '',
+          items: [
+            {
+              description: '',
+              optional: undefined
+            }
+          ]
+        }
       }
     }
   },
