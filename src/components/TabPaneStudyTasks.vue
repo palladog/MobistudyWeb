@@ -60,6 +60,7 @@ import { schedulingToString } from '../data/Scheduling.js'
 import API from '../data/API.js'
 import FormBuilder from 'components/ModalFormBuilder.vue'
 import FormSimulator from 'components/ModalFormSimulator.vue'
+import QueryDataTypeEnum from '../data/QueryDataTypeEnum.js'
 
 export default {
   components: {
@@ -88,10 +89,12 @@ export default {
           }]
         }]
       },
-      selectOptionsDataTypeForQuery: [
-        { label: 'Steps', value: 'valSteps', color: 'black' },
-        { label: 'Weight', value: 'valWeight', color: 'secondary' }
-      ]
+      selectOptionsDataTypeForQuery: QueryDataTypeEnum.values.map((v) => {
+        return {
+          label: QueryDataTypeEnum.valueToString(v),
+          value: v
+        }
+      })
     }
   },
   async created () {

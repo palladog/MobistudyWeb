@@ -2,12 +2,16 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/StudyDesignLayout.vue'),
+    component: () => import('layouts/HomeLayout.vue'),
     children: [
       {
-        path: '/',
+        path: '/studyDesign',
+        component: () => import('pages/StudyDesign.vue')
+      },
+      {
+        path: '/studyDesign/:studyKey',
         component: () => import('pages/StudyDesign.vue'),
-        props: { studyKey: 32922302 }
+        props: true
       }
     ]
   }
