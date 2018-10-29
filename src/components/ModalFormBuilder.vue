@@ -24,6 +24,7 @@
           <q-input v-model="question.helper" type="text" clearable @input="update()"/>
         </q-field>
         <q-field label="Default/Next Question ID: " helper="If not specified, the next available question will be used. Terminate the form with 'ENDFORM'.">
+          <p v-show="question.nextDefaultId == 'REMOVED'" class="text-negative">THIS QUESTION HAS BEEN REMOVED!</p>
           <q-select style="width: 110px" color="secondary" v-model="question.nextDefaultId" :options="defaultIdSelection" @input="update()" />
         </q-field>
 
@@ -36,6 +37,7 @@
             <q-input v-model="answerChoice.text" type="text" clearable />
           </q-field>
           <q-field v-show="question.type !== 'multiChoice'" label="Next Question ID: " helper="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM'." >
+            <p v-show="answerChoice.nextQuestionId == 'REMOVED'" class="text-negative">THIS QUESTION HAS BEEN REMOVED!</p>
             <q-input v-model="answerChoice.nextQuestionId" type="text" clearable style="max-width: 150px"/>
           </q-field>
           <div class="row">
@@ -99,10 +101,19 @@ export default {
       {
         label: 'Q1',
         value: 'Q1'
-      }
-      ]
+      }]
     }
   },
+  // computed: {
+  //   defaultIdSelection () {
+  //     let ret = [{
+  //       label: 'ENDFORM',
+  //       value: 'ENDFORM'
+  //     }]
+  //     for i , this,questions.lenght i++
+  //     ret.push({ Q + i})
+  //   }
+  // },
   methods: {
     show () {
       this.opened = true
