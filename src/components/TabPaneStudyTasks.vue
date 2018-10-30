@@ -114,7 +114,7 @@ export default {
         this.$q.notify({
           color: 'negative',
           position: 'bottom',
-          message: 'Cannot retrieve the forms, check the connection and reload the page',
+          message: 'Cannot retrieve the forms. Check the connection and reload the page.',
           icon: 'report_problem'
         })
       }
