@@ -8,8 +8,8 @@ export default {
     await axios.post(BASE_URL + '/studies', design)
     // TODO: return await axios....
   },
-  async updateDraftStudyDesign (studyKey) {
-    await axios.put(BASE_URL + '/studies/' + studyKey)
+  async updateDraftStudyDesign (studyKey, design) {
+    await axios.put(BASE_URL + '/studies/' + studyKey, design)
   },
   async publishStudyDesign (design) {
     await axios.post(BASE_URL + '/studies', design)

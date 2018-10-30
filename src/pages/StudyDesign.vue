@@ -104,9 +104,44 @@ export default {
       // TODO: set completed to true or a date
       this.$q.notify('Publish Q')
     },
-    saveProgress () {
-      this.$q.notify('Save Progress')
-      // TODO: axios.post or you put it depending if you have the studyId
+    async saveProgress () {
+      if (this.studyKey) {
+        try {
+          await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
+          console.log('update --> saving progress')
+          this.$q.notify({
+            color: 'primary',
+            position: 'bottom',
+            message: 'Save Progress',
+            icon: 'done'
+          })
+        } catch (err) {
+          this.$q.notify({
+            color: 'negative',
+            position: 'bottom',
+            message: 'Cannot save progress. Please check the connection.',
+            icon: 'report_problem'
+          })
+        }
+      } else {
+        try {
+          await API.saveDraftStudyDesign(this.studyDesign)
+          console.log('NEW Save --> saving progress')
+          this.$q.notify({
+            color: 'primary',
+            position: 'bottom',
+            message: 'Save Progress',
+            icon: 'done'
+          })
+        } catch (err) {
+          this.$q.notify({
+            color: 'negative',
+            position: 'bottom',
+            message: 'Cannot save progress. Please check the connection.',
+            icon: 'report_problem'
+          })
+        }
+      }
     }
   }
 }
