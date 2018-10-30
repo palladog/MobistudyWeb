@@ -32,30 +32,33 @@
         <span slot="subtitle">Items that the participant has to consent to.</span>
       </q-card-title>
       <q-card-main>
+        <q-list>
         <q-list-header>Automatically generated items from tasks. You can rephrase them, but they will be overwritten each time you change the tasks.</q-list-header>
-        <q-item v-for="(tt, tindex) in consent.taskItems" :key="tindex">
-          <q-item-side>Task {{ (tindex + 1) }}</q-item-side>
-          <q-item-main>
-            <div class="row items-center">
-              <div class="col-10"><q-input v-model="tt.description" type="text"/></div>
-              <div class="col-1">Optional:</div>
-              <div class="col-1"><q-checkbox v-model="alwaysTrue" readonly disabled/></div>
-            </div>
-          </q-item-main>
-        </q-item>
-        <q-item-separator />
+          <q-item v-for="(tt, tindex) in consent.taskItems" :key="tindex">
+            <q-item-side>Task {{ (tindex + 1) }}</q-item-side>
+            <q-item-main>
+              <div class="row items-center">
+                <div class="col-10"><q-input v-model="tt.description" type="text"/></div>
+                <div class="col-1">Optional:</div>
+                <div class="col-1"><q-checkbox v-model="alwaysTrue" readonly disabled/></div>
+              </div>
+            </q-item-main>
+          </q-item>
+        </q-list>
+        <q-list class="q-mt-md">
         <q-list-header>Extra items. Use them if you have other items in addition to the tasks.</q-list-header>
-        <q-item v-for="(et, eindex) in consent.extraItems" :key="eindex">
-          <q-item-side>Item {{ (eindex + 1) }}</q-item-side>
-          <q-item-main>
-            <div class="row items-center">
-              <div class="col-9"><q-input v-model="et.description" type="text"/></div>
-              <div class="col-1">Optional:</div>
-              <div class="col-1"><q-checkbox v-model="et.optional" /></div>
-              <div class="col-1"><q-btn round icon="remove" size="sm" color="negative" @click="removeExtraItem(eindex)"></q-btn></div>
-            </div>
-          </q-item-main>
-        </q-item>
+          <q-item v-for="(et, eindex) in consent.extraItems" :key="eindex">
+            <q-item-side>Item {{ (eindex + 1) }}</q-item-side>
+            <q-item-main>
+              <div class="row items-center">
+                <div class="col-9"><q-input v-model="et.description" type="text"/></div>
+                <div class="col-1">Optional:</div>
+                <div class="col-1"><q-checkbox v-model="et.optional" /></div>
+                <div class="col-1"><q-btn round icon="remove" size="sm" color="negative" @click="removeExtraItem(eindex)"></q-btn></div>
+              </div>
+            </q-item-main>
+          </q-item>
+        </q-list>
         <q-btn icon="add" @click="addExtraItem()">Add an item</q-btn>
       </q-card-main>
     </q-card>
