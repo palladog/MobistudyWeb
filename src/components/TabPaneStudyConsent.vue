@@ -68,6 +68,7 @@
 <script>
 import { schedulingToString } from '../data/Scheduling.js'
 import QueryDataTypeEnum from '../data/QueryDataTypeEnum.js'
+import API from '../data/API.js'
 
 export default {
   name: 'TabPaneStudyConsent',
@@ -98,7 +99,6 @@ export default {
           }
           this.consent.taskItems.push(newTaskItem)
         }
-        console.log('updating taskItems', this.consent.taskItems)
       },
       deep: true
     }

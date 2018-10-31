@@ -168,7 +168,22 @@ export default {
       })
     },
     createForm () {
-      // TODO: reset the current form
+      this.newForm = {
+        name: undefined,
+        description: undefined,
+        questions: [{
+          id: 'Q1',
+          text: undefined,
+          helper: undefined,
+          type: 'freetext',
+          nextDefaultId: undefined,
+          answerChoices: [{
+            id: 'Q1A1',
+            text: undefined,
+            nextQuestionId: undefined
+          }]
+        }]
+      }
       this.$refs.formbuilder.show()
     },
     openFormBuilder () {

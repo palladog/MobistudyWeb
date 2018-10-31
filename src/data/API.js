@@ -6,7 +6,6 @@ export default {
 
   async saveDraftStudyDesign (design) {
     await axios.post(BASE_URL + '/studies', design)
-    // TODO: return await axios....
   },
   async updateDraftStudyDesign (studyKey, design) {
     await axios.put(BASE_URL + '/studies/' + studyKey, design)
@@ -16,6 +15,10 @@ export default {
   },
   async getStudyDescription (studyKey) {
     let resp = await axios.get(BASE_URL + '/studies/' + studyKey)
+    return resp.data
+  },
+  async getSpecificForm (formKey) {
+    let resp = await axios.get(BASE_URL + '/forms/' + formKey)
     return resp.data
   },
   async getFormsList () {

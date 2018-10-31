@@ -209,6 +209,7 @@ export default {
           position: 'bottom',
           message: 'The form has been published.',
           icon: 'done'})
+        this.$parent.getForms()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
