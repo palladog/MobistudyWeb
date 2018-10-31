@@ -4,8 +4,9 @@
       <q-toolbar-title>
         Study designer
       </q-toolbar-title>
-      <q-btn class="q-mr-md" color="warning" label="Save Draft" @click="saveProgress"/>
-      <q-btn class="float-right q-mr-md" color="negative" label="Publish" @click="publish"/>
+      <q-btn class="q-mr-md" v-show="!this.studyDesign.published" color="warning" label="Save Draft" @click="saveProgress"/>
+      <q-btn class="float-right q-mr-md" v-show="!this.studyDesign.published" color="negative" label="Publish" @click="publish"/>
+      <q-btn class="float-right q-mr-md" v-show="this.studyDesign.published" color="blue" label="Published"/>
     </q-toolbar>
 
     <q-tabs color="secondary">
@@ -41,6 +42,7 @@ export default {
   data () {
     return {
       studyDesign: {
+        published: undefined,
         generalities: {
           title: '',
           description: '',
@@ -93,18 +95,64 @@ export default {
         this.$q.notify({
           color: 'negative',
           position: 'bottom',
-          message: 'Cannot retrieve the study description, check the connection',
+          message: 'Cannot retrieve the study description. Please check the connection',
           icon: 'report_problem'
         })
       }
     }
   },
   methods: {
-    publish () {
-      // TODO: set completed to true or a date
-      this.$q.notify('Publish Q')
+    async publish () {
+      let timeStamp = new Date().toISOString()
+      if (this.studyDesign.published) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'bottom',
+          message: 'This study has already been published.',
+          icon: 'report_problem'
+        })
+      } else {
+        if (this.studyKey) {
+          try {
+            this.studyDesign.published = timeStamp
+            await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
+            this.$q.notify({
+              color: 'primary',
+              position: 'bottom',
+              message: 'Study has been published.',
+              icon: 'done'
+            })
+          } catch (err) {
+            this.$q.notify({
+              color: 'negative',
+              position: 'bottom',
+              message: 'Cannot publish. Please check the connection.',
+              icon: 'report_problem'
+            })
+          }
+        } else {
+          try {
+            this.studyDesign.published = timeStamp
+            await API.publishStudyDesign(this.studyDesign)
+            this.$q.notify({
+              color: 'primary',
+              position: 'bottom',
+              message: 'Study has been published.',
+              icon: 'done'
+            })
+          } catch (err) {
+            this.$q.notify({
+              color: 'negative',
+              position: 'bottom',
+              message: 'Cannot publish. Please check the connection.',
+              icon: 'report_problem'
+            })
+          }
+        }
+      }
     },
     async saveProgress () {
+      let timeStamp = new Date().toISOString()
       if (this.studyKey) {
         try {
           await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
@@ -125,6 +173,7 @@ export default {
         }
       } else {
         try {
+          this.studyDesign.created = timeStamp
           await API.saveDraftStudyDesign(this.studyDesign)
           console.log('NEW Save --> saving progress')
           this.$q.notify({
