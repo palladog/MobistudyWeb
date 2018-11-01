@@ -19,8 +19,6 @@
               </q-item>
             </q-list>
           </q-btn-dropdown>
-          <q-btn label="Create new Form" @click="createForm()"/>
-          <q-btn label="Simulate Form" @click="openFormSimulator()"/>
         </q-card-main>
       </q-card>
       <!-- Tasks -->
