@@ -10,12 +10,12 @@
     </q-toolbar>
 
     <q-tabs color="secondary">
-      <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" />
+      <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" :color="$v.studyDesign.generalities.$error? 'negative': ''"/>
       <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria" />
       <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/>
       <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent"/>
 
-      <tab-pane-study-generalities name="tab-gen" :generalities="studyDesign.generalities"></tab-pane-study-generalities>
+      <tab-pane-study-generalities name="tab-gen" v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></tab-pane-study-generalities>
       <tab-pane-study-criteria name="tab-crit" :criteria="studyDesign.inclusionCriteria" ></tab-pane-study-criteria>
       <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" ></tab-pane-study-tasks>
       <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent" :tasks="studyDesign.tasks" ></tab-pane-study-consent>
@@ -29,6 +29,7 @@ import TabPaneStudyCriteria from '../components/TabPaneStudyCriteria'
 import TabPaneStudyTasks from '../components/TabPaneStudyTasks'
 import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
 import API from '../data/API.js'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
@@ -83,6 +84,21 @@ export default {
           privacyPolicy: '',
           taskItems: [],
           extraItems: []
+        }
+      }
+    }
+  },
+  validations: {
+    studyDesign: {
+      generalities: {
+        title: { required },
+        principalInvestigators: {
+          required,
+          $each: {
+            name: { required },
+            contact: { required },
+            institution: { required }
+          }
         }
       }
     }
@@ -152,45 +168,41 @@ export default {
       }
     },
     async saveProgress () {
-      let timeStamp = new Date().toISOString()
-      if (this.studyKey) {
-        try {
-          await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
-          console.log('update --> saving progress')
-          this.$q.notify({
-            color: 'primary',
-            position: 'bottom',
-            message: 'Save Progress',
-            icon: 'done'
-          })
-        } catch (err) {
-          this.$q.notify({
-            color: 'negative',
-            position: 'bottom',
-            message: 'Cannot save progress. Please check the connection.',
-            icon: 'report_problem'
-          })
-        }
-      } else {
-        try {
-          this.studyDesign.created = timeStamp
-          await API.saveDraftStudyDesign(this.studyDesign)
-          console.log('NEW Save --> saving progress')
-          this.$q.notify({
-            color: 'primary',
-            position: 'bottom',
-            message: 'Save Progress',
-            icon: 'done'
-          })
-        } catch (err) {
-          this.$q.notify({
-            color: 'negative',
-            position: 'bottom',
-            message: 'Cannot save progress. Please check the connection.',
-            icon: 'report_problem'
-          })
-        }
+      this.$v.studyDesign.generalities.$touch()
+
+      if (this.$v.studyDesign.generalities.$error) {
+        this.$q.notify('Please correct the fields in the generalities.')
+        // return
       }
+      // try {
+      //   if (this.studyKey) {
+      //     await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
+      //     console.log('update --> saving progress')
+      //     this.$q.notify({
+      //       color: 'primary',
+      //       position: 'bottom',
+      //       message: 'Save Progress',
+      //       icon: 'done'
+      //     })
+      //   } else {
+      //     this.studyDesign.created = new Date()
+      //     await API.saveDraftStudyDesign(null, this.studyDesign)
+      //     console.log('NEW Save --> saving progress')
+      //     this.$q.notify({
+      //       color: 'primary',
+      //       position: 'bottom',
+      //       message: 'Save Progress',
+      //       icon: 'done'
+      //     })
+      //   }
+      // } catch (err) {
+      //   this.$q.notify({
+      //     color: 'negative',
+      //     position: 'bottom',
+      //     message: 'Cannot save progress. Please check the connection.',
+      //     icon: 'report_problem'
+      //   })
+      // }
     }
   }
 }
