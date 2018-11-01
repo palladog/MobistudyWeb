@@ -40,7 +40,7 @@
             <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList" @input="changeFormName(task, $event)"/>
           </q-field>
           <q-field class="q-mt-lg" label="Scheduling:" helper="Use the triangle to show or hide the information.">
-            <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)" disable>
+            <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)">
               <scheduler v-model="task.scheduling"></scheduler>
             </q-collapsible>
           </q-field>

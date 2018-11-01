@@ -36,13 +36,7 @@
         <q-select @input="update()" v-show="intervalType == 'y'"   v-model="yearlyInterval" :options="yearlyIntervalOptions" />
       </q-field>
       <q-field label="Week days:" helper="Optional. Specify week days.">
-        <q-checkbox @input="update()" v-model="weekDays" val="mo" label="Monday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="tu" label="Tuesday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="we" label="Wednesday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="th" label="Thursday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="fr" label="Friday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="sa" label="Saturday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="su" label="Sunday" />
+        <q-checkbox v-for="(opt, ind) in weekDaysOpts" :key="ind" @input="update()" v-model="weekDays" :val="opt.value" :label="opt.label" />
       </q-field>
       <q-field label="Months:" helper="Optional. Specify months.">
         <q-checkbox @input="update()" v-model="months" val="1" label="January" />
@@ -66,6 +60,8 @@
 </template>
 
 <script>
+import { DayOfWeekEnum } from '../data/Scheduling.js'
+
 export default {
   name: 'Scheduler',
   props: ['value'],
@@ -439,6 +435,12 @@ export default {
       ],
 
       weekDays: this.value.weekDays,
+      weekDaysOpts: DayOfWeekEnum.values.map((v) => {
+        return {
+          value: v,
+          label: DayOfWeekEnum.valueToString(v)
+        }
+      }),
 
       months: this.value.months,
 

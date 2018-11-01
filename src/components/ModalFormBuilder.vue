@@ -38,7 +38,7 @@
           </q-field>
           <q-field v-show="question.type !== 'multiChoice'" label="Next Question ID: " helper="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM'." >
             <p v-show="answerChoice.nextQuestionId == 'REMOVED'" class="text-negative">THIS QUESTION HAS BEEN REMOVED!</p>
-            <q-input v-model="answerChoice.nextQuestionId" type="text" clearable style="max-width: 150px"/>
+            <!-- <q-select style="width: 110px" color="secondary" v-model="answerChoice.nextQuestionId" :options="defaultIdSelection" @input="update()" /> -->
           </q-field>
           <div class="row">
             <div class="col-6">
@@ -95,27 +95,24 @@ export default {
         label: 'Multiple choice',
         value: 'multiChoice'
       }],
-      opened: false,
-      defaultIdSelection: [{
-        label: 'ENDFORM',
-        value: 'ENDFORM'
-      },
-      {
-        label: 'Q1',
-        value: 'Q1'
-      }]
+      opened: false
     }
   },
-  // computed: {
-  //   defaultIdSelection () {
-  //     let ret = [{
-  //       label: 'ENDFORM',
-  //       value: 'ENDFORM'
-  //     }]
-  //     for i , this,questions.lenght i++
-  //     ret.push({ Q + i})
-  //   }
-  // },
+  computed: {
+    defaultIdSelection () {
+      let ret = [{
+        label: 'ENDFORM',
+        value: 'ENDFORM'
+      }]
+      for (let i = 0; i < this.value.questions.length; i++) {
+        ret.push({
+          label: this.value.questions[i].id,
+          value: this.value.questions[i].id
+        })
+      }
+      return ret
+    }
+  },
   methods: {
     show () {
       this.opened = true
@@ -140,13 +137,10 @@ export default {
           nextQuestionId: undefined
         }]
       })
-      this.defaultIdSelection.push({label: qid, value: qid})
     },
     // removes a question and updates all question IDs, answerChoiceIDs and nextQuestionIDs
     removeQuestion (qIndex) {
       this.value.questions.splice(qIndex, 1)
-      // Remove last element from Default Question ID selection. Keep ID only for first question.
-      if (this.defaultIdSelection.length > 2) this.defaultIdSelection.pop()
 
       // update all indexes
       for (let qi = 0; qi < this.value.questions.length; qi++) {
