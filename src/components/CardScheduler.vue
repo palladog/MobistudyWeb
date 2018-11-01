@@ -12,14 +12,14 @@
         <p>
           Validity:
         </p>
-        <q-field label="From:" helper="Enter the number of days from the start">
-          <q-input type="number" v-model="start" @input="update()"/>
+        <q-field label="From:" helper="Optional. Enter the number of days from the start">
+          <q-input type="number" v-model="start" @input="update()" />
         </q-field>
         <q-field label="To:" helper="Optional. The number of days from the start.">
-          <q-input type="number" v-model="until"  @input="update()"/>
+          <q-input type="number" v-model="until"  @input="update()" />
         </q-field>
         <q-field label="occurrences:" helper="Optional. The number of occurrences.">
-          <q-input type="number" v-model="occurrences"  @input="update()"/>
+          <q-input type="number" v-model="occurrences"  @input="update()" />
         </q-field>
       </div>
       <q-card-separator />

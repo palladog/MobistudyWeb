@@ -38,7 +38,7 @@
           </q-field>
           <q-field v-show="question.type !== 'multiChoice'" label="Next Question ID: " helper="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM'." >
             <p v-show="answerChoice.nextQuestionId == 'REMOVED'" class="text-negative">THIS QUESTION HAS BEEN REMOVED!</p>
-            <!-- <q-select style="width: 110px" color="secondary" v-model="answerChoice.nextQuestionId" :options="defaultIdSelection" @input="update()" /> -->
+            <q-select style="width: 110px" color="secondary" v-model="answerChoice.nextQuestionId" :options="defaultIdSelection" @input="update()" />
           </q-field>
           <div class="row">
             <div class="col-6">
