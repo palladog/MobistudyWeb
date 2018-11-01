@@ -5,13 +5,13 @@ const BASE_URL = '/api'
 export default {
 
   async saveDraftStudyDesign (design) {
-    await axios.post(BASE_URL + '/studies', design)
+    return axios.post(BASE_URL + '/studies', design)
   },
   async updateDraftStudyDesign (studyKey, design) {
-    await axios.put(BASE_URL + '/studies/' + studyKey, design)
+    return axios.put(BASE_URL + '/studies/' + studyKey, design)
   },
   async publishStudyDesign (design) {
-    await axios.post(BASE_URL + '/studies', design)
+    return axios.post(BASE_URL + '/studies', design)
   },
   async getStudyDescription (studyKey) {
     let resp = await axios.get(BASE_URL + '/studies/' + studyKey)
@@ -26,6 +26,6 @@ export default {
     return resp.data
   },
   async publishForm (form) {
-    await axios.post(BASE_URL + '/forms', form)
+    return axios.post(BASE_URL + '/forms', form)
   }
 }
