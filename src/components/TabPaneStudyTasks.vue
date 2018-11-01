@@ -30,8 +30,14 @@
           Form Task
         </q-card-title>
         <q-card-main>
-          <q-field v-if="task.type === 'dataQuery'" label="Data type:">
-            <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery" placeholder="Please select the data type to be collected."/>
+          <q-field v-if="task.type === 'dataQuery'" label="Data type:" helper="Please select the data type to be collected.">
+            <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery"/>
+          </q-field>
+          <q-field v-if="task.type === 'dataQuery'" label="Aggregated:" helper="If aggregated, the data will be summed.">
+            <q-checkbox color="secondary" v-model="task.aggregated" />
+          </q-field>
+          <q-field v-if="task.type === 'dataQuery'" label="Bucket:" helper="You can sum the data into buckets.">
+            <q-select color="secondary" v-model="task.bucket" :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated"/>
           </q-field>
           <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
           <q-field v-if="task.type === 'form'" label="Form:" helper="Please select the form to be shown.">
@@ -92,7 +98,31 @@ export default {
           label: QueryDataTypeEnum.valueToString(v),
           value: v
         }
-      })
+      }),
+      selectOptionsBucketForQuery: [{
+        value: 'none',
+        label: 'None'
+      },
+      {
+        value: 'hour',
+        label: 'Hour'
+      },
+      {
+        value: 'day',
+        label: 'Day'
+      },
+      {
+        value: 'week',
+        label: 'Week'
+      },
+      {
+        value: 'month',
+        label: 'Month'
+      },
+      {
+        value: 'year',
+        label: 'Year'
+      }]
     }
   },
   async created () {
@@ -136,7 +166,8 @@ export default {
           weekDays: []
         },
         dataType: undefined,
-        aggregated: undefined
+        aggregated: false,
+        bucket: 'none'
       })
     },
     removeTask (index) {
