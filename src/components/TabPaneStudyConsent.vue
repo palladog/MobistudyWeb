@@ -68,7 +68,6 @@
 <script>
 import { schedulingToString } from '../data/Scheduling.js'
 import QueryDataTypeEnum from '../data/QueryDataTypeEnum.js'
-import API from '../data/API.js'
 
 export default {
   name: 'TabPaneStudyConsent',
@@ -93,8 +92,7 @@ export default {
             newTaskItem.description = 'You agree to send your data about ' +
             QueryDataTypeEnum.valueToString(task.dataType) + '. ' + schedulingToString(task.scheduling)
           } else if (task.type === 'form') {
-            // TODO: retrieve the form name from the formKey
-            newTaskItem.description = 'You agree to answer the TODO form. ' +
+            newTaskItem.description = `You agree to answer the "${task.formName}" form. ` +
             schedulingToString(task.scheduling)
           }
           this.consent.taskItems.push(newTaskItem)

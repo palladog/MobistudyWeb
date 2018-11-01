@@ -37,7 +37,7 @@
           </q-field>
           <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
           <q-field v-if="task.type === 'form'" label="Form:" helper="Please select the form to be shown.">
-            <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList"/>
+            <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList" @input="changeFormName(task, $event)"/>
           </q-field>
           <q-field class="q-mt-lg" label="Scheduling:" helper="Use the triangle to show or hide the information.">
             <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)" disable>
@@ -164,8 +164,16 @@ export default {
           monthDays: [],
           weekDays: []
         },
-        formKey: undefined
+        formKey: undefined,
+        // this is mainly used for the consent tab, so it can be discarded when the object is sent to the server
+        formName: undefined
       })
+    },
+    changeFormName (task, formKey) {
+      let option = this.selectOptionsFormsList.find((opt) => {
+        return opt.value === formKey
+      })
+      task.formName = option.label
     },
     createForm () {
       this.newForm = {
