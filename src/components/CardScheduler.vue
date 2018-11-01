@@ -12,14 +12,14 @@
         <p>
           Validity:
         </p>
-        <q-field label="From:" helper="Enter the number of days from the start">
-          <q-input type="number" v-model="start" @input="update()"/>
+        <q-field label="From:" helper="Optional. Enter the number of days from the start">
+          <q-input type="number" v-model="start" @input="update()" />
         </q-field>
         <q-field label="To:" helper="Optional. The number of days from the start.">
-          <q-input type="number" v-model="until"  @input="update()"/>
+          <q-input type="number" v-model="until"  @input="update()" />
         </q-field>
         <q-field label="occurrences:" helper="Optional. The number of occurrences.">
-          <q-input type="number" v-model="occurrences"  @input="update()"/>
+          <q-input type="number" v-model="occurrences"  @input="update()" />
         </q-field>
       </div>
       <q-card-separator />
@@ -36,13 +36,7 @@
         <q-select @input="update()" v-show="intervalType == 'y'"   v-model="yearlyInterval" :options="yearlyIntervalOptions" />
       </q-field>
       <q-field label="Week days:" helper="Optional. Specify week days.">
-        <q-checkbox @input="update()" v-model="weekDays" val="mo" label="Monday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="tu" label="Tuesday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="we" label="Wednesday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="th" label="Thursday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="fr" label="Friday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="sa" label="Saturday" />
-        <q-checkbox @input="update()" v-model="weekDays" val="su" label="Sunday" />
+        <q-checkbox v-for="(opt, ind) in weekDaysOpts" :key="ind" @input="update()" v-model="weekDays" :val="opt.value" :label="opt.label" />
       </q-field>
       <q-field label="Months:" helper="Optional. Specify months.">
         <q-checkbox @input="update()" v-model="months" val="1" label="January" />
@@ -66,15 +60,17 @@
 </template>
 
 <script>
+import { DayOfWeekEnum } from '../data/Scheduling.js'
+
 export default {
   name: 'Scheduler',
-  props: ['scheduling'],
+  props: ['value'],
   data () {
     return {
-      startDelaySecs: undefined,
-      validitySecs: undefined,
-      occurrences: undefined,
-      intervalType: 'd',
+      startDelaySecs: this.value.startDelaySecs,
+      validitySecs: this.value.untilSecs,
+      occurrences: this.value.occurrences,
+      intervalType: this.value.intervalType,
       intervalTypeOptions: [
         {
           label: 'Daily',
@@ -94,7 +90,7 @@ export default {
         }
       ],
 
-      dailyInterval: undefined,
+      dailyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       dailyIntervalOptions: [
         {
           label: 'Every day',
@@ -218,7 +214,7 @@ export default {
         }
       ],
 
-      weeklyInterval: undefined,
+      weeklyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       weeklyIntervalOptions: [
         {
           label: 'Every week',
@@ -326,7 +322,7 @@ export default {
         }
       ],
 
-      monthlyInterval: undefined,
+      monthlyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       monthlyIntervalOptions: [
         {
           label: 'Every month',
@@ -394,7 +390,7 @@ export default {
         }
       ],
 
-      yearlyInterval: undefined,
+      yearlyInterval: this.value.interval ? this.value.interval.toString() : undefined,
       yearlyIntervalOptions: [
         {
           label: 'Every year',
@@ -438,13 +434,17 @@ export default {
         }
       ],
 
-      interval: '1',
+      weekDays: this.value.weekDays,
+      weekDaysOpts: DayOfWeekEnum.values.map((v) => {
+        return {
+          value: v,
+          label: DayOfWeekEnum.valueToString(v)
+        }
+      }),
 
-      weekDays: [],
+      months: this.value.months,
 
-      months: [],
-
-      monthDays: []
+      monthDays: this.value.monthDays
     }
   },
   computed: {
