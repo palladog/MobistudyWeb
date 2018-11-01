@@ -40,7 +40,7 @@
             <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList"/>
           </q-field>
           <q-field class="q-mt-lg" label="Scheduling:" helper="Use the triangle to show or hide the information.">
-            <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)" opened>
+            <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)" disable>
               <scheduler v-model="task.scheduling"></scheduler>
             </q-collapsible>
           </q-field>
@@ -114,7 +114,7 @@ export default {
         this.$q.notify({
           color: 'negative',
           position: 'bottom',
-          message: 'Cannot retrieve the forms, check the connection and reload the page',
+          message: 'Cannot retrieve the forms. Check the connection and reload the page.',
           icon: 'report_problem'
         })
       }
@@ -124,7 +124,7 @@ export default {
     },
     addDT () {
       this.tasks.push({
-        id: this.tasks.length,
+        id: this.tasks.length + 1,
         type: 'dataQuery',
         scheduling: {
           startEvent: 'consent',
@@ -143,11 +143,15 @@ export default {
     },
     removeTask (index) {
       this.tasks.splice(index, 1)
-      // TODO: update all tasks ids
+      // update task id
+      for (let i = 0; i < this.tasks.length; i++) {
+        // update the task ids after the one that has been removed
+        if (i >= index) this.tasks[i].id = this.tasks[i].id - 1
+      }
     },
     addFormT () {
       this.tasks.push({
-        id: this.tasks.length,
+        id: this.tasks.length + 1,
         type: 'form',
         scheduling: {
           startEvent: 'consent',
@@ -162,10 +166,24 @@ export default {
         },
         formKey: undefined
       })
-      console.log(this.tasks)
     },
     createForm () {
-      // TODO: reset the current form
+      this.newForm = {
+        name: undefined,
+        description: undefined,
+        questions: [{
+          id: 'Q1',
+          text: undefined,
+          helper: undefined,
+          type: 'freetext',
+          nextDefaultId: undefined,
+          answerChoices: [{
+            id: 'Q1A1',
+            text: undefined,
+            nextQuestionId: undefined
+          }]
+        }]
+      }
       this.$refs.formbuilder.show()
     },
     openFormBuilder () {

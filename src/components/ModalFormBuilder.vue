@@ -65,10 +65,10 @@
           <q-btn color="secondary" @click="openFormSimulator()" label="Simulate" />
         </div>
         <div class="col-4">
-          <q-btn color="primary" @click="opened = false" label="Publish" />
+          <q-btn color="primary" @click="publish()" label="Publish" />
         </div>
         <div class="col-4">
-          <q-btn color="primary" @click="opened = false" label="Cancel" />
+          <q-btn color="primary" @click="cancelForm()" label="Cancel" />
         </div>
       </div>
     </div>
@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import API from '../data/API.js'
+
 export default {
   name: 'FormBuilder',
   props: ['value'],
@@ -190,6 +192,31 @@ export default {
       this.value.questions[qIndex].answerChoices.splice(aIndex, 1)
       for (let i = aIndex; i < this.value.questions[qIndex].answerChoices.length; i++) {
         this.value.questions[qIndex].answerChoices[i].id = this.value.questions[qIndex].id + 'A' + (i + 1)
+      }
+    },
+    // cancel the form
+    cancelForm () {
+      this.opened = false
+      // TODO: Add logic to reset newForm
+    },
+    // publish the form
+    async publish () {
+      this.opened = false
+      try {
+        await API.publishForm(this.value)
+        this.$q.notify({
+          color: 'primary',
+          position: 'bottom',
+          message: 'The form has been published.',
+          icon: 'done'})
+        this.$parent.getForms()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'bottom',
+          message: 'Cannot Publish the form. Check the connection and reload the page.',
+          icon: 'report_problem'
+        })
       }
     }
   }
