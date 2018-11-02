@@ -82,7 +82,7 @@
           <q-datetime class="q-ml-xl q-mb-lg" v-model="value.startDate" @blur="v.startDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable/>
         </q-field>
         <!-- <q-field label="End date:" helper="Ending date of the study" :error="v.endDate.$error" error-label="An end date is required."> -->
-        <q-field label="End date:" helper="Ending date of the study" :error="!v.endDate.$error"
+        <q-field label="End date:" helper="Ending date of the study" :error="!v.endDate.$minValue"
         error-label="Please check the end date. It occurs before the Start Dates.">
           <q-datetime class="q-ml-xl" v-model="value.endDate" @blur="v.endDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable />
         </q-field>
@@ -121,12 +121,6 @@ export default {
     },
     removeRowInstitution (index) {
       this.value.institutions.splice(index, 1)
-    },
-    checkEndDate (dateStart, dateEnd) {
-      if (Date.parse(dateStart) > Date.parse(dateEnd)) {
-        this.$q.notify('The End Date of the study is before the Start Date. Please re-enter the End Date.')
-        this.value.endDate = ''
-      }
     }
   }
 }

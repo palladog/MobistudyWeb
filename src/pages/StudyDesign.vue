@@ -11,14 +11,14 @@
 
     <q-tabs color="secondary">
       <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" :color="$v.studyDesign.generalities.$error? 'negative': ''"/>
-      <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria" />
+      <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria"/>
       <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/>
-      <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent"/>
+      <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent" :color="$v.studyDesign.consent.$error? 'negative': ''"/>
 
       <tab-pane-study-generalities name="tab-gen" v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></tab-pane-study-generalities>
-      <tab-pane-study-criteria name="tab-crit" :criteria="studyDesign.inclusionCriteria" ></tab-pane-study-criteria>
-      <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" ></tab-pane-study-tasks>
-      <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent" :tasks="studyDesign.tasks" ></tab-pane-study-consent>
+      <tab-pane-study-criteria name="tab-crit" :criteria="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria" ></tab-pane-study-criteria>
+      <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" :v="$v.studyDesign.tasks" ></tab-pane-study-tasks>
+      <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent" :tasks="studyDesign.tasks" :v="$v.studyDesign.consent" ></tab-pane-study-consent>
     </q-tabs>
   </q-page>
 </template>
@@ -29,7 +29,7 @@ import TabPaneStudyCriteria from '../components/TabPaneStudyCriteria'
 import TabPaneStudyTasks from '../components/TabPaneStudyTasks'
 import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
 import API from '../data/API.js'
-import { required, minValue } from 'vuelidate/lib/validators'
+import { required, minValue, maxValue } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
@@ -110,7 +110,15 @@ export default {
           }
         },
         startDate: { required },
-        endDate: { required, minValue: minValue(value => value > this.startDate.toISOString()) }
+        endDate: { minValue: minValue(value => value > this.startDate.toISOString()) }
+      },
+      inclusionCriteria: {
+        minAge: { maxValue: maxValue(14) },
+        maxAge: { minValue: minValue(20) }
+      },
+      consent: {
+        invitation: { required },
+        privacyPolicy: { required }
       }
     }
   },
@@ -180,9 +188,21 @@ export default {
     },
     async saveProgress () {
       this.$v.studyDesign.generalities.$touch()
+      this.$v.studyDesign.inclusionCriteria.$touch()
+      this.$v.studyDesign.tasks.$touch()
+      this.$v.studyDesign.consent.$touch()
 
       if (this.$v.studyDesign.generalities.$error) {
         this.$q.notify('Please correct the fields in the Generalities tab.')
+      } else if (this.$v.studyDesign.inclusionCriteria.$error) {
+        this.$q.notify('Please correct the fields in the Inclusion Criteria tab.')
+      }
+      // if (this.$v.studyDesign.tasks.$error) {
+      //   this.$q.notify('Please correct the fields in the Tasks tab.')
+      //   // return
+      // }
+      if (this.$v.studyDesign.consent.$error) {
+        this.$q.notify('Please correct the fields in the Consent tab.')
         // return
       }
       // try {
