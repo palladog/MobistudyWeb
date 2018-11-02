@@ -20,7 +20,37 @@ const DayOfWeekEnum = {
   }
 }
 
-// TODO: create a MonthsEnum
+const MonthOfYearEnum = {
+  values: [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' ],
+  valueToString (v) {
+    if (v === '1') return 'January'
+    if (v === '2') return 'February'
+    if (v === '3') return 'March'
+    if (v === '4') return 'April'
+    if (v === '5') return 'May'
+    if (v === '6') return 'June'
+    if (v === '7') return 'July'
+    if (v === '8') return 'August'
+    if (v === '9') return 'September'
+    if (v === '10') return 'October'
+    if (v === '11') return 'November'
+    if (v === '12') return 'December'
+  },
+  stringToValue (s) {
+    if (s === 'January') return '1'
+    if (s === 'February') return '2'
+    if (s === 'March') return '3'
+    if (s === 'April') return '4'
+    if (s === 'May') return '5'
+    if (s === 'June') return '6'
+    if (s === 'July') return '7'
+    if (s === 'August') return '8'
+    if (s === 'September') return '9'
+    if (s === 'October') return '10'
+    if (s === 'November') return '11'
+    if (s === 'December') return '12'
+  }
+}
 
 export function schedulingToString (sc) {
   if (!sc.startEvent) return 'Not defined yet'
@@ -60,7 +90,12 @@ export function schedulingToString (sc) {
     else s += `Repeated every ${sc.interval} years.`
   }
   if (sc.months && sc.months.length) {
-    // TODO: output "on the following months: "
+    s += ' On the following month(s): '
+    let mths = sc.months.reduce((acc, d, index) => {
+      let r = index === 0 ? '' : ', '
+      return (acc += r + MonthOfYearEnum.valueToString(d))
+    }, '')
+    s += mths + '.'
   }
   if (sc.monthDays && sc.monthDays.length) {
     s += ' On '
@@ -82,4 +117,4 @@ export function schedulingToString (sc) {
   return s
 }
 
-export { DayOfWeekEnum }
+export { DayOfWeekEnum, MonthOfYearEnum }
