@@ -29,7 +29,7 @@ import TabPaneStudyCriteria from '../components/TabPaneStudyCriteria'
 import TabPaneStudyTasks from '../components/TabPaneStudyTasks'
 import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
 import API from '../data/API.js'
-import { required } from 'vuelidate/lib/validators'
+import { required, minValue } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
@@ -92,6 +92,7 @@ export default {
     studyDesign: {
       generalities: {
         title: { required },
+        description: { required },
         principalInvestigators: {
           required,
           $each: {
@@ -99,7 +100,17 @@ export default {
             contact: { required },
             institution: { required }
           }
-        }
+        },
+        institutions: {
+          required,
+          $each: {
+            name: { required },
+            contact: { required },
+            dataAccess: { required }
+          }
+        },
+        startDate: { required },
+        endDate: { required, minValue: minValue(value => value > this.startDate.toISOString()) }
       }
     }
   },
@@ -171,7 +182,7 @@ export default {
       this.$v.studyDesign.generalities.$touch()
 
       if (this.$v.studyDesign.generalities.$error) {
-        this.$q.notify('Please correct the fields in the generalities.')
+        this.$q.notify('Please correct the fields in the Generalities tab.')
         // return
       }
       // try {
