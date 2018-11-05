@@ -9,7 +9,7 @@
       <q-card-main>
         <q-field label="Invitation Message" helper="The invitation message sent for the study."
         :error="v.invitation.$error" error-label="A consent invitation message is required.">
-          <q-input v-model="consent.invitation" @blur="v.privacyPolicy.$touch" type="textarea" rows="7"/>
+          <q-input v-model.trim="consent.invitation" @blur="v.privacyPolicy.$touch" type="textarea" rows="7"/>
         </q-field>
       </q-card-main>
     </q-card>
@@ -22,7 +22,7 @@
       <q-card-main>
         <q-field label="Privacy Message" helper="This the privacy policy for the study."
         :error="v.privacyPolicy.$error" error-label="A Privacy message is required.">
-          <q-input v-model="consent.privacyPolicy"  @blur="v.privacyPolicy.$touch" readonly type="textarea" rows="7"/>
+          <q-input v-model.trim="consent.privacyPolicy"  @blur="v.privacyPolicy.$touch" readonly type="textarea" rows="7"/>
         </q-field>
       </q-card-main>
     </q-card>

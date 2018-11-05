@@ -11,7 +11,7 @@
 
     <q-tabs color="secondary">
       <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" :color="$v.studyDesign.generalities.$error? 'negative': ''"/>
-      <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria"/>
+      <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria" :color="$v.studyDesign.inclusionCriteria.$error? 'negative': ''"/>
       <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/>
       <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent" :color="$v.studyDesign.consent.$error? 'negative': ''"/>
 
@@ -113,7 +113,7 @@ export default {
         endDate: { minValue: minValue(value => value > this.startDate.toISOString()) }
       },
       inclusionCriteria: {
-        minAge: { maxValue: maxValue(14) },
+        minAge: { required, maxValue: maxValue(14) },
         maxAge: { minValue: minValue(20) }
       },
       consent: {
@@ -189,12 +189,13 @@ export default {
     async saveProgress () {
       this.$v.studyDesign.generalities.$touch()
       this.$v.studyDesign.inclusionCriteria.$touch()
-      this.$v.studyDesign.tasks.$touch()
+      // this.$v.studyDesign.tasks.$touch()
       this.$v.studyDesign.consent.$touch()
 
       if (this.$v.studyDesign.generalities.$error) {
         this.$q.notify('Please correct the fields in the Generalities tab.')
-      } else if (this.$v.studyDesign.inclusionCriteria.$error) {
+      }
+      if (this.$v.studyDesign.inclusionCriteria.$error) {
         this.$q.notify('Please correct the fields in the Inclusion Criteria tab.')
       }
       // if (this.$v.studyDesign.tasks.$error) {

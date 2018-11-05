@@ -6,10 +6,10 @@
       </q-card-title>
       <q-card-main>
         <q-field label="Title" helper="Short name of the study" :error="v.title.$error" error-label="A title is required.">
-          <q-input v-model="value.title" @blur="v.title.$touch" @input="update()" clearable/>
+          <q-input v-model.trim="v.title.$model" @blur="v.title.$touch" @input="update()" clearable/>
         </q-field>
         <q-field label="Description" helper="Layman's description of the study" :error="v.description.$error" error-label="A description is required.">
-          <q-input v-model="value.description"  @blur="v.description.$touch" type="textarea" rows="7" @input="update()" clearable/>
+          <q-input v-model.trim="v.description.$model"  @blur="v.description.$touch" type="textarea" rows="7" @input="update()" clearable/>
         </q-field>
       </q-card-main>
     </q-card>
@@ -49,16 +49,16 @@
       <q-card-main>
         <div v-for="(inst, index) in v.institutions.$each.$iter" :key="index">
           <q-field label="Name of Institution:" helper="Please enter the name of the institution" :error="inst.name.$error" error-label="A name is required.">
-            <q-input v-model="inst.name.$model" type="text" @blur="inst.name.$touch" @input="update()" clearable/>
+            <q-input v-model.trim="inst.name.$model" type="text" @blur="inst.name.$touch" @input="update()" clearable/>
           </q-field>
           <q-field label="Contact:" helper="Contact Details of the institution, may include address" :error="inst.contact.$error" error-label="The contact details of the institution are required.">
-            <q-input v-model="inst.contact.$model" type="textarea" rows="4" @blur="inst.contact.$touch" @input="update()" clearable/>
+            <q-input v-model.trim="inst.contact.$model" type="textarea" rows="4" @blur="inst.contact.$touch" @input="update()" clearable/>
           </q-field>
           <q-field class="q-mt-md" label="Data Access:" helper="Data access per institution. Please select the level of access to grant or not."
           :error="inst.dataAccess.$error" error-label="THe level of Data Access is required." @input="update()">
-            <q-radio v-model="inst.dataAccess.$model" val="no" color="secondary" label="No" @input="update()"/>
-            <q-radio v-model="inst.dataAccess.$model" val="anonymised" color="secondary" label="Anonymised" @input="update()" style="margin-left: 10px"/>
-            <q-radio v-model="inst.dataAccess.$model" val="full" color="secondary" label="Full" @input="update()" style="margin-left: 10px"/>
+            <q-radio v-model.trim="inst.dataAccess.$model" val="no" color="secondary" label="No" @input="update()"/>
+            <q-radio v-model.trim="inst.dataAccess.$model" val="anonymised" color="secondary" label="Anonymised" @input="update()" style="margin-left: 10px"/>
+            <q-radio v-model.trim="inst.dataAccess.$model" val="full" color="secondary" label="Full" @input="update()" style="margin-left: 10px"/>
           </q-field>
           <div class="row justify-center">
             <div class="col">
@@ -79,12 +79,12 @@
       </q-card-title>
       <q-card-main>
         <q-field label="Start date:" helper="Starting date of the study" :error="v.startDate.$error" error-label="A start date is required.">
-          <q-datetime class="q-ml-xl q-mb-lg" v-model="value.startDate" @blur="v.startDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable/>
+          <q-datetime class="q-ml-xl q-mb-lg" v-model.trim="value.startDate" @blur="v.startDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable/>
         </q-field>
         <!-- <q-field label="End date:" helper="Ending date of the study" :error="v.endDate.$error" error-label="An end date is required."> -->
         <q-field label="End date:" helper="Ending date of the study" :error="!v.endDate.$minValue"
         error-label="Please check the end date. It occurs before the Start Dates.">
-          <q-datetime class="q-ml-xl" v-model="value.endDate" @blur="v.endDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable />
+          <q-datetime class="q-ml-xl" v-model.trim="value.endDate" @blur="v.endDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable />
         </q-field>
       </q-card-main>
     </q-card>

@@ -3,21 +3,23 @@
     <!-- Inclusion Criteria Tab Card -->
     <q-card class="form-card">
       <q-card-title>Inclusion Criteria
-        <span slot="subtitle">Criteria to filter participants in the study</span>
+        <span slot18="subtitle">Criteria to filter participants in the study</span>
       </q-card-title>
       <q-card-main>
         <!-- Age Range & Sex -->
         <q-field label="Age range:" helper="Desired age range of the participants.">
           <div class="row gutter-lg justify-center">
             <div class="col-6">
-              <q-input v-model="criteria.minAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
+              <!-- <div :error="v.minAge.maxValue" error-label="Min age error." /> -->
+              <!-- <div :error="v.minAge.required" error-label="Min age is required." /> -->
+              <q-input v-model.trim="criteria.minAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
+              <q-field :error="v.minAge.maxValue" error-label="Min age error." />
             </div>
             <div class="col-6">
-              <q-input v-model="criteria.maxAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" clearable/>
+              <q-input v-model.trim="criteria.maxAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" clearable/>
             </div>
           </div>
         </q-field>
-
         <q-field label="Gender:" helper="Desired gender.">
           <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Male" color="secondary" val="male" />
           <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Female" color="secondary" val="female" />
@@ -87,7 +89,7 @@
 import axios from 'axios'
 export default {
   name: 'TabPaneStudyCriteria',
-  props: ['criteria'],
+  props: ['criteria', 'v'],
   computed: {
     diseasesVue: {
       get: function () {
