@@ -7,8 +7,9 @@
       </q-card-title>
       <!-- Consent Tab: Invitation Message Card -->
       <q-card-main>
-        <q-field label="Invitation Message" helper="The invitation message sent for the study.">
-          <q-input v-model="consent.invitation" type="textarea" rows="7"/>
+        <q-field label="Invitation Message" helper="The invitation message sent for the study."
+        :error="v.invitation.$error" error-label="A consent invitation message is required.">
+          <q-input v-model.trim="consent.invitation" @blur="v.privacyPolicy.$touch" type="textarea" rows="7"/>
         </q-field>
       </q-card-main>
     </q-card>
@@ -19,8 +20,9 @@
         <span slot="subtitle">Privacy information viewed by participant.</span>
       </q-card-title>
       <q-card-main>
-        <q-field label="Privacy Message" helper="This the privacy policy for the study.">
-          <q-input v-model="consent.privacyPolicy" readonly type="textarea" rows="7"/>
+        <q-field label="Privacy Message" helper="This the privacy policy for the study."
+        :error="v.privacyPolicy.$error" error-label="A Privacy message is required.">
+          <q-input v-model.trim="consent.privacyPolicy"  @blur="v.privacyPolicy.$touch" readonly type="textarea" rows="7"/>
         </q-field>
       </q-card-main>
     </q-card>
@@ -71,7 +73,7 @@ import QueryDataTypeEnum from '../data/QueryDataTypeEnum.js'
 
 export default {
   name: 'TabPaneStudyConsent',
-  props: ['consent', 'tasks'],
+  props: ['consent', 'tasks', 'v'],
   data () {
     return {
       alwaysTrue: true

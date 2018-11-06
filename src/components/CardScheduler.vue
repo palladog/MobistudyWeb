@@ -39,18 +39,7 @@
         <q-checkbox v-for="(opt, ind) in weekDaysOpts" :key="ind" @input="update()" v-model="weekDays" :val="opt.value" :label="opt.label" />
       </q-field>
       <q-field label="Months:" helper="Optional. Specify months.">
-        <q-checkbox @input="update()" v-model="months" val="1" label="January" />
-        <q-checkbox @input="update()" v-model="months" val="2" label="February" />
-        <q-checkbox @input="update()" v-model="months" val="3" label="March" />
-        <q-checkbox @input="update()" v-model="months" val="4" label="April" />
-        <q-checkbox @input="update()" v-model="months" val="5" label="May" />
-        <q-checkbox @input="update()" v-model="months" val="6" label="June" />
-        <q-checkbox @input="update()" v-model="months" val="7" label="July" />
-        <q-checkbox @input="update()" v-model="months" val="8" label="August" />
-        <q-checkbox @input="update()" v-model="months" val="9" label="September" />
-        <q-checkbox @input="update()" v-model="months" val="10" label="October" />
-        <q-checkbox @input="update()" v-model="months" val="11" label="November" />
-        <q-checkbox @input="update()" v-model="months" val="12" label="December" />
+        <q-checkbox v-for="(monOpt, ind2) in monthsOpts" :key="ind2" @input="update()" v-model="months" :val="monOpt.value" :label="monOpt.label" />
       </q-field>
       <q-field label="Days of the month:" helper="Optional. Specify the days of the mont.">
         <q-checkbox @input="update()" v-for="monthday in 31" v-model="monthDays" :key="monthday" :val="monthday" :label="monthday.toString()" />
@@ -60,7 +49,7 @@
 </template>
 
 <script>
-import { DayOfWeekEnum } from '../data/Scheduling.js'
+import { DayOfWeekEnum, MonthOfYearEnum } from '../data/Scheduling.js'
 
 export default {
   name: 'Scheduler',
@@ -443,6 +432,12 @@ export default {
       }),
 
       months: this.value.months,
+      monthsOpts: MonthOfYearEnum.values.map((v) => {
+        return {
+          value: v,
+          label: MonthOfYearEnum.valueToString(v)
+        }
+      }),
 
       monthDays: this.value.monthDays
     }
