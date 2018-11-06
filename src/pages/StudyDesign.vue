@@ -11,7 +11,7 @@
 
     <q-tabs color="secondary">
       <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" :color="$v.studyDesign.generalities.$error? 'negative': ''"/>
-      <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria" :color="$v.studyDesign.inclusionCriteria.$error? 'negative': ''"/>
+      <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria"/>
       <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/>
       <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent" :color="$v.studyDesign.consent.$error? 'negative': ''"/>
 
@@ -29,7 +29,7 @@ import TabPaneStudyCriteria from '../components/TabPaneStudyCriteria'
 import TabPaneStudyTasks from '../components/TabPaneStudyTasks'
 import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
 import API from '../data/API.js'
-import { required, minValue, maxValue } from 'vuelidate/lib/validators'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
@@ -111,10 +111,6 @@ export default {
         },
         startDate: { required },
         endDate: { required }
-      },
-      inclusionCriteria: {
-        minAge: { required, maxValue: maxValue(14) },
-        maxAge: { minValue: minValue(20) }
       },
       consent: {
         invitation: { required },

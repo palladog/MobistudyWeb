@@ -10,10 +10,7 @@
         <q-field label="Age range:" helper="Desired age range of the participants.">
           <div class="row gutter-lg justify-center">
             <div class="col-6">
-              <!-- <div :error="v.minAge.maxValue" error-label="Min age error." /> -->
-              <!-- <div :error="v.minAge.required" error-label="Min age is required." /> -->
               <q-input v-model.trim="criteria.minAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Minimum Age of participants" clearable/>
-              <q-field :error="v.minAge.maxValue" error-label="Min age error." />
             </div>
             <div class="col-6">
               <q-input v-model.trim="criteria.maxAge" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" placeholder="Maximum Age of participants" clearable/>
@@ -48,6 +45,7 @@
             <q-radio class="col" v-model="criteria.lifestyle.active" val="no" color="secondary" label="Not active" style="margin-left: 10px" />
             <q-radio class="col" v-model="criteria.lifestyle.active" val="notrequired" color="secondary" label="Not required" style="margin-left: 10px" />
           </div>
+           <q-item-separator />
           <div class="row">
             <q-radio class="col" v-model="criteria.lifestyle.smoker" val="yes" color="secondary" label="Smoker" />
             <q-radio class="col" v-model="criteria.lifestyle.smoker" val="no" color="secondary" label="Non smoker" style="margin-left: 10px" />
@@ -68,7 +66,7 @@
           </q-field>
           <q-field class="q-mt-md" label="Participant Answer:" helper="This is the answer that make the patient eligible.">
             <q-radio class="q-mr-lg" v-model="criteriaQuestion.answer" val="yes" color="secondary" label="Yes" />
-            <q-radio v-model="criteriaQuestion.answer" val="no" color="full" label="No" />
+            <q-radio v-model="criteriaQuestion.answer" val="no" color="full" label="No" style="margin-left: 10px" />
           </q-field>
           <div class="row justify-center">
             <div class="col">

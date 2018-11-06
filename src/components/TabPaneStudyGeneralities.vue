@@ -98,8 +98,6 @@ export default {
   props: ['value', 'v'],
   methods: {
     update () {
-      console.log('Start Date: ', this.value.startDate)
-      console.log('End Date ->: ', this.value.endDate)
       this.$emit('input', this.value)
     },
     addRowInvestigator (index) {
