@@ -110,7 +110,7 @@ export default {
           }
         },
         startDate: { required },
-        endDate: { minValue: minValue(value => value > this.startDate.toISOString()) }
+        endDate: { required }
       },
       inclusionCriteria: {
         minAge: { required, maxValue: maxValue(14) },

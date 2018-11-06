@@ -79,12 +79,12 @@
       </q-card-title>
       <q-card-main>
         <q-field label="Start date:" helper="Starting date of the study" :error="v.startDate.$error" error-label="A start date is required.">
-          <q-datetime class="q-ml-xl q-mb-lg" v-model.trim="value.startDate" @blur="v.startDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable/>
+          <q-datetime class="q-ml-xl q-mb-lg" v-model.trim="v.startDate.$model" @blur="v.startDate.$touch"
+          :max="v.endDate.$model" type="date" format="D-MMM-YYYY" @input="update()" clearable/>
         </q-field>
-        <!-- <q-field label="End date:" helper="Ending date of the study" :error="v.endDate.$error" error-label="An end date is required."> -->
-        <q-field label="End date:" helper="Ending date of the study" :error="!v.endDate.$minValue"
-        error-label="Please check the end date. It occurs before the Start Dates.">
-          <q-datetime class="q-ml-xl" v-model.trim="value.endDate" @blur="v.endDate.$touch" type="date" format="D-MMM-YYYY" @input="update()" clearable />
+        <q-field label="End date:" helper="Ending date of the study" :error="v.endDate.$error" error-label="An end date is required.">
+          <q-datetime class="q-ml-xl" v-model.trim="v.endDate.$model" @blur="v.endDate.$touch"
+           :min="v.startDate.$model" type="date" format="D-MMM-YYYY" @input="update()" clearable />
         </q-field>
       </q-card-main>
     </q-card>
@@ -98,6 +98,8 @@ export default {
   props: ['value', 'v'],
   methods: {
     update () {
+      console.log('Start Date: ', this.value.startDate)
+      console.log('End Date ->: ', this.value.endDate)
       this.$emit('input', this.value)
     },
     addRowInvestigator (index) {
