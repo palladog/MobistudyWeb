@@ -5,6 +5,10 @@ const routes = [
     component: () => import('layouts/HomeLayout.vue'),
     children: [
       {
+        path: '/onBoarding',
+        component: () => import('pages/Onboarding.vue')
+      },
+      {
         path: '/studyDesign',
         component: () => import('pages/StudyDesign.vue')
       },
