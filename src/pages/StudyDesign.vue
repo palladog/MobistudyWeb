@@ -133,8 +133,26 @@ export default {
     }
   },
   methods: {
+    checkValidation: function () {
+      var errorGen = false
+      var errorCon = false
+      this.$v.studyDesign.generalities.$touch()
+      this.$v.studyDesign.consent.$touch()
+      // Check for errors from validation
+      if (this.$v.studyDesign.generalities.$error) {
+        this.$q.notify('Please correct the fields in the Generalities tab.')
+        errorGen = true
+      }
+      if (this.$v.studyDesign.consent.$error) {
+        this.$q.notify('Please correct the fields in the Consent tab.')
+        errorCon = true
+      }
+      // If there are any validation errors, the validation check has failed
+      if (errorGen === true || errorCon === true) return false
+    },
     async publish () {
       let timeStamp = new Date().toISOString()
+      // If published not empty, study has already been published
       if (this.studyDesign.published) {
         this.$q.notify({
           color: 'negative',
@@ -143,94 +161,82 @@ export default {
           icon: 'report_problem'
         })
       } else {
+        // If there is a studyKey and validation passed, a draft exists
         if (this.studyKey) {
-          try {
-            this.studyDesign.published = timeStamp
-            await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
-            this.$q.notify({
-              color: 'primary',
-              position: 'bottom',
-              message: 'Study has been published.',
-              icon: 'done'
-            })
-          } catch (err) {
-            this.$q.notify({
-              color: 'negative',
-              position: 'bottom',
-              message: 'Cannot publish. Please check the connection.',
-              icon: 'report_problem'
-            })
+          if (this.checkValidation() !== false) {
+            try {
+              this.studyDesign.published = timeStamp
+              await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
+              this.$q.notify({
+                color: 'primary',
+                position: 'bottom',
+                message: 'Study has been published.',
+                icon: 'done'
+              })
+            } catch (err) {
+              this.$q.notify({
+                color: 'negative',
+                position: 'bottom',
+                message: 'Error. Please check the connection.',
+                icon: 'report_problem'
+              })
+            }
           }
         } else {
-          try {
-            this.studyDesign.published = timeStamp
-            await API.publishStudyDesign(this.studyDesign)
-            this.$q.notify({
-              color: 'primary',
-              position: 'bottom',
-              message: 'Study has been published.',
-              icon: 'done'
-            })
-          } catch (err) {
-            this.$q.notify({
-              color: 'negative',
-              position: 'bottom',
-              message: 'Cannot publish. Please check the connection.',
-              icon: 'report_problem'
-            })
+          // If no studyKey, publish directly if validation passed
+          if (this.checkValidation() !== false) {
+            try {
+              this.studyDesign.published = timeStamp
+              await API.publishStudyDesign(this.studyDesign)
+              this.$q.notify({
+                color: 'primary',
+                position: 'bottom',
+                message: 'Study has been published.',
+                icon: 'done'
+              })
+            } catch (err) {
+              this.$q.notify({
+                color: 'negative',
+                position: 'bottom',
+                message: 'Cannot publish. Please check the connection.',
+                icon: 'report_problem'
+              })
+            }
           }
         }
       }
     },
     async saveProgress () {
-      this.$v.studyDesign.generalities.$touch()
-      this.$v.studyDesign.inclusionCriteria.$touch()
-      // this.$v.studyDesign.tasks.$touch()
-      this.$v.studyDesign.consent.$touch()
-
-      if (this.$v.studyDesign.generalities.$error) {
-        this.$q.notify('Please correct the fields in the Generalities tab.')
+      // If there are no validation errors, save the draft
+      if (this.checkValidation() !== false) {
+        try {
+          if (this.studyKey) {
+            await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
+            this.$q.notify({
+              color: 'primary',
+              position: 'bottom',
+              message: 'Save Progress',
+              icon: 'done'
+            })
+          } else {
+            this.studyDesign.created = new Date()
+            await API.saveDraftStudyDesign(null, this.studyDesign)
+            this.$q.notify({
+              color: 'primary',
+              position: 'bottom',
+              message: 'Save Progress',
+              icon: 'done'
+            })
+          }
+        } catch (err) {
+          this.$q.notify({
+            color: 'negative',
+            position: 'bottom',
+            message: 'Cannot save progress. Please check the connection.',
+            icon: 'report_problem'
+          })
+        }
       }
-      if (this.$v.studyDesign.inclusionCriteria.$error) {
-        this.$q.notify('Please correct the fields in the Inclusion Criteria tab.')
-      }
-      // if (this.$v.studyDesign.tasks.$error) {
-      //   this.$q.notify('Please correct the fields in the Tasks tab.')
-      //   // return
-      // }
-      if (this.$v.studyDesign.consent.$error) {
-        this.$q.notify('Please correct the fields in the Consent tab.')
-        // return
-      }
-      // try {
-      //   if (this.studyKey) {
-      //     await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
-      //     console.log('update --> saving progress')
-      //     this.$q.notify({
-      //       color: 'primary',
-      //       position: 'bottom',
-      //       message: 'Save Progress',
-      //       icon: 'done'
-      //     })
-      //   } else {
-      //     this.studyDesign.created = new Date()
-      //     await API.saveDraftStudyDesign(null, this.studyDesign)
-      //     console.log('NEW Save --> saving progress')
-      //     this.$q.notify({
-      //       color: 'primary',
-      //       position: 'bottom',
-      //       message: 'Save Progress',
-      //       icon: 'done'
-      //     })
-      //   }
-      // } catch (err) {
-      //   this.$q.notify({
-      //     color: 'negative',
-      //     position: 'bottom',
-      //     message: 'Cannot save progress. Please check the connection.',
-      //     icon: 'report_problem'
-      //   })
-      // }
     }
   }
 }
