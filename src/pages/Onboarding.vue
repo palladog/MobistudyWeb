@@ -56,15 +56,24 @@
             </q-card-title>
             <q-card-separator />
             <q-card-main>
-                <q-field label="Email" helper="Enter your email." >
-                    <q-input v-model="username" type="email" placeholder=" e.g. email@email.com" />
-                </q-field>
-                <div class ="row q-mt-md">
+                <div class="shadow-1 q-pa-sm q-mt-lg">
+                   <q-field class ="q-mt-md" label="Editable studies(NOT published): " />
+                    <div v-for="(study, index) in studiesList" :key="index">
+                        <q-btn class ="row q-mt-md" size="lg" :label="study" @click="editStudy(index)"/>
+                    </div>
+                </div>
+                <div class="shadow-1 q-pa-sm q-mt-lg">
+                    <q-field class ="q-mt-md" label="Publised Studies (view-only): " />
+                    <div v-for="(pstudy, index1) in publishedStudiesList" :key="index1">
+                        <q-btn class ="row q-mt-md" size="lg" :label="pstudy" @click="viewStudy(index1)"/>
+                    </div>
+                </div>
+                <div class ="row q-mt-lg">
                     <q-btn label="Create New Study" color="secondary" @click="createNewStudy()"/>
                 </div>
             </q-card-main>
         </q-card>
-        <!-- List of Studies -->
+        <!-- Settings -->
         <q-card class="form-onboarding-card q-pa-lg">
             <q-card-title>Settings
                 <q-btn class="float-right" round icon="close" color="black" @click="closeSettings()"/>
@@ -93,13 +102,23 @@ export default {
       username: '',
       password: '',
       newPassword: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      studiesList: [ 'study 1456556546456546564774', 'study 2', 'study 3' ],
+      publishedStudiesList: [ 'Pubstudy 1', 'Pubstudy 2' ]
     }
   },
   methods: {
     createNewStudy () {
     // Call Study Design
       this.$q.notify('Create new study')
+    },
+    editStudy (index) {
+    // Edit Study
+      this.$q.notify('Edit Study ' + index)
+    },
+    viewStudy (index) {
+    // Edit Study
+      this.$q.notify('Edit Study ' + index)
     },
     login () {
       this.$q.notify('Login clicked')
