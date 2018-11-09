@@ -9,7 +9,7 @@ const routes = [
         component: () => import('pages/StudyDesign.vue')
       },
       {
-        path: '/studyDesign/:studyKey',
+        path: '/studyDesign/:propStudyKey',
         component: () => import('pages/StudyDesign.vue'),
         props: true
       }
