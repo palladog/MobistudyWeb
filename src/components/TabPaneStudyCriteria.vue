@@ -113,9 +113,9 @@ export default {
         return keys
       },
       set: function (keys) {
-        for (let key in this.criteria.meds) {
+        for (let key in this.criteria.medications) {
           // if key is not in keys, delete
-          if (!keys.includes(key)) delete this.criteria.meds[key]
+          if (!keys.includes(key)) delete this.criteria.medications[key]
         }
       }
     }
@@ -166,19 +166,19 @@ export default {
       var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
       var edition = 'en-edition'
       var version = '20180131'
-      // Construct Meds Query URL
+      // Construct medications Query URL
       var medQueryURL = baseUrl + '/' + edition + '/v' + version + '/descriptions?query=' + encodeURIComponent(medDescription) + '&limit=50&searchMode=partialMatching' + '&lang=english&statusFilter=activeOnly&skipTo=0' + '&semanticFilter=substance' + '&returnLimit=100&normalize=true'
       this.loading = true
       axios.get(medQueryURL)
         .then((response) => {
           this.loading = false
           const dataMed = response.data
-          // Filter out already selected meds
+          // Filter out already selected medications
           let resMedsFiltByLen = dataMed.matches.filter(entry => entry['term'].length < 40)
-          const selMeds = Object.keys(this.criteria.meds)
+          const selMeds = Object.keys(this.criteria.medications)
           var medsFil = resMedsFiltByLen.filter((entry) => !selMeds.includes(entry.term))
           if (medsFil.length === 0) {
-            this.$q.notify('There are no more matching items with the current terms. Please search for other meds.')
+            this.$q.notify('There are no more matching items with the current terms. Please search for other medications.')
           }
           const resultM = medsFil.map((item) => {
             return {
@@ -194,7 +194,7 @@ export default {
         })
     },
     selectedMeds (item) {
-      this.criteria.meds[item.label] = item.conceptId
+      this.criteria.medications[item.label] = item.conceptId
     },
     duplicatedMeds (label) {
       this.$q.notify(`"${label}" already in list`)
