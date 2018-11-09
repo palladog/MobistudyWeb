@@ -33,7 +33,7 @@ import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
-  props: ['studyKey'],
+  props: ['propStudyKey'],
   components: {
     'tab-pane-study-generalities': TabPaneStudyGeneralities,
     'tab-pane-study-criteria': TabPaneStudyCriteria,
@@ -43,6 +43,7 @@ export default {
   data () {
     return {
       studyDesign: {
+        keyOfStudy: '',
         published: undefined,
         generalities: {
           title: '',
@@ -119,9 +120,9 @@ export default {
     }
   },
   async created () {
-    if (this.studyKey) {
+    if (this.propStudyKey) {
       try {
-        this.studyDesign = await API.getStudyDescription(this.studyKey)
+        this.studyDesign = await API.getStudyDescription(this.propStudyKey)
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -162,11 +163,11 @@ export default {
         })
       } else {
         // If there is a studyKey and validation passed, a draft exists
-        if (this.studyKey) {
+        if (this.propStudyKey) {
           if (this.checkValidation() !== false) {
             try {
               this.studyDesign.published = timeStamp
-              await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
+              await API.updateDraftStudyDesign(this.propStudyKey, this.studyDesign)
               this.$q.notify({
                 color: 'primary',
                 position: 'bottom',
@@ -209,32 +210,53 @@ export default {
     async saveProgress () {
       // If there are no validation errors, save the draft
       if (this.checkValidation() !== false) {
-        try {
-          if (this.studyKey) {
-            await API.updateDraftStudyDesign(this.studyKey, this.studyDesign)
+        var checkStudyKey = ''
+        // If there is a propStudykey, use that as the key and update the study only
+        // If there is no propStudykey, then use the studyDesign.keyOfStudy after creating a new study to update
+        if (this.propStudyKey) {
+          checkStudyKey = this.propStudyKey
+        } else if (this.propStudyKey === undefined && this.studyDesign.keyOfStudy) {
+          checkStudyKey = this.studyDesign.keyOfStudy
+        }
+        if (checkStudyKey) {
+          try {
+            await API.updateDraftStudyDesign(checkStudyKey, this.studyDesign)
             this.$q.notify({
               color: 'primary',
               position: 'bottom',
-              message: 'Save Progress',
+              message: 'Updated draft and saved Progress',
               icon: 'done'
             })
-          } else {
-            this.studyDesign.created = new Date()
-            await API.saveDraftStudyDesign(null, this.studyDesign)
+          } catch (err) {
             this.$q.notify({
-              color: 'primary',
+              color: 'negative',
               position: 'bottom',
-              message: 'Save Progress',
-              icon: 'done'
+              message: 'Cannot update and save progress. Please check the connection.',
+              icon: 'report_problem'
             })
           }
-        } catch (err) {
-          this.$q.notify({
-            color: 'negative',
-            position: 'bottom',
-            message: 'Cannot save progress. Please check the connection.',
-            icon: 'report_problem'
-          })
+        } else {
+        // If no studyKey in the prop, then save the study for the 1st time
+          this.studyDesign.created = new Date()
+          await API.saveDraftStudyDesign(this.studyDesign)
+            .then(response => {
+              this.studyDesign.keyOfStudy = response.data._key
+              this.$q.notify({
+                color: 'primary',
+                position: 'bottom',
+                message: 'Updated draft and saved Progress',
+                icon: 'done'
+              })
+            })
+            .catch(err => {
+              console.log(err)
+              this.$q.notify({
+                color: 'negative',
+                position: 'bottom',
+                message: 'Cannot save progress. Please check the connection.',
+                icon: 'report_problem'
+              })
+            })
         }
       }
     }

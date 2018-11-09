@@ -22,7 +22,7 @@
       <q-card-main>
         <q-field label="Privacy Message" helper="This the privacy policy for the study."
         :error="v.privacyPolicy.$error" error-label="A Privacy message is required.">
-          <q-input v-model.trim="consent.privacyPolicy"  @blur="v.privacyPolicy.$touch" readonly type="textarea" rows="7"/>
+          <q-input v-model.trim="consent.privacyPolicy"  @blur="v.privacyPolicy.$touch" type="textarea" rows="7"/>
         </q-field>
       </q-card-main>
     </q-card>
