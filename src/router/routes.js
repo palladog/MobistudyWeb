@@ -1,9 +1,31 @@
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
+    component: () => import('pages/login.vue')
+  },
+  {
+    path: '/newuser',
+    component: () => import('pages/newuser.vue')
+  },
+  {
+    path: '/admin',
     component: () => import('layouts/HomeLayout.vue'),
     children: [
+      {
+        path: '/',
+        component: () => import('pages/adminHome.vue')
+      }
+    ]
+  },
+  {
+    path: '/researcher',
+    component: () => import('layouts/HomeLayout.vue'),
+    children: [
+      {
+        path: '/',
+        component: () => import('pages/researcherHome.vue')
+      },
       {
         path: '/studyDesign',
         component: () => import('pages/StudyDesign.vue')

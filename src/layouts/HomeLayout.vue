@@ -6,6 +6,7 @@
           MobiStudy
           <span slot="subtitle">Running on Quasar v{{ $q.version }}</span>
         </q-toolbar-title>
+        <q-btn flat round dense icon="exit_to_app" @click="logout()" aria-label="Logout" />
       </q-toolbar>
 
     </q-layout-header>
@@ -14,3 +15,19 @@
     </q-page-container>
   </q-layout>
 </template>
+
+<script>
+import API from '../data/API.js'
+import userinfo from '../data/userinfo.js'
+
+export default {
+  name: 'HomeLayout',
+  methods: {
+    logout () {
+      userinfo.logout()
+      API.setToken('')
+      this.$router.push('/login')
+    }
+  }
+}
+</script>
