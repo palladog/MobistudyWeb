@@ -1,12 +1,30 @@
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
+    component: () => import('pages/login.vue')
+  },
+  {
+    path: '/newuser',
+    component: () => import('pages/newuser.vue')
+  },
+  {
+    path: '/admin',
     component: () => import('layouts/HomeLayout.vue'),
     children: [
       {
-        path: '/onBoarding',
-        component: () => import('pages/Onboarding.vue')
+        path: '/',
+        component: () => import('pages/adminHome.vue')
+      }
+    ]
+  },
+  {
+    path: '/researcher',
+    component: () => import('layouts/HomeLayout.vue'),
+    children: [
+      {
+        path: '/',
+        component: () => import('pages/researcherHome.vue')
       },
       {
         path: '/studyDesign',
