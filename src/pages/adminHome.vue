@@ -1,12 +1,15 @@
 <template>
   <q-page>
+
     <q-card class="q-ma-lg">
+      <q-card-title>
+        Create new team
+      </q-card-title>
       <q-card-main>
-        <div class="row justify-around">
-          <p class="col-2 self-center">
-            Create new team
-          </p>
-          <q-input v-model="teamName" class="col-8 self-center" float-label="Team name" type="text" />
+        <div class="row">
+          <div class="col-10 self-center">
+            <q-input v-model="teamName" class="col-8 self-center" float-label="Team name" type="text" />
+          </div>
           <div class="col-2 self-center">
             <q-btn label="Add" color="warning" @click="createTeam()"/>
           </div>
@@ -19,22 +22,36 @@
         Generate teams invitation codes
       </q-card-title>
       <q-card-main>
-        <div v-for="(team, index) in allTeams" :key="index" class="q-mt-md row justify-around">
-          <p class="col-2 self-center">
-            Team name: {{team.name}}
-          </p>
-          <div class="col-2 self-center">
-            <q-btn label="Generate new code" color="warning" @click="generateCode(team._key)"/>
+        <div v-for="(team, index) in allTeams" :key="index" class="q-mt-md">
+          <div class="row">
+            <div class="col-2">
+              <q-field label="Team Name: " />
+            </div>
+            <div class="col-4"> {{team.name}} </div>
+            <div class="col-6">
+              <q-btn label="Generate new code" color="warning" @click="generateCode(team._key)"/>
+            </div>
           </div>
-          <p class="col-8">
-            Code: {{team.invitationCode}}
-          </p>
+          <div class="row q-mt-lg">
+            <div class="col-2">
+               <q-field label="Code: " />
+            </div>
+            <div class="col-10 exactFit">
+              {{team.invitationCode}}
+            </div>
+          </div>
+          <q-card-separator class="q-mt-md"/>
         </div>
       </q-card-main>
     </q-card>
 
   </q-page>
 </template>
+<style>
+div .exactFit {
+  word-wrap: break-word
+}
+</style>
 
 <script>
 import API from '../data/API.js'

@@ -13,23 +13,41 @@
         </div>
       </q-card-main>
     </q-card>
-
+    <q-card class="q-ma-lg q-pa-lg">
+      <q-card-title>Teams
+        <span slot="subtitle">A member of the following team(s) (Please select from the List): </span>
+      </q-card-title>
+      <q-card-separator />
+      <q-card-main>
+        <q-btn-dropdown color="primary" label="List of Teams">
+          <q-list link>
+            <q-item v-for="(team, index) in teamsList" :key="index" v-close-overlay @click.native="getUserStudies(index)">
+              <q-item-side icon="folder" inverted color="primary" />
+              <q-item-main>
+                <q-item-tile label> {{ team.toUpperCase() }} </q-item-tile>
+              </q-item-main>
+            </q-item>
+            <q-item-separator inset />
+          </q-list>
+      </q-btn-dropdown>
+      </q-card-main>
+    </q-card>
     <q-card class="q-ma-lg q-pa-lg">
         <q-card-title>Studies
-            <span slot="subtitle">List of Studies</span>
+            <span slot="subtitle">List of Studies for {{ this.selectedTeam }}</span>
         </q-card-title>
         <q-card-separator />
         <q-card-main>
             <div class="shadow-1 q-pa-sm q-mt-lg">
                <q-field class ="q-mt-md" label="Editable studies (NOT published): " />
                 <div v-for="(study, index) in studiesList" :key="index">
-                    <q-btn class ="row q-mt-md" size="lg" :label="study" @click="editStudy(index)"/>
+                    <q-btn class ="row q-mt-md" size="lg" :label="study" color="light" @click="editStudy(index)"/>
                 </div>
             </div>
             <div class="shadow-1 q-pa-sm q-mt-lg">
-                <q-field class ="q-mt-md" label="Publised Studies (view-only): " />
+                <q-field class ="q-mt-md" label="Published Studies (view-only): " />
                 <div v-for="(pstudy, index1) in publishedStudiesList" :key="index1">
-                    <q-btn class ="row q-mt-md" size="lg" :label="pstudy" @click="viewStudy(index1)"/>
+                    <q-btn class ="row q-mt-md" size="lg" :label="pstudy" color="positive" @click="viewStudy(index1)"/>
                 </div>
             </div>
             <div class ="row q-mt-lg">
@@ -48,7 +66,11 @@ export default {
   data () {
     return {
       invitationCode: '',
-      password: ''
+      password: '',
+      studiesList: ['a study'],
+      publishedStudiesList: ['a publ'],
+      teamsList: ['team A', 'Team B', 'Team C'],
+      selectedTeam: ''
     }
   },
   async created () {
@@ -66,6 +88,10 @@ export default {
           icon: 'report_problem'
         })
       }
+    },
+    getUserStudies (index) {
+      this.selectedTeam = this.teamsList[index].toUpperCase()
+      this.$q.notify('Get studies for user in: ' + this.selectedTeam)
     }
   }
 }

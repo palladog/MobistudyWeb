@@ -42,6 +42,7 @@ export default {
     let resp = await axios.get(BASE_URL + '/teams', axiosConfig)
     return resp.data
   },
+  // STUDY
   async saveDraftStudyDesign (design) {
     return axios.post(BASE_URL + '/studies', design, axiosConfig)
   },
@@ -55,6 +56,7 @@ export default {
     let resp = await axios.get(BASE_URL + '/studies/' + studyKey, axiosConfig)
     return resp.data
   },
+  // FORMS
   async getSpecificForm (formKey) {
     let resp = await axios.get(BASE_URL + '/forms/' + formKey, axiosConfig)
     return resp.data
