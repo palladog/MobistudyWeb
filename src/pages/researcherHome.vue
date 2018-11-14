@@ -81,6 +81,13 @@ export default {
     async addToTeam () {
       try {
         await API.addUserToTeam(this.invitationCode)
+        this.$q.dialog({
+          title: 'User added to team',
+          message: 'You have been added to the team.',
+          ok: true,
+          cancel: false,
+          preventClose: true
+        })
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -88,6 +95,10 @@ export default {
           icon: 'report_problem'
         })
       }
+    },
+    async verifyExistence () {
+      // TO DO
+      // Called by addToTeam() ---> verify if the user already exists in the team
     },
     getUserStudies (index) {
       this.selectedTeam = this.teamsList[index].toUpperCase()
