@@ -84,7 +84,7 @@ export default {
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot add your account to any team, please check the invitation code again',
+          message: 'Cannot add your account to any team. Please check the invitation code again or ask for a new one.',
           icon: 'report_problem'
         })
       }

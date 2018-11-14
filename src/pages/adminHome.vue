@@ -21,7 +21,8 @@
       <q-card-title>
         Generate teams invitation codes
       </q-card-title>
-      <q-card-main>
+      <q-collapsible label="Click to view teams and codes">
+        <q-card-main>
         <div v-for="(team, index) in allTeams" :key="index" class="q-mt-md">
           <div class="row">
             <div class="col-2">
@@ -42,7 +43,36 @@
           </div>
           <q-card-separator class="q-mt-md"/>
         </div>
-      </q-card-main>
+        </q-card-main>
+      </q-collapsible>
+    </q-card>
+
+    <q-card class="q-ma-lg">
+      <q-collapsible label="Teams &amp; Members:">
+        <q-card-main>
+        <div v-for="(team, tindex) in allTeams" :key="tindex">
+          <div class="row">
+            <div class="col-2">
+              <q-field class="text-weight-bolder" label="Team: " />
+            </div>
+            <div class="col-10 exactFit">
+              <q-field class="text-weight-bolder" :label="team.name"/>
+            </div>
+          </div>
+          <div v-for="(user, uindex) in teamMembers[tindex]" :key="uindex">
+            <div class="row">
+              <div class="col-2">
+                <q-field class="text-weight-medium" label="User: " />
+              </div>
+              <div class="col-10 exactFit">
+                <q-field :label="user"/>
+              </div>
+            </div>
+          </div>
+          <q-card-separator class="q-mt-sm"/>
+        </div>
+        </q-card-main>
+      </q-collapsible>
     </q-card>
 
   </q-page>
@@ -60,7 +90,8 @@ export default {
   data () {
     return {
       teamName: '',
-      allTeams: []
+      allTeams: [],
+      teamMembers: []
     }
   },
   async created () {
@@ -70,6 +101,10 @@ export default {
     async getTeams () {
       try {
         this.allTeams = await API.getTeams()
+        let i = 0
+        for (i; i < this.allTeams.length; i++) {
+          this.teamMembers[i] = this.allTeams[i].researchersKeys
+        }
       } catch (err) {
         this.$q.notify({
           color: 'negative',
