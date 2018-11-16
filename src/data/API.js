@@ -56,6 +56,14 @@ export default {
     let resp = await axios.get(BASE_URL + '/studies/' + studyKey, axiosConfig)
     return resp.data
   },
+  async getStudies () {
+    let resp = await axios.get(BASE_URL + '/studies/', axiosConfig)
+    return resp.data
+  },
+  async getAllTeamStudies (teamKey) {
+    let resp = await axios.get(BASE_URL + '/studies/' + teamKey, axiosConfig)
+    return resp.data
+  },
   // FORMS
   async getSpecificForm (formKey) {
     let resp = await axios.get(BASE_URL + '/forms/' + formKey, axiosConfig)

@@ -33,7 +33,7 @@ import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
-  props: ['propStudyKey'],
+  props: ['propStudyKey', 'propTeamKey'],
   components: {
     'tab-pane-study-generalities': TabPaneStudyGeneralities,
     'tab-pane-study-criteria': TabPaneStudyCriteria,
@@ -44,6 +44,7 @@ export default {
     return {
       studyDesign: {
         keyOfStudy: '',
+        studyTeamKey: '',
         published: undefined,
         generalities: {
           title: '',
@@ -120,9 +121,15 @@ export default {
     }
   },
   async created () {
+    // Populate the studyTeamKey with the prop value
+    if (this.studyDesign.studyTeamKey === '') {
+      this.studyDesign.studyTeamKey = this.propTeamKey
+    }
+    // Populate Study if it has already been created before
     if (this.propStudyKey) {
       try {
         this.studyDesign = await API.getStudyDescription(this.propStudyKey)
+        console.log('STU  DEs', this.studyDesign)
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -236,27 +243,47 @@ export default {
             })
           }
         } else {
-        // If no studyKey in the prop, then save the study for the 1st time
-          this.studyDesign.created = new Date()
-          await API.saveDraftStudyDesign(this.studyDesign)
-            .then(response => {
-              this.studyDesign.keyOfStudy = response.data._key
-              this.$q.notify({
-                color: 'primary',
-                position: 'bottom',
-                message: 'Updated draft and saved Progress',
-                icon: 'done'
-              })
+          try {
+          // If no studyKey in the prop, then save the study for the 1st time
+            this.studyDesign.created = new Date()
+            let response = await API.saveDraftStudyDesign(this.studyDesign)
+            console.log('TU RESPONSE: ', response)
+            this.studyDesign.keyOfStudy = response.data._key
+            this.$q.notify({
+              color: 'primary',
+              position: 'bottom',
+              message: 'Updated draft and saved Progress',
+              icon: 'done'
             })
-            .catch(err => {
-              console.log(err)
-              this.$q.notify({
-                color: 'negative',
-                position: 'bottom',
-                message: 'Cannot save progress. Please check the connection.',
-                icon: 'report_problem'
-              })
+          } catch (err) {
+            this.$q.notify({
+              color: 'negative',
+              position: 'bottom',
+              message: 'Cannot save progress. Please check the connection.',
+              icon: 'report_problem'
             })
+          }
+          // If no studyKey in the prop, then save the study for the 1st time
+          // this.studyDesign.created = new Date()
+          // await API.saveDraftStudyDesign(this.studyDesign)
+          //   .then(response => {
+          //     this.studyDesign.keyOfStudy = response.data._key
+          //     this.$q.notify({
+          //       color: 'primary',
+          //       position: 'bottom',
+          //       message: 'Updated draft and saved Progress',
+          //       icon: 'done'
+          //     })
+          //   })
+          //   .catch(err => {
+          //     // this.$q.notify({
+          //     //   color: 'negative',
+          //     //   position: 'bottom',
+          //     //   message: 'Cannot save progress. Please check the connection.',
+          //     //   icon: 'report_problem'
+          //     // })
+          //     throw err
+          //   })
         }
       }
     }

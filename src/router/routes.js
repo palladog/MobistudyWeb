@@ -27,11 +27,12 @@ const routes = [
         component: () => import('pages/researcherHome.vue')
       },
       {
-        path: '/studyDesign',
-        component: () => import('pages/StudyDesign.vue')
+        path: '/studyDesign/:propTeamKey',
+        component: () => import('pages/StudyDesign.vue'),
+        props: true
       },
       {
-        path: '/studyDesign/:propStudyKey',
+        path: '/studyDesign/:propTeamKey/:propStudyKey',
         component: () => import('pages/StudyDesign.vue'),
         props: true
       }

@@ -19,28 +19,18 @@
       </q-card-title>
       <q-card-separator />
       <q-card-main>
-        <q-btn-dropdown color="primary" label="List of Teams">
-          <q-list link>
-            <q-item v-for="(team, index) in teamsList" :key="index" v-close-overlay @click.native="getUserStudies(index)">
-              <q-item-side icon="folder" inverted color="primary" />
-              <q-item-main>
-                <q-item-tile label> {{ team.toUpperCase() }} </q-item-tile>
-              </q-item-main>
-            </q-item>
-            <q-item-separator inset />
-          </q-list>
-      </q-btn-dropdown>
+        <q-select v-model="selectedTeamValue" :options="teamsListOptions" @input="selectTeam()"/>
       </q-card-main>
     </q-card>
     <q-card class="q-ma-lg q-pa-lg">
         <q-card-title>Studies
-            <span slot="subtitle">List of Studies for {{ this.selectedTeam }}</span>
+            <span slot="subtitle">List of Studies for {{ this.selectedTeamLabel }}</span>
         </q-card-title>
         <q-card-separator />
         <q-card-main>
             <div class="shadow-1 q-pa-sm q-mt-lg">
                <q-field class ="q-mt-md" label="Editable studies (NOT published): " />
-                <div v-for="(study, index) in studiesList" :key="index">
+                <div v-for="(study, index) in unpublishedStudiesList" :key="index">
                     <q-btn class ="row q-mt-md" size="lg" :label="study" color="light" @click="editStudy(index)"/>
                 </div>
             </div>
@@ -51,10 +41,11 @@
                 </div>
             </div>
             <div class ="row q-mt-lg">
-                <q-btn label="Create New Study" color="secondary" @click="createNewStudy()"/>
+                <q-btn :label="createStudyLabel" color="secondary" @click="createNewStudy()"/>
             </div>
         </q-card-main>
     </q-card>
+    <q-btn label="Get list of studies" @click="getAllStudies()" />
 
   </q-page>
 </template>
@@ -67,15 +58,25 @@ export default {
     return {
       invitationCode: '',
       password: '',
-      studiesList: ['a study'],
-      publishedStudiesList: ['a publ'],
-      teamsList: ['team A', 'Team B', 'Team C'],
-      selectedTeam: ''
+      unpublishedStudiesList: [],
+      publishedStudiesList: [],
+      teamsList: [],
+      teamsListOptions: [],
+      selectedTeamValue: '',
+      selectedTeamLabel: '',
+      createStudyLabel: 'Create new study'
     }
   },
   async created () {
     let teams = await API.getUserTeams()
-    console.log(teams)
+    let i = 0
+    for (i = 0; i < teams.length; i++) {
+      // get each team name and add it to teamsListOptions
+      this.teamsListOptions.push({
+        label: teams[i].name,
+        value: teams[i]._key
+      })
+    }
   },
   methods: {
     async addToTeam () {
@@ -100,9 +101,50 @@ export default {
       // TO DO
       // Called by addToTeam() ---> verify if the user already exists in the team
     },
-    getUserStudies (index) {
-      this.selectedTeam = this.teamsList[index].toUpperCase()
-      this.$q.notify('Get studies for user in: ' + this.selectedTeam)
+    selectTeam (index) {
+      let result = this.teamsListOptions.find(opts => opts.value === this.selectedTeamValue)
+      this.selectedTeamLabel = result.label
+      this.createStudyLabel = 'Create new study for ' + this.selectedTeamLabel
+    },
+    async getAllStudies () {
+      try {
+        // All Studies for a team
+        let listOfStudies = await API.getAllTeamStudies(this.selectedTeamValue)
+        if (listOfStudies.length > 0) {
+          // Get Published Studies
+          var publishedStudies = listOfStudies.filter(function (obj) {
+            return obj.published !== ''
+          }).map(function (obj) {
+            return obj.generalities.title
+          })
+          this.publishedStudiesList = publishedStudies
+          // Get unpublished Studies
+          var unPublishedStudies = listOfStudies.filter(function (obj) {
+            return obj.published === ''
+          }).map(function (obj) {
+            return obj.generalities.title
+          })
+          this.unpublishedStudiesList = unPublishedStudies
+        }
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot get list of studies.',
+          icon: 'report_problem'
+        })
+      }
+    },
+    createNewStudy () {
+      // user has to select a team
+      if (this.selectedTeamValue === '') {
+        this.$q.notify({
+          color: 'negative',
+          message: 'You must select a team in order to create a study.',
+          icon: 'report_problem'
+        })
+      } else {
+        this.$router.push('studyDesign/' + this.selectedTeamValue)
+      }
     }
   }
 }
