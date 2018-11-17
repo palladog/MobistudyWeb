@@ -2,11 +2,12 @@
   <q-page>
     <q-toolbar color="secondary">
       <q-toolbar-title>
-        Study designer
+        Study Designer
       </q-toolbar-title>
-      <q-btn class="q-mr-md" v-show="!this.studyDesign.published" color="warning" label="Save Draft" @click="saveProgress"/>
-      <q-btn class="float-right q-mr-md" v-show="!this.studyDesign.published" color="negative" label="Publish" @click="publish"/>
+      <q-btn class="q-mr-md" v-show="!this.studyDesign.published" size="md" color="warning" label="Save Draft" @click="saveProgress()"/>
+      <q-btn class="float-right q-mr-md" v-show="!this.studyDesign.published" color="negative" label="Publish" @click="publish()"/>
       <q-btn class="float-right q-mr-md" v-show="this.studyDesign.published" color="blue" label="Published"/>
+      <q-btn  class="float-right q-mr-md" round color="black" icon="close" @click="exitDesigner"/>
     </q-toolbar>
 
     <q-tabs color="secondary">
@@ -128,8 +129,7 @@ export default {
     // Populate Study if it has already been created before
     if (this.propStudyKey) {
       try {
-        this.studyDesign = await API.getStudyDescription(this.propStudyKey)
-        console.log('STU  DEs', this.studyDesign)
+        this.studyDesign = await API.getStudyDescription(this.propTeamKey, this.propStudyKey)
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -247,7 +247,6 @@ export default {
           // If no studyKey in the prop, then save the study for the 1st time
             this.studyDesign.created = new Date()
             let response = await API.saveDraftStudyDesign(this.studyDesign)
-            console.log('TU RESPONSE: ', response)
             this.studyDesign.keyOfStudy = response.data._key
             this.$q.notify({
               color: 'primary',
@@ -285,6 +284,29 @@ export default {
           //     throw err
           //   })
         }
+      }
+    },
+    exitDesigner () {
+      if (this.keyOfStudy === '') {
+        this.$q.dialog({
+          title: 'Exit',
+          color: 'warning',
+          message: 'You have not saved this draft. Would you like to continue exiting yet?',
+          ok: 'Yes, exit without saving',
+          cancel: 'Cancel'
+        }).then(() => {
+          this.$router.push('/researcher')
+        }).catch(() => {
+          this.$q.notify('Cancel')
+        })
+      } else {
+        this.$q.notify({
+          color: 'primary',
+          position: 'bottom',
+          message: 'Back to User home.',
+          icon: 'arrow_back'
+        })
+        this.$router.push('/researcher')
       }
     }
   }

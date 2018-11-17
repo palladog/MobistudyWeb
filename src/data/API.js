@@ -53,8 +53,8 @@ export default {
   async publishStudyDesign (design) {
     return axios.post(BASE_URL + '/studies', design, axiosConfig)
   },
-  async getStudyDescription (studyKey) {
-    let resp = await axios.get(BASE_URL + '/studies/' + studyKey, axiosConfig)
+  async getStudyDescription (teamKey, studyKey) {
+    let resp = await axios.get(BASE_URL + '/studies/' + teamKey + '/' + studyKey, axiosConfig)
     return resp.data
   },
   async getStudies () {

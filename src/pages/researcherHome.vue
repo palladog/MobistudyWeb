@@ -32,14 +32,16 @@
         <q-card-main>
             <div class="shadow-1 q-pa-sm q-mt-lg" v-show="unpublishedStudiesList.length > 0">
                <q-field class ="q-mt-md" label="Editable studies (NOT published): " />
+               <q-card-separator />
                 <div v-for="(study, index) in unpublishedStudiesList" :key="index">
-                    <q-btn class ="row q-mt-md" size="lg" :label="study" color="light" @click="editStudy(index)"/>
+                    <q-btn class ="row q-mt-md" size="lg" :label="study.title" color="light" @click="goToStudy(index)"/>
                 </div>
             </div>
             <div class="shadow-1 q-pa-sm q-mt-lg" v-show="publishedStudiesList.length > 0">
                 <q-field class ="q-mt-md" label="Published Studies (view-only): " />
+                <q-card-separator />
                 <div v-for="(pstudy, index1) in publishedStudiesList" :key="index1">
-                    <q-btn class ="row q-mt-md" size="lg" :label="pstudy" color="positive" @click="viewStudy(index1)"/>
+                    <q-btn class ="row q-mt-md" size="lg" :label="pstudy.title" color="positive" @click="goToPubStudy(index1)"/>
                 </div>
             </div>
             <div class ="row q-mt-lg">
@@ -47,7 +49,6 @@
             </div>
         </q-card-main>
     </q-card>
-    <!-- <q-btn label="Get list of studies" @click="getAllStudies()" /> -->
 
   </q-page>
 </template>
@@ -66,7 +67,7 @@ export default {
       teamsListOptions: [],
       selectedTeamValue: '',
       selectedTeamLabel: '',
-      createStudyLabel: 'Create new study'
+      createStudyLabel: ''
     }
   },
   async created () {
@@ -76,7 +77,7 @@ export default {
     } catch (err) {
       this.$q.notify({
         color: 'negative',
-        message: 'Cannot initialise home page2. Please check our connection.',
+        message: 'Cannot initialise home page. Please check our connection.',
         icon: 'report_problem'
       })
     }
@@ -96,6 +97,7 @@ export default {
         // Set default value displayed to that of first element
         this.selectedTeamValue = teams[0]._key
         this.selectedTeamLabel = teams[0].name
+        this.createStudyLabel = 'Create new study for ' + this.selectedTeamLabel
         this.getAllStudies()
       }
     },
@@ -143,14 +145,16 @@ export default {
           var publishedStudies = this.userListOfStudies.filter(function (obj) {
             return obj.published !== ''
           }).map(function (obj) {
-            return obj.generalities.title
+            let pubObj = { 'title': obj.generalities.title, 'study_key': obj._key }
+            return pubObj
           })
           this.publishedStudiesList = publishedStudies
           // Get unpublished Studies
           var unPublishedStudies = this.userListOfStudies.filter(function (obj) {
             return obj.published === ''
           }).map(function (obj) {
-            return obj.generalities.title
+            let unpubObj = { 'title': obj.generalities.title, 'study_key': obj._key }
+            return unpubObj
           })
           this.unpublishedStudiesList = unPublishedStudies
         }
@@ -173,6 +177,12 @@ export default {
       } else {
         this.$router.push('studyDesign/' + this.selectedTeamValue)
       }
+    },
+    goToStudy (index) {
+      this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.unpublishedStudiesList[index].study_key)
+    },
+    goToPubStudy (index) {
+      this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.publishedStudiesList[index].study_key)
     }
   }
 }
