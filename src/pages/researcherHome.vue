@@ -1,40 +1,42 @@
 <template>
   <q-page>
-    <q-card class="q-ma-lg">
+    <q-card class="q-ma-lg q-pl-lg" color="cyan-2">
       <q-card-main>
-        <div class="row justify-around">
-          <p class="col-2 self-center">
-            Add me to a new team:
-          </p>
-          <q-input v-model="invitationCode" class="col-8 self-center" float-label="Invitation code" type="text" />
-          <div class="col-2 self-center">
-            <q-btn  label="Add" color="warning" @click="addToTeam()"/>
-          </div>
-        </div>
+        <q-field :label="userWelcome"/>
+      </q-card-main>
+    </q-card>
+    <q-card class="q-ma-lg q-pl-lg q-pr-lg">
+      <q-card-title>Add me to a new team</q-card-title>
+      <q-card-main>
+          <q-input v-model="invitationCode" float-label="Invitation code" type="text" clearable/>
+          <q-btn class="q-mt-md"  label="Add" color="warning" @click="addToTeam()"/>
       </q-card-main>
     </q-card>
     <q-card class="q-ma-lg q-pa-lg">
-      <q-card-title>Teams
-        <span slot="subtitle">A member of the following team(s) (Please select from the List): </span>
+      <q-card-title  v-show="teamsListOptions.length === 0">Teams
+        <span slot="subtitle">You are not a member of any team. Please contact your mobiStudy admin to be added to one. </span>
+      </q-card-title>
+      <q-card-title  v-show="teamsListOptions.length > 0">Teams
+        <span slot="subtitle">You are a member of the following team(s). (Please select one from the List to continue): </span>
       </q-card-title>
       <q-card-separator />
-      <q-card-main>
+      <q-card-main v-show="teamsListOptions.length > 0">
         <q-select v-model="selectedTeamValue" :options="teamsListOptions" @input="selectTeam()"/>
       </q-card-main>
     </q-card>
-    <q-card class="q-ma-lg q-pa-lg">
+    <q-card class="q-ma-lg q-pa-lg" v-show="userListOfStudies.length > 0">
         <q-card-title>Studies
             <span slot="subtitle">List of Studies for {{ this.selectedTeamLabel }}</span>
         </q-card-title>
         <q-card-separator />
         <q-card-main>
-            <div class="shadow-1 q-pa-sm q-mt-lg">
+            <div class="shadow-1 q-pa-sm q-mt-lg" v-show="unpublishedStudiesList.length > 0">
                <q-field class ="q-mt-md" label="Editable studies (NOT published): " />
                 <div v-for="(study, index) in unpublishedStudiesList" :key="index">
                     <q-btn class ="row q-mt-md" size="lg" :label="study" color="light" @click="editStudy(index)"/>
                 </div>
             </div>
-            <div class="shadow-1 q-pa-sm q-mt-lg">
+            <div class="shadow-1 q-pa-sm q-mt-lg" v-show="publishedStudiesList.length > 0">
                 <q-field class ="q-mt-md" label="Published Studies (view-only): " />
                 <div v-for="(pstudy, index1) in publishedStudiesList" :key="index1">
                     <q-btn class ="row q-mt-md" size="lg" :label="pstudy" color="positive" @click="viewStudy(index1)"/>
@@ -45,7 +47,7 @@
             </div>
         </q-card-main>
     </q-card>
-    <q-btn label="Get list of studies" @click="getAllStudies()" />
+    <!-- <q-btn label="Get list of studies" @click="getAllStudies()" /> -->
 
   </q-page>
 </template>
@@ -56,11 +58,11 @@ import API from '../data/API.js'
 export default {
   data () {
     return {
+      userWelcome: '',
       invitationCode: '',
-      password: '',
+      userListOfStudies: [],
       unpublishedStudiesList: [],
       publishedStudiesList: [],
-      teamsList: [],
       teamsListOptions: [],
       selectedTeamValue: '',
       selectedTeamLabel: '',
@@ -68,17 +70,42 @@ export default {
     }
   },
   async created () {
-    let teams = await API.getUserTeams()
-    let i = 0
-    for (i = 0; i < teams.length; i++) {
-      // get each team name and add it to teamsListOptions
-      this.teamsListOptions.push({
-        label: teams[i].name,
-        value: teams[i]._key
+    try {
+      this.initTeams()
+      this.initWelcomeLabel()
+    } catch (err) {
+      this.$q.notify({
+        color: 'negative',
+        message: 'Cannot initialise home page2. Please check our connection.',
+        icon: 'report_problem'
       })
     }
   },
   methods: {
+    async initTeams () {
+      let teams = await API.getTeams()
+      if (teams.length > 0) {
+        let i = 0
+        for (i = 0; i < teams.length; i++) {
+          // get each team name and add it to teamsListOptions
+          this.teamsListOptions.push({
+            label: teams[i].name,
+            value: teams[i]._key
+          })
+        }
+        // Set default value displayed to that of first element
+        this.selectedTeamValue = teams[0]._key
+        this.selectedTeamLabel = teams[0].name
+        this.getAllStudies()
+      }
+    },
+    async initWelcomeLabel () {
+      let cati = window.localStorage.getItem('user')
+      cati = JSON.parse(cati)
+      let catiKy = cati._key
+      let userDetails = await API.getUserByKey(catiKy)
+      this.userWelcome = 'Hello ' + userDetails.email + '. You are logged in as a ' + userDetails.role + '.'
+    },
     async addToTeam () {
       try {
         await API.addUserToTeam(this.invitationCode)
@@ -104,22 +131,23 @@ export default {
     selectTeam (index) {
       let result = this.teamsListOptions.find(opts => opts.value === this.selectedTeamValue)
       this.selectedTeamLabel = result.label
+      this.getAllStudies()
       this.createStudyLabel = 'Create new study for ' + this.selectedTeamLabel
     },
     async getAllStudies () {
       try {
         // All Studies for a team
-        let listOfStudies = await API.getAllTeamStudies(this.selectedTeamValue)
-        if (listOfStudies.length > 0) {
+        this.userListOfStudies = await API.getAllTeamStudies(this.selectedTeamValue)
+        if (this.userListOfStudies.length > 0) {
           // Get Published Studies
-          var publishedStudies = listOfStudies.filter(function (obj) {
+          var publishedStudies = this.userListOfStudies.filter(function (obj) {
             return obj.published !== ''
           }).map(function (obj) {
             return obj.generalities.title
           })
           this.publishedStudiesList = publishedStudies
           // Get unpublished Studies
-          var unPublishedStudies = listOfStudies.filter(function (obj) {
+          var unPublishedStudies = this.userListOfStudies.filter(function (obj) {
             return obj.published === ''
           }).map(function (obj) {
             return obj.generalities.title
