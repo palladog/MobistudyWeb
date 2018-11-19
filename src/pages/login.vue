@@ -15,7 +15,7 @@
             <q-btn label="New User" color="secondary" @click="newUser()"/>
           </q-card-actions>
           <q-card-actions>
-            <q-btn label="Recover lost password" flat color="primary" @click="recoverPassword()"/>
+            <q-btn label="Reset password" flat color="primary" @click="resetPassword()"/>
           </q-card-actions>
         </q-card>
       </q-page>
@@ -66,8 +66,31 @@ export default {
         }
       }
     },
-    async recoverPassword () {
-      this.$q.notify('Not implemented yet!')
+    async resetPassword () {
+      try {
+        if (this.email !== '') {
+          await API.askPasswordResetEmail(this.email)
+          this.$q.dialog({
+            title: 'Password reset',
+            message: 'An email was sent to ' + this.email + ' with instrucitions about how to reset your password.',
+            ok: true,
+            cancel: false,
+            preventClose: true
+          })
+        } else {
+          this.$q.notify({
+            color: 'negative',
+            message: 'No email specified',
+            icon: 'report_problem'
+          })
+        }
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Password reset failed: ' + error.message,
+          icon: 'report_problem'
+        })
+      }
     },
     newUser () {
       this.$router.push('/newuser')

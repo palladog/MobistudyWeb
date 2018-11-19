@@ -12,13 +12,14 @@ export default {
   name: 'Mobistudy',
   created () {
     // check if already logged in, otherwise go to login
-    if (!user.getUser().loggedin) {
-      console.log('LOGGED OUT GOING TO LOGIN')
+    let resettingpwd = window.location.href.includes('resetPassword')
+    if (!user.getUser().loggedin && !resettingpwd) {
+      console.log('LOGGED OUT, GOING TO LOGIN')
       this.$router.push('/login')
       // window.location = '/login'
       return
     } else {
-      API.setToken(user.getUser().token)
+      if (!resettingpwd) API.setToken(user.getUser().token)
     }
     // Add a 401 response interceptor
     this.$axios.interceptors.response.use(function (response) {

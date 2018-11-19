@@ -16,6 +16,12 @@ export default {
     let resp = await axios.post(BASE_URL + '/login', { email: email, password: password })
     return resp.data
   },
+  async askPasswordResetEmail (email) {
+    return axios.post(BASE_URL + '/sendResetPasswordEmail', { email: email })
+  },
+  async resetPassword (token, newpassword) {
+    return axios.post(BASE_URL + '/resetPassword', { token: token, password: newpassword })
+  },
   async createUser (newuser) {
     return axios.post(BASE_URL + '/users', newuser)
   },
