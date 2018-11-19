@@ -25,13 +25,10 @@
         <q-card-main>
         <div v-for="(team, index) in allTeams" :key="index" class="q-mt-md">
           <div class="row">
-            <div class="col-2">
+            <div class="col">
               <q-field label="Team Name: " />
             </div>
-            <div class="col-4"> {{team.name}} </div>
-            <div class="col-6">
-              <q-btn label="Generate new code" color="warning" @click="generateCode(team._key)"/>
-            </div>
+            <div class="col"> {{team.name}} </div>
           </div>
           <div class="row q-mt-lg">
             <div class="col-2">
@@ -39,6 +36,14 @@
             </div>
             <div class="col-10 exactFit">
               {{team.invitationCode}}
+            </div>
+          </div>
+          <div class="row q-mt-lg">
+            <div class="col">
+               <q-field label="Expiry date: " /> {{ niceDate(team.invitationExpiry) }}
+            </div>
+            <div class="col">
+              <q-btn label="Generate new code" color="warning" @click="generateCode(team._key)"/>
             </div>
           </div>
           <q-card-separator class="q-mt-md"/>
@@ -85,6 +90,7 @@ div .exactFit {
 
 <script>
 import API from '../data/API.js'
+import { date } from 'quasar'
 
 export default {
   data () {
@@ -98,6 +104,9 @@ export default {
     this.getTeams()
   },
   methods: {
+    niceDate (timeStamp) {
+      return date.formatDate(timeStamp, 'DD/MM/YYYY')
+    },
     async getTeams () {
       try {
         this.allTeams = await API.getTeams()

@@ -2,7 +2,7 @@
   <q-page>
     <q-card class="q-ma-lg q-pl-lg" color="cyan-2">
       <q-card-main>
-        <q-field :label="userWelcome"/>
+        {{ welcomeLabel }}
       </q-card-main>
     </q-card>
     <q-card class="q-ma-lg q-pl-lg q-pr-lg">
@@ -24,7 +24,7 @@
         <q-select v-model="selectedTeamValue" :options="teamsListOptions" @input="selectTeam()"/>
       </q-card-main>
     </q-card>
-    <q-card class="q-ma-lg q-pa-lg" v-show="userListOfStudies.length > 0">
+    <q-card class="q-ma-lg q-pa-lg" >
         <q-card-title>Studies
             <span slot="subtitle">List of Studies for {{ this.selectedTeamLabel }}</span>
         </q-card-title>
@@ -55,13 +55,12 @@
 
 <script>
 import API from '../data/API.js'
+import userinfo from '../data/userinfo.js'
 
 export default {
   data () {
     return {
-      userWelcome: '',
       invitationCode: '',
-      userListOfStudies: [],
       unpublishedStudiesList: [],
       publishedStudiesList: [],
       teamsListOptions: [],
@@ -73,7 +72,6 @@ export default {
   async created () {
     try {
       this.initTeams()
-      this.initWelcomeLabel()
     } catch (err) {
       this.$q.notify({
         color: 'negative',
@@ -82,31 +80,27 @@ export default {
       })
     }
   },
+  computed: {
+    welcomeLabel () {
+      return 'Hello ' + userinfo.getUser().email + '. You are logged in as a ' + userinfo.getUser().role + '.'
+    }
+  },
   methods: {
     async initTeams () {
       let teams = await API.getTeams()
-      if (teams.length > 0) {
-        let i = 0
-        for (i = 0; i < teams.length; i++) {
-          // get each team name and add it to teamsListOptions
-          this.teamsListOptions.push({
-            label: teams[i].name,
-            value: teams[i]._key
-          })
+      this.teamsListOptions = teams.map(t => {
+        return {
+          label: t.name,
+          value: t._key
         }
+      })
+      if (teams.length > 0) {
         // Set default value displayed to that of first element
         this.selectedTeamValue = teams[0]._key
         this.selectedTeamLabel = teams[0].name
         this.createStudyLabel = 'Create new study for ' + this.selectedTeamLabel
         this.getAllStudies()
       }
-    },
-    async initWelcomeLabel () {
-      let cati = window.localStorage.getItem('user')
-      cati = JSON.parse(cati)
-      let catiKy = cati._key
-      let userDetails = await API.getUserByKey(catiKy)
-      this.userWelcome = 'Hello ' + userDetails.email + '. You are logged in as a ' + userDetails.role + '.'
     },
     async addToTeam () {
       try {
@@ -118,6 +112,8 @@ export default {
           cancel: false,
           preventClose: true
         })
+        this.invitationCode = ''
+        this.initTeams()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -139,24 +135,22 @@ export default {
     async getAllStudies () {
       try {
         // All Studies for a team
-        this.userListOfStudies = await API.getAllTeamStudies(this.selectedTeamValue)
-        if (this.userListOfStudies.length > 0) {
+        let userListOfStudies = await API.getAllTeamStudies(this.selectedTeamValue)
+        if (userListOfStudies.length > 0) {
           // Get Published Studies
-          var publishedStudies = this.userListOfStudies.filter(function (obj) {
+          this.publishedStudiesList = userListOfStudies.filter(function (obj) {
             return obj.published !== ''
           }).map(function (obj) {
             let pubObj = { 'title': obj.generalities.title, 'study_key': obj._key }
             return pubObj
           })
-          this.publishedStudiesList = publishedStudies
           // Get unpublished Studies
-          var unPublishedStudies = this.userListOfStudies.filter(function (obj) {
+          this.unpublishedStudiesList = userListOfStudies.filter(function (obj) {
             return obj.published === ''
           }).map(function (obj) {
             let unpubObj = { 'title': obj.generalities.title, 'study_key': obj._key }
             return unpubObj
           })
-          this.unpublishedStudiesList = unPublishedStudies
         }
       } catch (err) {
         this.$q.notify({

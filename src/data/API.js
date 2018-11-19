@@ -36,7 +36,7 @@ export default {
     return resp.data
   },
   async addUserToTeam (invitationCode) {
-    return axios.post(BASE_URL + '/teams/addResearcher', invitationCode, axiosConfig)
+    return axios.post(BASE_URL + '/teams/addResearcher', { invitationCode: invitationCode }, axiosConfig)
   },
   // USER
   async getUserByKey (userKey) {

@@ -2,6 +2,7 @@
 var user = {
   loggedin: false,
   role: undefined,
+  email: undefined,
   _key: undefined,
   token: undefined
 }
@@ -23,6 +24,7 @@ export default {
     user.loggedin = true
     user._key = newuser._key
     user.role = newuser.role
+    user.email = newuser.email
     user.token = newuser.token
     window.localStorage.setItem('user', JSON.stringify(user))
     console.log('User info set', user)
@@ -31,6 +33,7 @@ export default {
     user = {
       loggedin: false,
       role: undefined,
+      email: undefined,
       _key: undefined,
       token: undefined
     }

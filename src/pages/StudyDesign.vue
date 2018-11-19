@@ -215,74 +215,50 @@ export default {
       }
     },
     async saveProgress () {
-      // If there are no validation errors, save the draft
-      if (this.checkValidation() !== false) {
-        var checkStudyKey = ''
-        // If there is a propStudykey, use that as the key and update the study only
-        // If there is no propStudykey, then use the studyDesign.keyOfStudy after creating a new study to update
-        if (this.propStudyKey) {
-          checkStudyKey = this.propStudyKey
-        } else if (this.propStudyKey === undefined && this.studyDesign.keyOfStudy) {
-          checkStudyKey = this.studyDesign.keyOfStudy
+      var checkStudyKey = ''
+      // If there is a propStudykey, use that as the key and update the study only
+      // If there is no propStudykey, then use the studyDesign.keyOfStudy after creating a new study to update
+      if (this.propStudyKey) {
+        checkStudyKey = this.propStudyKey
+      } else if (this.propStudyKey === undefined && this.studyDesign.keyOfStudy) {
+        checkStudyKey = this.studyDesign.keyOfStudy
+      }
+      if (checkStudyKey) {
+        try {
+          await API.updateDraftStudyDesign(checkStudyKey, this.studyDesign)
+          this.$q.notify({
+            color: 'primary',
+            position: 'bottom',
+            message: 'Updated draft and saved Progress',
+            icon: 'done'
+          })
+        } catch (err) {
+          this.$q.notify({
+            color: 'negative',
+            position: 'bottom',
+            message: 'Cannot update and save progress. Please check the connection.',
+            icon: 'report_problem'
+          })
         }
-        if (checkStudyKey) {
-          try {
-            await API.updateDraftStudyDesign(checkStudyKey, this.studyDesign)
-            this.$q.notify({
-              color: 'primary',
-              position: 'bottom',
-              message: 'Updated draft and saved Progress',
-              icon: 'done'
-            })
-          } catch (err) {
-            this.$q.notify({
-              color: 'negative',
-              position: 'bottom',
-              message: 'Cannot update and save progress. Please check the connection.',
-              icon: 'report_problem'
-            })
-          }
-        } else {
-          try {
+      } else {
+        try {
           // If no studyKey in the prop, then save the study for the 1st time
-            this.studyDesign.created = new Date()
-            let response = await API.saveDraftStudyDesign(this.studyDesign)
-            this.studyDesign.keyOfStudy = response.data._key
-            this.$q.notify({
-              color: 'primary',
-              position: 'bottom',
-              message: 'Updated draft and saved Progress',
-              icon: 'done'
-            })
-          } catch (err) {
-            this.$q.notify({
-              color: 'negative',
-              position: 'bottom',
-              message: 'Cannot save progress. Please check the connection.',
-              icon: 'report_problem'
-            })
-          }
-          // If no studyKey in the prop, then save the study for the 1st time
-          // this.studyDesign.created = new Date()
-          // await API.saveDraftStudyDesign(this.studyDesign)
-          //   .then(response => {
-          //     this.studyDesign.keyOfStudy = response.data._key
-          //     this.$q.notify({
-          //       color: 'primary',
-          //       position: 'bottom',
-          //       message: 'Updated draft and saved Progress',
-          //       icon: 'done'
-          //     })
-          //   })
-          //   .catch(err => {
-          //     // this.$q.notify({
-          //     //   color: 'negative',
-          //     //   position: 'bottom',
-          //     //   message: 'Cannot save progress. Please check the connection.',
-          //     //   icon: 'report_problem'
-          //     // })
-          //     throw err
-          //   })
+          this.studyDesign.created = new Date()
+          let response = await API.saveDraftStudyDesign(this.studyDesign)
+          this.studyDesign.keyOfStudy = response.data._key
+          this.$q.notify({
+            color: 'primary',
+            position: 'bottom',
+            message: 'Updated draft and saved Progress',
+            icon: 'done'
+          })
+        } catch (err) {
+          this.$q.notify({
+            color: 'negative',
+            position: 'bottom',
+            message: 'Cannot save progress. Please check the connection.',
+            icon: 'report_problem'
+          })
         }
       }
     },
