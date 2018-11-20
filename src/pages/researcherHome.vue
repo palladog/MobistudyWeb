@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-card class="q-ma-lg q-pl-lg" color="cyan-2">
+    <q-card class="q-ma-lg q-pl-lg" color="cyan-6">
       <q-card-main>
         {{ welcomeLabel }}
       </q-card-main>
