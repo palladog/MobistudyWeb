@@ -5,6 +5,7 @@
         {{ welcomeLabel }}
       </q-card-main>
     </q-card>
+    <!-- Create New Teams -->
     <q-card class="q-ma-lg">
       <q-card-title>
         Create new team
@@ -15,20 +16,23 @@
             <q-input v-model="teamName" class="col-8 self-center" float-label="Team name" type="text" />
           </div>
           <div class="col-2 self-center">
-            <q-btn label="Add" color="warning" @click="createTeam()"/>
+            <q-btn label="Add Team" color="warning" @click="createTeam()"/>
           </div>
         </div>
       </q-card-main>
     </q-card>
-
-    <q-card class="q-ma-lg">
-      <q-card-title>
-        Generate teams invitation codes
-      </q-card-title>
-      <q-collapsible label="Click to view teams and codes">
+    <!-- Teams and Invitation Codes -->
+    <q-card class="q-ma-lg" v-show="allTeams.length != 0">
+      <q-collapsible label="View Teams &amp; Generate Invitation Codes">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(team, index) in allTeams" :key="index" class="q-mt-sm">
+          <div class="row">
+            <div class="col-7"></div>
+            <div class="col-5">
+              <q-btn class="float-right q-mb-sm" label="Delete Team" color="negative" icon="remove" @click="deleteTeam(index)"/>
+            </div>
+          </div>
           <div class="row">
             <div class="col-3">
               <q-field label="Team Name: " />
@@ -59,9 +63,9 @@
         </q-card-main>
       </q-collapsible>
     </q-card>
-
-    <q-card class="q-ma-lg">
-      <q-collapsible label="Teams &amp; Members:">
+    <!-- Teams and their Users -->
+    <q-card class="q-ma-lg" v-show="allTeams.length != 0">
+      <q-collapsible label="View Teams &amp; Members:">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(team, tindex) in allTeams" :key="tindex">
@@ -76,7 +80,7 @@
           <div v-for="(user, uindex) in teamMembers[tindex]" :key="uindex">
             <div class="row">
               <div class="col-3">
-                <q-field class="text-weight-medium" label="User: " />
+                <q-field class="text-weight-bold" label="User: " />
               </div>
               <div class="col-9 exactFit">
                 <q-field :label="user"/>
@@ -88,9 +92,9 @@
         </q-card-main>
       </q-collapsible>
     </q-card>
-
-    <q-card class="q-ma-lg">
-      <q-collapsible label="List of Studies &amp; Details:">
+    <!-- Studies  -->
+    <q-card class="q-ma-lg" v-show="allStudies.length != 0">
+      <q-collapsible label="View Studies &amp; Details:">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(study, index) in allStudies" :key="index">
@@ -123,6 +127,47 @@
         </q-card-main>
       </q-collapsible>
     </q-card>
+    <!-- List of Users  -->
+    <q-card class="q-ma-lg" v-show="allUsers.length != 0">
+      <q-collapsible label="View All Users &amp; Details:">
+        <q-card-separator/>
+        <q-card-main>
+        <div v-for="(user, index) in allUsers" :key="index">
+          <div class="row">
+            <div class="col-7"></div>
+            <div class="col-5">
+              <q-btn class="float-right q-mb-sm" label="Delete User" color="negative" icon="remove" @click="deleteUser(index)"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <q-field class="text-weight-bolder" label="User Key: " />
+            </div>
+            <div class="col-9 exactFit">
+              <q-field class="text-weight-bolder" :label="user._key"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <q-field class="text-weight-bolder" label="Role: " />
+            </div>
+            <div class="col-9 exactFit">
+              <q-field :label="user.email"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <q-field class="text-weight-bolder" label="Name: " />
+            </div>
+            <div class="col-9 exactFit">
+              <q-field :label="user.role"/>
+            </div>
+          </div>
+          <q-card-separator v-if="index != allUsers.length-1" class="q-mt-sm q-mb-sm"/>
+          </div>
+        </q-card-main>
+      </q-collapsible>
+    </q-card>
   </q-page>
 </template>
 <style>
@@ -142,12 +187,12 @@ export default {
       teamName: '',
       allTeams: [],
       teamMembers: [],
-      allStudies: []
+      allStudies: [],
+      allUsers: []
     }
   },
   async created () {
-    this.getTeams()
-    this.getAllStudies()
+    this.init()
   },
   computed: {
     welcomeLabel () {
@@ -157,6 +202,11 @@ export default {
   methods: {
     niceDate (timeStamp) {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
+    },
+    init () {
+      this.getTeams()
+      this.getAllStudies()
+      this.getAllUsers()
     },
     async getTeams () {
       try {
@@ -218,6 +268,44 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot generate invitation code',
+          icon: 'report_problem'
+        })
+      }
+    },
+    async deleteTeam (index) {
+      try {
+        await API.deleteTeam(this.allTeams[index]._key)
+        this.allTeams.splice(index, 1)
+        this.getTeams()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot delete team',
+          icon: 'report_problem'
+        })
+      }
+    },
+    async getAllUsers () {
+      try {
+        this.allUsers = await API.getAllDbUsers()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve studies list',
+          icon: 'report_problem'
+        })
+      }
+    },
+    async deleteUser (index) {
+      try {
+        await API.deleteUser(this.allUsers[index]._key)
+        this.allUsers.splice(index, 1)
+        this.getAllUsers()
+        this.getTeams()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot delete user',
           icon: 'report_problem'
         })
       }

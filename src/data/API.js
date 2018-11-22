@@ -44,9 +44,21 @@ export default {
   async addUserToTeam (invitationCode) {
     return axios.post(BASE_URL + '/teams/addResearcher', { invitationCode: invitationCode }, axiosConfig)
   },
+  async deleteTeam (teamKey) {
+    let resp = await axios.delete(BASE_URL + '/teams/' + teamKey, axiosConfig)
+    return resp.data
+  },
   // USER
   async getUserByKey (userKey) {
     let resp = await axios.get(BASE_URL + '/users/' + userKey, axiosConfig)
+    return resp.data
+  },
+  async getAllDbUsers () {
+    let resp = await axios.get(BASE_URL + '/users/all', axiosConfig)
+    return resp.data
+  },
+  async deleteUser (userKey) {
+    let resp = await axios.delete(BASE_URL + '/users/' + userKey, axiosConfig)
     return resp.data
   },
   // STUDY
