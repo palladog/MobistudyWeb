@@ -72,7 +72,7 @@ export default {
           await API.askPasswordResetEmail(this.email)
           this.$q.dialog({
             title: 'Password reset',
-            message: 'An email was sent to ' + this.email + ' with instrucitions about how to reset your password.',
+            message: 'An email was sent to ' + this.email + ' with instructions about how to reset your password.',
             ok: true,
             cancel: false,
             preventClose: true

@@ -65,24 +65,28 @@
     </q-card>
     <!-- Teams and their Users -->
     <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-      <q-collapsible label="View Teams &amp; Members:">
+      <q-collapsible label="View Teams &amp; Users:">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(team, tindex) in allTeams" :key="tindex">
           <div class="row">
+            <div class="col-1"></div>
             <div class="col-3">
               <q-field class="text-weight-bolder" label="Team: " />
             </div>
-            <div class="col-9 exactFit">
+            <div class="col-8 exactFit">
               <q-field class="text-weight-bolder" :label="team.name"/>
             </div>
           </div>
           <div v-for="(user, uindex) in teamMembers[tindex]" :key="uindex">
             <div class="row">
+              <div class="col-1">
+                <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeTeamUser(uindex, tindex)"/>
+              </div>
               <div class="col-3">
                 <q-field class="text-weight-bold" label="User: " />
               </div>
-              <div class="col-9 exactFit">
+              <div class="col-8 exactFit">
                 <q-field :label="user"/>
               </div>
             </div>
@@ -136,7 +140,7 @@
           <div class="row">
             <div class="col-7"></div>
             <div class="col-5">
-              <q-btn class="float-right q-mb-sm" label="Delete User" color="negative" icon="remove" @click="deleteUser(index)"/>
+              <q-btn class="float-right q-mb-sm" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
             </div>
           </div>
           <div class="row">
@@ -272,10 +276,24 @@ export default {
         })
       }
     },
-    async deleteTeam (index) {
+    deleteTeam (index) {
+      this.$q.dialog({
+        title: 'Exit',
+        color: 'warning',
+        message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This cannot be undone. Would you like to continue?',
+        ok: 'Yes, delete Team: ' + this.allTeams[index].name,
+        cancel: 'Cancel'
+      }).then(() => {
+        this.deleteTeamFromDb(index)
+      }).catch(() => {
+        this.$q.notify('Cancelling Deleting Team ' + this.allTeams[index].name)
+      })
+    },
+    async deleteTeamFromDb (index) {
       try {
         await API.deleteTeam(this.allTeams[index]._key)
         this.allTeams.splice(index, 1)
+        this.$q.notify('Team ' + this.allTeams[index].name + ' Deleted')
         this.getTeams()
       } catch (err) {
         this.$q.notify({
@@ -296,16 +314,62 @@ export default {
         })
       }
     },
-    async deleteUser (index) {
+    deleteUser (index) {
+      this.$q.dialog({
+        title: 'Exit',
+        color: 'warning',
+        message: 'You are deleting USER ' + this.allUsers[index].email + ' from the DB. This cannot be undone. Would you like to continue?',
+        ok: 'Yes, delete User: ' + this.allUsers[index].email,
+        cancel: 'Cancel'
+      }).then(() => {
+        this.deleteUserFromDb(index)
+      }).catch(() => {
+        this.$q.notify('Cancelling Deleting User' + this.allUsers[index].email)
+      })
+    },
+    async deleteUserFromDb (index) {
       try {
         await API.deleteUser(this.allUsers[index]._key)
         this.allUsers.splice(index, 1)
+        this.$q.notify('User ' + this.allUsers[index].email + ' Deleted')
         this.getAllUsers()
         this.getTeams()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot delete user',
+          message: 'Cannot delete user' + this.allUsers[index].email,
+          icon: 'report_problem'
+        })
+      }
+    },
+    removeTeamUser (uindex, tindex) {
+      this.$q.dialog({
+        title: 'Exit',
+        color: 'warning',
+        message: 'You are removing USER ' + this.allTeams[tindex].researchersKeys[uindex] + ' from TEAM ' + this.allTeams[tindex].name + '. Would you like to continue?',
+        ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
+        cancel: 'Cancel'
+      }).then(() => {
+        this.removeUserFromTeamDb(uindex, tindex)
+      }).catch(() => {
+        this.$q.notify('Cancelling Removing User' + this.allTeams[tindex].researchersKeys[uindex])
+      })
+    },
+    async removeUserFromTeamDb (uindex, tindex) {
+      let userRemoved = {
+        teamKey: this.allTeams[tindex]._key,
+        userKey: this.allTeams[tindex].researchersKeys[uindex]
+      }
+      console.log('DEL ACTION: ', userRemoved)
+      try {
+        await API.removeUserFromTeam(userRemoved)
+        this.allTeams.splice(tindex, 1)
+        this.$q.notify('User ' + userRemoved.userKey + ' has been removed from Team ' + userRemoved.teamKey)
+        this.getTeams()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot remove User ' + userRemoved.userKey + ' from Team ' + this.allTeams[tindex].name,
           icon: 'report_problem'
         })
       }
