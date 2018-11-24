@@ -23,14 +23,17 @@
     </q-card>
     <!-- Teams and Invitation Codes -->
     <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-      <q-collapsible label="View Teams &amp; Generate Invitation Codes">
+      <q-collapsible label="Teams &amp; Invitation Codes">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(team, index) in allTeams" :key="index" class="q-mt-sm">
+          <div class="row" v-show="codeExpired[index]">
+            <p><font color="red"> The Invitation Code for {{team.name}} has EXPIRED. </font></p>
+          </div>
           <div class="row">
             <div class="col-7"></div>
             <div class="col-5">
-              <q-btn class="float-right q-mb-sm" label="Delete Team" color="negative" icon="remove" @click="deleteTeam(index)"/>
+              <q-btn class="float-right" label="Delete Team" color="negative" icon="remove" @click="deleteTeam(index)"/>
             </div>
           </div>
           <div class="row">
@@ -65,7 +68,7 @@
     </q-card>
     <!-- Teams and their Users -->
     <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-      <q-collapsible label="View Teams &amp; Users:">
+      <q-collapsible label="Teams &amp; Users:">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(team, tindex) in allTeams" :key="tindex">
@@ -98,10 +101,16 @@
     </q-card>
     <!-- Studies  -->
     <q-card class="q-ma-lg" v-show="allStudies.length != 0">
-      <q-collapsible label="View Studies &amp; Details:">
+      <q-collapsible label="Studies &amp; Details:">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(study, index) in allStudies" :key="index">
+          <div class="row">
+            <div class="col-7"></div>
+            <div class="col-5">
+              <q-btn class="float-right" label="Delete Study from Db" color="negative" icon="remove" @click="deleteStudy(index)"/>
+            </div>
+          </div>
           <div class="row">
             <div class="col-3">
               <q-field class="text-weight-bolder" label="Study Key: " />
@@ -133,14 +142,14 @@
     </q-card>
     <!-- List of Users  -->
     <q-card class="q-ma-lg" v-show="allUsers.length != 0">
-      <q-collapsible label="View All Users &amp; Details:">
+      <q-collapsible label="All Users &amp; Details:">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(user, index) in allUsers" :key="index">
           <div class="row">
             <div class="col-7"></div>
             <div class="col-5">
-              <q-btn class="float-right q-mb-sm" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
+              <q-btn class="float-right" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
             </div>
           </div>
           <div class="row">
@@ -156,7 +165,7 @@
               <q-field class="text-weight-bolder" label="Role: " />
             </div>
             <div class="col-9 exactFit">
-              <q-field :label="user.email"/>
+              <q-field :label="user.role"/>
             </div>
           </div>
           <div class="row">
@@ -164,7 +173,7 @@
               <q-field class="text-weight-bolder" label="Name: " />
             </div>
             <div class="col-9 exactFit">
-              <q-field :label="user.role"/>
+              <q-field :label="user.email"/>
             </div>
           </div>
           <q-card-separator v-if="index != allUsers.length-1" class="q-mt-sm q-mb-sm"/>
@@ -188,6 +197,7 @@ import { date } from 'quasar'
 export default {
   data () {
     return {
+      codeExpired: [],
       teamName: '',
       allTeams: [],
       teamMembers: [],
@@ -207,17 +217,29 @@ export default {
     niceDate (timeStamp) {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
     },
+    // Initialisation
     init () {
       this.getTeams()
       this.getAllStudies()
       this.getAllUsers()
     },
     async getTeams () {
+      console.log('NICE NOW: ', this.niceDate(Date.now()))
       try {
         this.allTeams = await API.getTeams()
         let i = 0
         for (i; i < this.allTeams.length; i++) {
           this.teamMembers[i] = this.allTeams[i].researchersKeys
+          let invitationExpiry = this.allTeams[i].invitationExpiry
+          console.log('inv exp: ', invitationExpiry)
+          console.log('NICE inv exp: ', this.niceDate(invitationExpiry))
+          // See if invitation date has expired
+          if (this.niceDate(Date.now()) > this.niceDate(invitationExpiry)) {
+            this.codeExpired.push(true)
+          } else {
+            this.codeExpired.push(false)
+          }
+          console.log('CODE E: ', this.codeExpired[i])
         }
       } catch (err) {
         this.$q.notify({
@@ -238,6 +260,18 @@ export default {
         })
       }
     },
+    async getAllUsers () {
+      try {
+        this.allUsers = await API.getAllDbUsers()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve studies list',
+          icon: 'report_problem'
+        })
+      }
+    },
+    // Teams
     async createTeam () {
       try {
         await API.createTeam(this.teamName)
@@ -267,6 +301,7 @@ export default {
     async generateCode (key) {
       try {
         await API.generateTeamCode(key)
+        this.codeExpired = []
         this.getTeams()
       } catch (err) {
         this.$q.notify({
@@ -276,6 +311,7 @@ export default {
         })
       }
     },
+    // Delete TEAM from Db
     deleteTeam (index) {
       this.$q.dialog({
         title: 'Exit',
@@ -303,17 +339,69 @@ export default {
         })
       }
     },
-    async getAllUsers () {
+    // Remove USER from Db
+    removeTeamUser (uindex, tindex) {
+      this.$q.dialog({
+        title: 'Exit',
+        color: 'warning',
+        message: 'You are removing USER ' + this.allTeams[tindex].researchersKeys[uindex] + ' from TEAM ' + this.allTeams[tindex].name + '. Would you like to continue?',
+        ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
+        cancel: 'Cancel'
+      }).then(() => {
+        this.removeUserFromTeamDb(uindex, tindex)
+      }).catch(() => {
+        this.$q.notify('Cancelling Removing User' + this.allTeams[tindex].researchersKeys[uindex])
+      })
+    },
+    async removeUserFromTeamDb (uindex, tindex) {
+      let userRemoved = {
+        teamKey: this.allTeams[tindex]._key,
+        userKey: this.allTeams[tindex].researchersKeys[uindex]
+      }
       try {
-        this.allUsers = await API.getAllDbUsers()
+        await API.removeUserFromTeam(userRemoved)
+        this.allTeams.splice(tindex, 1)
+        this.$q.notify('User ' + userRemoved.userKey + ' has been removed from Team ' + userRemoved.teamKey)
+        this.getTeams()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot retrieve studies list',
+          message: 'Cannot remove User ' + userRemoved.userKey + ' from Team ' + this.allTeams[tindex].name,
           icon: 'report_problem'
         })
       }
     },
+    // Delete STUDY from Db
+    deleteStudy (index) {
+      let study = this.allStudies[index].generalities
+      this.$q.dialog({
+        title: 'Exit',
+        color: 'warning',
+        message: 'You are deleting STUDY ' + study.title + ' from the DB. This cannot be undone. Would you like to continue?',
+        ok: 'Yes, delete Study: ' + study.title,
+        cancel: 'Cancel'
+      }).then(() => {
+        this.deleteStudyFromDb(index)
+      }).catch(() => {
+        this.$q.notify('Cancelling Deleting Study' + study.title)
+      })
+    },
+    async deleteStudyFromDb (index) {
+      let study = this.allStudies[index]
+      try {
+        await API.deleteStudy(study._key)
+        this.allUsers.splice(index, 1)
+        this.$q.notify('Study ' + study.generalities.title + ' Deleted')
+        this.getAllStudies()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot delete study' + study.generalities.title,
+          icon: 'report_problem'
+        })
+      }
+    },
+    // Delete Users from Db
     deleteUser (index) {
       this.$q.dialog({
         title: 'Exit',
@@ -338,38 +426,6 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot delete user' + this.allUsers[index].email,
-          icon: 'report_problem'
-        })
-      }
-    },
-    removeTeamUser (uindex, tindex) {
-      this.$q.dialog({
-        title: 'Exit',
-        color: 'warning',
-        message: 'You are removing USER ' + this.allTeams[tindex].researchersKeys[uindex] + ' from TEAM ' + this.allTeams[tindex].name + '. Would you like to continue?',
-        ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
-        cancel: 'Cancel'
-      }).then(() => {
-        this.removeUserFromTeamDb(uindex, tindex)
-      }).catch(() => {
-        this.$q.notify('Cancelling Removing User' + this.allTeams[tindex].researchersKeys[uindex])
-      })
-    },
-    async removeUserFromTeamDb (uindex, tindex) {
-      let userRemoved = {
-        teamKey: this.allTeams[tindex]._key,
-        userKey: this.allTeams[tindex].researchersKeys[uindex]
-      }
-      console.log('DEL ACTION: ', userRemoved)
-      try {
-        await API.removeUserFromTeam(userRemoved)
-        this.allTeams.splice(tindex, 1)
-        this.$q.notify('User ' + userRemoved.userKey + ' has been removed from Team ' + userRemoved.teamKey)
-        this.getTeams()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot remove User ' + userRemoved.userKey + ' from Team ' + this.allTeams[tindex].name,
           icon: 'report_problem'
         })
       }

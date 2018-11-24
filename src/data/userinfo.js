@@ -10,7 +10,6 @@ let userstr = window.localStorage.getItem('user')
 if (userstr) {
   try {
     user = JSON.parse(userstr)
-    console.log('User info set', user)
   } catch (err) {
     // nothing to be done
   }
@@ -27,7 +26,6 @@ export default {
     user.email = newuser.email
     user.token = newuser.token
     window.localStorage.setItem('user', JSON.stringify(user))
-    console.log('User info set', user)
   },
   logout () {
     user = {
@@ -38,6 +36,5 @@ export default {
       token: undefined
     }
     window.localStorage.removeItem('user')
-    console.log('User info unset')
   }
 }
