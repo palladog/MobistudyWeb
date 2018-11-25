@@ -6,12 +6,18 @@
           <q-card-title>Sign In</q-card-title>
           <q-card-main>
             <form autocomplete="on">
-              <q-input v-model="email" type="email" float-label="Email" placeholder="e.g. email@email.com" autocomplete="on"/>
-              <q-input v-model="password" type="password" float-label="Password" autocomplete="on" @keyup.enter="login()"/>
+              <q-field :error="$v.email.$error" error-label="An email address is required.">
+                <q-input v-model.trim="$v.email.$model" type="email" float-label="Email" placeholder="e.g. email@email.com"
+                 autocomplete="on" @blur="$v.email.$touch" clearable/>
+              </q-field>
+              <q-field :error="$v.password.$error" error-label="A password is required.">
+                <q-input v-model.trim="$v.password.$model" type="password" float-label="Password" autocomplete="on"
+                @blur="$v.password.$touch" clearable @keyup.enter="validationCheck"/>
+              </q-field>
             </form>
           </q-card-main>
           <q-card-actions>
-            <q-btn label="login" color="primary" @click="login()"/>
+            <q-btn label="login" color="primary" @click="validationCheck"/>
             <q-btn label="New User" color="secondary" @click="newUser()"/>
           </q-card-actions>
           <q-card-actions>
@@ -32,6 +38,7 @@
 <script>
 import API from '../data/API.js'
 import userinfo from '../data/userinfo.js'
+import { required, email } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -40,7 +47,18 @@ export default {
       password: ''
     }
   },
+  validations: {
+    email: { required, email },
+    password: { required }
+  },
   methods: {
+    validationCheck: function () {
+      this.$v.email.$touch()
+      this.$v.password.$touch()
+      if (this.$v.email.$error || this.$v.password.$error) {
+        this.$q.notify('Please correct the indicated fields.')
+      } else this.login()
+    },
     async login () {
       try {
         let user = await API.login(this.email, this.password)

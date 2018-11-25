@@ -142,6 +142,7 @@ export default {
   },
   methods: {
     checkValidation: function () {
+      // Checking for Errors only in tabs generalities and Error
       var errorGen = false
       var errorCon = false
       this.$v.studyDesign.generalities.$touch()
