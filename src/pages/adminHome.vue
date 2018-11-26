@@ -224,22 +224,18 @@ export default {
       this.getAllUsers()
     },
     async getTeams () {
-      console.log('NICE NOW: ', this.niceDate(Date.now()))
       try {
         this.allTeams = await API.getTeams()
         let i = 0
         for (i; i < this.allTeams.length; i++) {
           this.teamMembers[i] = this.allTeams[i].researchersKeys
           let invitationExpiry = this.allTeams[i].invitationExpiry
-          console.log('inv exp: ', invitationExpiry)
-          console.log('NICE inv exp: ', this.niceDate(invitationExpiry))
           // See if invitation date has expired
           if (Date.now() > new Date(invitationExpiry)) {
             this.codeExpired.push(true)
           } else {
             this.codeExpired.push(false)
           }
-          console.log('CODE E: ', this.codeExpired[i])
         }
       } catch (err) {
         this.$q.notify({
@@ -286,13 +282,13 @@ export default {
         if (err.response && err.response.status === 409) {
           this.$q.notify({
             color: 'negative',
-            message: 'A team with the same name already exists',
+            message: 'A team with the same name: ' + this.teamName + ' already exists.',
             icon: 'report_problem'
           })
         } else {
           this.$q.notify({
             color: 'negative',
-            message: 'Cannot create team',
+            message: 'Cannot create team ' + this.teamName,
             icon: 'report_problem'
           })
         }
@@ -322,7 +318,7 @@ export default {
           cancel: 'Cancel'
         })
         this.deleteTeamFromDb(index)
-      } catch( err) {
+      } catch (err) {
         this.$q.notify('Cancelling Deleting Team ' + this.allTeams[index].name)
       }
     },
@@ -335,24 +331,25 @@ export default {
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot delete team',
+          message: 'Cannot delete team ' + this.allTeams[index].name,
           icon: 'report_problem'
         })
       }
     },
     // Remove USER from Db
-    removeTeamUser (uindex, tindex) {
-      this.$q.dialog({
-        title: 'Exit',
-        color: 'warning',
-        message: 'You are removing USER ' + this.allTeams[tindex].researchersKeys[uindex] + ' from TEAM ' + this.allTeams[tindex].name + '. Would you like to continue?',
-        ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
-        cancel: 'Cancel'
-      }).then(() => {
+    async removeTeamUser (uindex, tindex) {
+      try {
+        await this.$q.dialog({
+          title: 'Exit',
+          color: 'warning',
+          message: 'You are removing USER ' + this.allTeams[tindex].researchersKeys[uindex] + ' from TEAM ' + this.allTeams[tindex].name + '. Would you like to continue?',
+          ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
+          cancel: 'Cancel'
+        })
         this.removeUserFromTeamDb(uindex, tindex)
-      }).catch(() => {
-        this.$q.notify('Cancelling Removing User' + this.allTeams[tindex].researchersKeys[uindex])
-      })
+      } catch (error) {
+        this.$q.notify('Cancelling Removing User ' + this.allTeams[tindex].researchersKeys[uindex])
+      }
     },
     async removeUserFromTeamDb (uindex, tindex) {
       let userRemoved = {
@@ -373,19 +370,20 @@ export default {
       }
     },
     // Delete STUDY from Db
-    deleteStudy (index) {
+    async deleteStudy (index) {
       let study = this.allStudies[index].generalities
-      this.$q.dialog({
-        title: 'Exit',
-        color: 'warning',
-        message: 'You are deleting STUDY ' + study.title + ' from the DB. This cannot be undone. Would you like to continue?',
-        ok: 'Yes, delete Study: ' + study.title,
-        cancel: 'Cancel'
-      }).then(() => {
+      try {
+        await this.$q.dialog({
+          title: 'Exit',
+          color: 'warning',
+          message: 'You are deleting STUDY ' + study.title + ' from the DB. This cannot be undone. Would you like to continue?',
+          ok: 'Yes, delete Study: ' + study.title,
+          cancel: 'Cancel'
+        })
         this.deleteStudyFromDb(index)
-      }).catch(() => {
-        this.$q.notify('Cancelling Deleting Study' + study.title)
-      })
+      } catch (error) {
+        this.$q.notify('Cancelling Deleting Study ' + study.title)
+      }
     },
     async deleteStudyFromDb (index) {
       let study = this.allStudies[index]
@@ -397,24 +395,25 @@ export default {
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot delete study' + study.generalities.title,
+          message: 'Cannot delete study ' + study.generalities.title,
           icon: 'report_problem'
         })
       }
     },
     // Delete Users from Db
-    deleteUser (index) {
-      this.$q.dialog({
-        title: 'Exit',
-        color: 'warning',
-        message: 'You are deleting USER ' + this.allUsers[index].email + ' from the DB. This cannot be undone. Would you like to continue?',
-        ok: 'Yes, delete User: ' + this.allUsers[index].email,
-        cancel: 'Cancel'
-      }).then(() => {
+    async deleteUser (index) {
+      try {
+        await this.$q.dialog({
+          title: 'Exit',
+          color: 'warning',
+          message: 'You are deleting USER ' + this.allUsers[index].email + ' from the DB. This cannot be undone. Would you like to continue?',
+          ok: 'Yes, delete User: ' + this.allUsers[index].email,
+          cancel: 'Cancel'
+        })
         this.deleteUserFromDb(index)
-      }).catch(() => {
-        this.$q.notify('Cancelling Deleting User' + this.allUsers[index].email)
-      })
+      } catch (error) {
+        this.$q.notify('Cancelling Deleting User ' + this.allUsers[index].email)
+      }
     },
     async deleteUserFromDb (index) {
       try {
@@ -426,7 +425,7 @@ export default {
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot delete user' + this.allUsers[index].email,
+          message: 'Cannot delete user ' + this.allUsers[index].email,
           icon: 'report_problem'
         })
       }
