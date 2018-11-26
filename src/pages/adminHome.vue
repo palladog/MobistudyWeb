@@ -234,7 +234,7 @@ export default {
           console.log('inv exp: ', invitationExpiry)
           console.log('NICE inv exp: ', this.niceDate(invitationExpiry))
           // See if invitation date has expired
-          if (this.niceDate(Date.now()) > this.niceDate(invitationExpiry)) {
+          if (Date.now() > new Date(invitationExpiry)) {
             this.codeExpired.push(true)
           } else {
             this.codeExpired.push(false)
@@ -312,18 +312,19 @@ export default {
       }
     },
     // Delete TEAM from Db
-    deleteTeam (index) {
-      this.$q.dialog({
-        title: 'Exit',
-        color: 'warning',
-        message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This cannot be undone. Would you like to continue?',
-        ok: 'Yes, delete Team: ' + this.allTeams[index].name,
-        cancel: 'Cancel'
-      }).then(() => {
+    async deleteTeam (index) {
+      try {
+        await this.$q.dialog({
+          title: 'Exit',
+          color: 'warning',
+          message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This cannot be undone. Would you like to continue?',
+          ok: 'Yes, delete Team: ' + this.allTeams[index].name,
+          cancel: 'Cancel'
+        })
         this.deleteTeamFromDb(index)
-      }).catch(() => {
+      } catch( err) {
         this.$q.notify('Cancelling Deleting Team ' + this.allTeams[index].name)
-      })
+      }
     },
     async deleteTeamFromDb (index) {
       try {
