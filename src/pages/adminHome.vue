@@ -181,6 +181,41 @@
         </q-card-main>
       </q-collapsible>
     </q-card>
+    <!-- Participants and Studies -->
+    <q-card class="q-ma-lg" v-show="allParticipants.length != 0">
+      <q-collapsible label="Participants &amp; Studies: ">
+        <q-card-separator/>
+        <q-card-main>
+        <div v-for="(participant, index) in allParticipants" :key="index">
+          <div class="row">
+            <div class="col-5"></div>
+            <div class="col-7">
+              <q-btn class="float-right" label="Remove Participant from Study" color="negative" icon="remove" @click="removeParticipant(index)"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <q-field class="text-weight-bolder" label="Participant Key: " />
+            </div>
+            <div class="col-9 exactFit">
+              <q-field class="text-weight-bolder" :label="participant._key"/>
+            </div>
+          </div>
+            <div v-for="(accepted, accIndex) in participant.acceptedStudies" :key="accIndex">
+              <div class="row">
+                <div class="col-3">
+                  <q-field class="text-weight-bolder" label="Accepted Study: " />
+                </div>
+                <div class="col-9 exactFit">
+                  <q-field :label="accepted.studyDescriptionKey"/>
+                </div>
+              </div>
+            </div>
+          <q-card-separator v-if="index != participant.length-1" class="q-mt-sm q-mb-sm"/>
+          </div>
+        </q-card-main>
+      </q-collapsible>
+    </q-card>
   </q-page>
 </template>
 <style>
@@ -202,7 +237,8 @@ export default {
       allTeams: [],
       teamMembers: [],
       allStudies: [],
-      allUsers: []
+      allUsers: [],
+      allParticipants: []
     }
   },
   async created () {
@@ -222,6 +258,7 @@ export default {
       this.getTeams()
       this.getAllStudies()
       this.getAllUsers()
+      this.getAllParticipants()
     },
     async getTeams () {
       try {
@@ -262,7 +299,19 @@ export default {
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot retrieve studies list',
+          message: 'Cannot retrieve users list',
+          icon: 'report_problem'
+        })
+      }
+    },
+    async getAllParticipants () {
+      try {
+        this.allParticipants = await API.getParticipants()
+        // console.log('ALL PA: ', this.allParticipants[0].acceptedStudies)
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve participants list',
           icon: 'report_problem'
         })
       }
@@ -271,12 +320,12 @@ export default {
     async createTeam () {
       try {
         await API.createTeam(this.teamName)
-        this.teamName = ''
         this.$q.notify({
           color: 'positive',
-          message: 'Team created!',
+          message: 'Team ' + this.teamName + ' created!',
           icon: 'thumb_up'
         })
+        this.teamName = ''
         this.getTeams()
       } catch (err) {
         if (err.response && err.response.status === 409) {
@@ -429,6 +478,9 @@ export default {
           icon: 'report_problem'
         })
       }
+    },
+    removeParticipant (index) {
+      this.$q.notify('Remove Participant')
     }
   }
 }

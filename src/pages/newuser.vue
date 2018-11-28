@@ -18,7 +18,10 @@
               <q-input v-model.trim="$v.confirmPassword.$model" type="password" placeholder="xxxxxxxx" @blur="$v.confirmPassword.$touch" clearable/>
             </q-field>
             <div class ="row q-mt-md">
-              <div class = "col-9">
+              <div class = "col-5">
+                <q-btn label="Cancel Registration" color="warning" @click="cancelRegistration"/>
+              </div>
+              <div class = "col-4">
               </div>
               <div class = "col-3">
                 <q-btn label="Register" color="primary" @click="validationCheck"/>
@@ -55,6 +58,9 @@ export default {
     confirmPassword: { required }
   },
   methods: {
+    cancelRegistration () {
+      this.$router.push('/login')
+    },
     validationCheck: function () {
       this.$v.email.$touch()
       this.$v.newPassword.$touch()

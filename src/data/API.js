@@ -101,5 +101,18 @@ export default {
   },
   async publishForm (form) {
     return axios.post(BASE_URL + '/forms', form, axiosConfig)
+  },
+  // PARTICIPANT
+  async getParticipants () {
+    let resp = await axios.get(BASE_URL + '/participants', axiosConfig)
+    return resp.data
+  },
+  async getParticipantsOfStudy (teamKey) {
+    let resp = await axios.get(BASE_URL + '/participants/accepted/' + teamKey, axiosConfig)
+    return resp.data
+  },
+  async getWithdrawnParticipantsOfStudy (teamKey) {
+    let resp = await axios.get(BASE_URL + '/participants/withdrawn/' + teamKey, axiosConfig)
+    return resp.data
   }
 }
