@@ -27,7 +27,7 @@ export default {
       if (error.response.status === 401 && !error.config.url.includes('login')) {
         console.log('Got disconnected !')
         user.logout()
-        window.location = '/login'
+        window.location = '/#/login'
       }
       return Promise.reject(error)
     })

@@ -24,7 +24,7 @@
         <q-select v-model="selectedTeamValue" :options="teamsListOptions" @input="selectTeam()"/>
       </q-card-main>
     </q-card>
-    <q-card class="q-ma-lg q-pa-lg" >
+    <q-card class="q-ma-lg q-pa-lg" v-show="unpublishedStudiesList.length > 0 || publishedStudiesList.length > 0">
         <q-card-title>Studies
             <span slot="subtitle">List of Studies for {{ this.selectedTeamLabel }}</span>
         </q-card-title>
@@ -49,7 +49,57 @@
             </div>
         </q-card-main>
     </q-card>
-
+    <!-- Published Study and Accepted/Withdrawn Participants -->
+    <q-card class="q-ma-lg" v-show="studyParticipantsAccepted.length != 0 || studyParticipantsWithdrawn != 0">
+      <q-collapsible label="Published Study &amp; Participants (by TEAM): ">
+        <q-card-separator/>
+        <q-card-main>
+        <div class="shadow-1 q-pa-sm q-mt-lg" v-for="(study, index) in studyParticipantsAccepted" :key="index">
+          <div class="row">
+            <div class="col-3">
+              <q-field class="text-weight-bolder" label="Accepted Study: " />
+            </div>
+            <div class="col-9 exactFit">
+              <q-field class="text-weight-bolder" :label="study.studyKey"/>
+            </div>
+          </div>
+            <div v-for="(accepted, accIndex) in study.participants" :key="accIndex">
+              <div class="row">
+                <div class="col-3">
+                  <q-field class="text-weight-bolder" label="Participant: " />
+                </div>
+                <div class="col-9 exactFit">
+                  <q-field :label="accepted"/>
+                </div>
+              </div>
+            </div>
+        </div>
+        </q-card-main>
+        <q-card-main v-if="studyParticipantsWithdrawn.length > 0">
+        <q-card-separator/>
+        <div class="shadow-1 q-pa-sm q-mt-lg" v-for="(studyw, indexw) in studyParticipantsWithdrawn" :key="indexw">
+          <div class="row">
+            <div class="col-3">
+              <q-field class="text-weight-bolder" label="Withdrawn fromStudy: " />
+            </div>
+            <div class="col-9 exactFit">
+              <q-field class="text-weight-bolder" :label="studyw.studyKey"/>
+            </div>
+          </div>
+            <div v-for="(withdrawn, accIndexw) in studyw.participants" :key="accIndexw">
+              <div class="row">
+                <div class="col-3">
+                  <q-field class="text-weight-bolder" label="Participant: " />
+                </div>
+                <div class="col-9 exactFit">
+                  <q-field :label="withdrawn"/>
+                </div>
+              </div>
+            </div>
+        </div>
+        </q-card-main>
+      </q-collapsible>
+    </q-card>
   </q-page>
 </template>
 
@@ -64,6 +114,8 @@ export default {
       unpublishedStudiesList: [],
       publishedStudiesList: [],
       teamsListOptions: [],
+      studyParticipantsAccepted: [],
+      studyParticipantsWithdrawn: [],
       selectedTeamValue: '',
       selectedTeamLabel: '',
       createStudyLabel: ''
@@ -104,10 +156,10 @@ export default {
     },
     async addToTeam () {
       try {
-        await API.addUserToTeam(this.invitationCode)
+        let res = await API.addUserToTeam(this.invitationCode)
         this.$q.dialog({
           title: 'User added to team',
-          message: 'You have been added to the team.',
+          message: 'You have been added to the team ' + res.data.teamName + '.',
           ok: true,
           cancel: false,
           preventClose: true
@@ -122,15 +174,15 @@ export default {
         })
       }
     },
-    async verifyExistence () {
-      // TO DO
-      // Called by addToTeam() ---> verify if the user already exists in the team
-    },
     selectTeam (index) {
       let result = this.teamsListOptions.find(opts => opts.value === this.selectedTeamValue)
       this.selectedTeamLabel = result.label
       this.getAllStudies()
       this.createStudyLabel = 'Create new study for ' + this.selectedTeamLabel
+      this.studyParticipantsAccepted = []
+      this.studyParticipantsWithdrawn = []
+      this.unpublishedStudiesList = []
+      this.publishedStudiesList = []
     },
     async getAllStudies () {
       try {
@@ -144,6 +196,11 @@ export default {
             let pubObj = { 'title': obj.generalities.title, 'study_key': obj._key }
             return pubObj
           })
+          // if there are published studies, list the participants
+          if (this.publishedStudiesList.length > 0) {
+            this.getAcceptedStudyParticipants()
+            this.getWithdrawnStudyParticipants()
+          }
           // Get unpublished Studies
           this.unpublishedStudiesList = userListOfStudies.filter(function (obj) {
             return obj.published === ''
@@ -177,6 +234,32 @@ export default {
     },
     goToPubStudy (index) {
       this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.publishedStudiesList[index].study_key)
+    },
+    async getAcceptedStudyParticipants () {
+      if (this.selectedTeamValue !== null) {
+        try {
+          this.studyParticipantsAccepted = await API.getParticipantsOfStudy(this.selectedTeamValue)
+        } catch (error) {
+          this.$q.notify({
+            color: 'negative',
+            message: 'Cannot retrieve participants list',
+            icon: 'report_problem'
+          })
+        }
+      }
+    },
+    async getWithdrawnStudyParticipants () {
+      if (this.selectedTeamValue !== null) {
+        try {
+          this.studyParticipantsWithdrawn = await API.getWithdrawnParticipantsOfStudy(this.selectedTeamValue)
+        } catch (error) {
+          this.$q.notify({
+            color: 'negative',
+            message: 'Cannot retrieve participants list',
+            icon: 'report_problem'
+          })
+        }
+      }
     }
   }
 }
