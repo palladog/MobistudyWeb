@@ -66,9 +66,9 @@
         </q-card-main>
       </q-collapsible>
     </q-card>
-    <!-- Teams and their Users -->
+    <!-- Teams and their Researchers -->
     <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-      <q-collapsible label="Teams &amp; Users:">
+      <q-collapsible label="Teams &amp; Researchers:">
         <q-card-separator/>
         <q-card-main>
         <div v-for="(team, tindex) in allTeams" :key="tindex">
@@ -84,10 +84,10 @@
           <div v-for="(user, uindex) in teamMembers[tindex]" :key="uindex">
             <div class="row">
               <div class="col-1">
-                <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeTeamUser(uindex, tindex)"/>
+                <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeTeamUser(tindex, uindex)"/>
               </div>
               <div class="col-3">
-                <q-field class="text-weight-bold" label="User: " />
+                <q-field class="text-weight-bold" label="Researcher: " />
               </div>
               <div class="col-8 exactFit">
                 <q-field :label="user"/>
@@ -186,32 +186,30 @@
       <q-collapsible label="Participants &amp; Studies: ">
         <q-card-separator/>
         <q-card-main>
-        <div v-for="(participant, index) in allParticipants" :key="index">
+        <div v-for="(participant, parIndex) in allParticipants" :key="parIndex">
           <div class="row">
-            <div class="col-5"></div>
-            <div class="col-7">
-              <q-btn class="float-right" label="Remove Participant from Study" color="negative" icon="remove" @click="removeParticipant(index)"/>
-            </div>
-          </div>
-          <div class="row">
+            <div class="col-1"></div>
             <div class="col-3">
               <q-field class="text-weight-bolder" label="Participant Key: " />
             </div>
-            <div class="col-9 exactFit">
+            <div class="col-8 exactFit">
               <q-field class="text-weight-bolder" :label="participant._key"/>
             </div>
           </div>
             <div v-for="(accepted, accIndex) in participant.acceptedStudies" :key="accIndex">
               <div class="row">
+                <div class="col-1">
+                  <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeParticipant(parIndex, accIndex)"/>
+                </div>
                 <div class="col-3">
                   <q-field class="text-weight-bolder" label="Accepted Study: " />
                 </div>
-                <div class="col-9 exactFit">
+                <div class="col-8 exactFit">
                   <q-field :label="accepted.studyDescriptionKey"/>
                 </div>
               </div>
             </div>
-          <q-card-separator v-if="index != participant.length-1" class="q-mt-sm q-mb-sm"/>
+          <q-card-separator v-if="parIndex != participant.length-1" class="q-mt-sm q-mb-sm"/>
           </div>
         </q-card-main>
       </q-collapsible>
@@ -386,7 +384,7 @@ export default {
       }
     },
     // Remove USER from Db
-    async removeTeamUser (uindex, tindex) {
+    async removeTeamUser (tindex, uindex) {
       try {
         await this.$q.dialog({
           title: 'Exit',
@@ -395,12 +393,12 @@ export default {
           ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
           cancel: 'Cancel'
         })
-        this.removeUserFromTeamDb(uindex, tindex)
+        this.removeUserFromTeamDb(tindex, uindex)
       } catch (error) {
         this.$q.notify('Cancelling Removing User ' + this.allTeams[tindex].researchersKeys[uindex])
       }
     },
-    async removeUserFromTeamDb (uindex, tindex) {
+    async removeUserFromTeamDb (tindex, uindex) {
       let userRemoved = {
         teamKey: this.allTeams[tindex]._key,
         userKey: this.allTeams[tindex].researchersKeys[uindex]
@@ -479,8 +477,24 @@ export default {
         })
       }
     },
-    removeParticipant (index) {
-      this.$q.notify('Remove Participant')
+    // Remove Participant from DB
+    async removeParticipant (parIndex, accIndex) {
+      let removedOne = {
+        partKey: this.allParticipants[parIndex]._key,
+        studyKey: this.allParticipants[parIndex].acceptedStudies[accIndex].studyDescriptionKey
+      }
+      try {
+        await API.removeParticipantFromStudy(removedOne)
+        this.allParticipants[parIndex].acceptedStudies.splice(accIndex, 1)
+        this.$q.notify('Participant ' + removedOne.partKey + ' has been removed from Study ' + removedOne.studyKey)
+        this.getAllParticipants()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot remove Participant ' + removedOne.partKey + ' from Study ' + removedOne.studyKey,
+          icon: 'report_problem'
+        })
+      }
     }
   }
 }

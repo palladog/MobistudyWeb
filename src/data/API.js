@@ -114,5 +114,12 @@ export default {
   async getWithdrawnParticipantsOfStudy (teamKey) {
     let resp = await axios.get(BASE_URL + '/participants/withdrawn/' + teamKey, axiosConfig)
     return resp.data
+  },
+  async removeParticipantFromStudy (participantRemoved) {
+    return axios.put(BASE_URL + '/participants/action/withdraw', { withdrawnOne: participantRemoved }, axiosConfig)
+  },
+  async deleteParticipant (userKey) {
+    let resp = await axios.delete(BASE_URL + '/participants/' + userKey, axiosConfig)
+    return resp.data
   }
 }
