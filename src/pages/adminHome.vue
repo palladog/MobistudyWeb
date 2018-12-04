@@ -479,13 +479,28 @@ export default {
     },
     // Remove Participant from DB
     async removeParticipant (parIndex, accIndex) {
+      let participant = this.allParticipants[parIndex]
+      try {
+        await this.$q.dialog({
+          title: 'Exit',
+          color: 'warning',
+          message: 'You are removing PARTICIPANT ' + participant._key + ' from STUDY ' + participant.acceptedStudies[accIndex].studyDescriptionKey + ' Would you like to continue?',
+          ok: 'Yes, remove Participant: ' + participant._key,
+          cancel: 'Cancel'
+        })
+        this.removeParticipantFromStudy(participant, accIndex)
+      } catch (error) {
+        this.$q.notify('CancellingRemoving Participant ' + participant._key)
+      }
+    },
+    async removeParticipantFromStudy (participant, accIndex) {
       let removedOne = {
-        partKey: this.allParticipants[parIndex]._key,
-        studyKey: this.allParticipants[parIndex].acceptedStudies[accIndex].studyDescriptionKey
+        partKey: participant._key,
+        studyKey: participant.acceptedStudies[accIndex].studyDescriptionKey
       }
       try {
         await API.removeParticipantFromStudy(removedOne)
-        this.allParticipants[parIndex].acceptedStudies.splice(accIndex, 1)
+        participant.acceptedStudies.splice(accIndex, 1)
         this.$q.notify('Participant ' + removedOne.partKey + ' has been removed from Study ' + removedOne.studyKey)
         this.getAllParticipants()
       } catch (err) {
