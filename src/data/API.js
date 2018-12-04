@@ -103,6 +103,10 @@ export default {
     return axios.post(BASE_URL + '/forms', form, axiosConfig)
   },
   // PARTICIPANT
+  async getOneParticipant (userKey) {
+    let resp = await axios.get(BASE_URL + '/participants/' + userKey, axiosConfig)
+    return resp.data
+  },
   async getParticipants () {
     let resp = await axios.get(BASE_URL + '/participants', axiosConfig)
     return resp.data
@@ -118,8 +122,8 @@ export default {
   async removeParticipantFromStudy (participantRemoved) {
     return axios.put(BASE_URL + '/participants/action/withdraw', { withdrawnOne: participantRemoved }, axiosConfig)
   },
-  async deleteParticipant (userKey) {
-    let resp = await axios.delete(BASE_URL + '/participants/' + userKey, axiosConfig)
+  async deleteParticipant (participantKey) {
+    let resp = await axios.delete(BASE_URL + '/participants/' + participantKey, axiosConfig)
     return resp.data
   }
 }

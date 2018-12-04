@@ -305,7 +305,6 @@ export default {
     async getAllParticipants () {
       try {
         this.allParticipants = await API.getParticipants()
-        // console.log('ALL PA: ', this.allParticipants[0].acceptedStudies)
       } catch (error) {
         this.$q.notify({
           color: 'negative',
@@ -449,30 +448,38 @@ export default {
     },
     // Delete Users from Db
     async deleteUser (index) {
+      let user = this.allUsers[index]
       try {
         await this.$q.dialog({
           title: 'Exit',
           color: 'warning',
-          message: 'You are deleting USER ' + this.allUsers[index].email + ' from the DB. This cannot be undone. Would you like to continue?',
-          ok: 'Yes, delete User: ' + this.allUsers[index].email,
+          message: 'You are deleting ' + user.role + ' ' + user.email + ' from the DB. This cannot be undone. Would you like to continue?',
+          ok: 'Yes, delete User: ' + user.email,
           cancel: 'Cancel'
         })
-        this.deleteUserFromDb(index)
+        this.deleteUserFromDb(user, index)
       } catch (error) {
-        this.$q.notify('Cancelling Deleting User ' + this.allUsers[index].email)
+        this.$q.notify('Cancelling Deleting User ' + user.email)
       }
     },
-    async deleteUserFromDb (index) {
+    async deleteUserFromDb (user, index) {
       try {
-        await API.deleteUser(this.allUsers[index]._key)
+        if (user.role === 'participant') {
+          // Get participant Key
+          let partKey = await API.getOneParticipant(user._key)
+          await API.deleteParticipant(partKey)
+        } else {
+          await API.deleteUser(user._key)
+        }
         this.allUsers.splice(index, 1)
-        this.$q.notify('User ' + this.allUsers[index].email + ' Deleted')
+        this.$q.notify('User ' + user.email + ' Deleted')
         this.getAllUsers()
         this.getTeams()
+        this.getAllParticipants()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot delete user ' + this.allUsers[index].email,
+          message: 'Cannot delete user ' + user.email,
           icon: 'report_problem'
         })
       }
