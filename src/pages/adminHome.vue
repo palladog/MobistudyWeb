@@ -365,7 +365,7 @@ export default {
         })
         this.deleteTeamFromDb(index)
       } catch (err) {
-        this.$q.notify('Cancelling Deleting Team ' + this.allTeams[index].name)
+        this.$q.notify('Cancelling Deletion of Team ' + this.allTeams[index].name)
       }
     },
     async deleteTeamFromDb (index) {
@@ -422,13 +422,14 @@ export default {
         await this.$q.dialog({
           title: 'Exit',
           color: 'warning',
-          message: 'You are deleting STUDY ' + study.title + ' from the DB. This cannot be undone. Would you like to continue?',
+          message: 'You are deleting STUDY ' + study.title + ' from the DB. This will affect participants of that study ' +
+          ' and they will no longer be associated to that study.This cannot be undone. Would you like to continue?',
           ok: 'Yes, delete Study: ' + study.title,
           cancel: 'Cancel'
         })
         this.deleteStudyFromDb(index)
       } catch (error) {
-        this.$q.notify('Cancelling Deleting Study ' + study.title)
+        this.$q.notify('Cancelling Deletion of Study ' + study.title)
       }
     },
     async deleteStudyFromDb (index) {
@@ -438,6 +439,7 @@ export default {
         this.allUsers.splice(index, 1)
         this.$q.notify('Study ' + study.generalities.title + ' Deleted')
         this.getAllStudies()
+        this.getAllParticipants()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -459,7 +461,7 @@ export default {
         })
         this.deleteUserFromDb(user, index)
       } catch (error) {
-        this.$q.notify('Cancelling Deleting User ' + user.email)
+        this.$q.notify('Cancelling Deletion of User ' + user.email)
       }
     },
     async deleteUserFromDb (user, index) {
