@@ -65,17 +65,17 @@ export default {
     return resp.data
   },
   // STUDY
-  async saveDraftStudyDesign (design) {
+  async saveDraftStudy (design) {
     return axios.post(BASE_URL + '/studies', design, axiosConfig)
   },
-  async updateDraftStudyDesign (studyKey, design) {
+  async updateDraftStudy (studyKey, design) {
     return axios.put(BASE_URL + '/studies/' + studyKey, design, axiosConfig)
   },
-  async publishStudyDesign (design) {
+  async publishStudy (design) {
     return axios.post(BASE_URL + '/studies', design, axiosConfig)
   },
-  async getStudyDescription (teamKey, studyKey) {
-    let resp = await axios.get(BASE_URL + '/studies/' + teamKey + '/' + studyKey, axiosConfig)
+  async getStudy (studyKey) {
+    let resp = await axios.get(BASE_URL + '/studies/' + studyKey, axiosConfig)
     return resp.data
   },
   async getStudies () {
@@ -83,7 +83,7 @@ export default {
     return resp.data
   },
   async getAllTeamStudies (teamKey) {
-    let resp = await axios.get(BASE_URL + '/studies/' + teamKey, axiosConfig)
+    let resp = await axios.get(BASE_URL + '/studies?teamKey=' + teamKey, axiosConfig)
     return resp.data
   },
   async deleteStudy (studyKey) {
@@ -111,12 +111,13 @@ export default {
     let resp = await axios.get(BASE_URL + '/participants', axiosConfig)
     return resp.data
   },
-  async getParticipantsOfStudy (teamKey) {
-    let resp = await axios.get(BASE_URL + '/participants/accepted/' + teamKey, axiosConfig)
-    return resp.data
-  },
-  async getWithdrawnParticipantsOfStudy (teamKey) {
-    let resp = await axios.get(BASE_URL + '/participants/withdrawn/' + teamKey, axiosConfig)
+  async getParticipantsOfStudy (studyKey, currentStatus) {
+    let resp
+    if (currentStatus) {
+      resp = await axios.get(BASE_URL + '/participants?studyKey=' + studyKey + '&currentStatus=' + currentStatus, axiosConfig)
+    } else {
+      resp = await axios.get(BASE_URL + '/participants?studyKey=' + studyKey, axiosConfig)
+    }
     return resp.data
   },
   async removeParticipantFromStudy (participantRemoved) {
