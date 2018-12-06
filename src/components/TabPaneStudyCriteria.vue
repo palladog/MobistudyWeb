@@ -123,7 +123,7 @@ export default {
   methods: {
     searchDisease (diseaseDescription, done) {
       // Declare top level URL vars
-      var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
+      var baseUrl = 'https://browser.ihtsdotools.org/api/v1/snomed/'
       var edition = 'en-edition'
       var version = '20180131'
       // Construct Disease Query URL
@@ -163,7 +163,7 @@ export default {
     },
     searchMeds (medDescription, done) {
       // Declare top level URL vars
-      var baseUrl = 'http://browser.ihtsdotools.org/api/v1/snomed/'
+      var baseUrl = 'https://browser.ihtsdotools.org/api/v1/snomed/'
       var edition = 'en-edition'
       var version = '20180131'
       // Construct medications Query URL
