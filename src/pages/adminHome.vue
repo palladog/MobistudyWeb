@@ -16,7 +16,7 @@
             <q-input v-model="teamName" class="col-8 self-center" float-label="Team name" type="text" />
           </div>
           <div class="col-2 self-center">
-            <q-btn label="Add Team" color="warning" @click="createTeam()"/>
+            <q-btn label="Add Team" color="warning" @click="createTeamMsg()"/>
           </div>
         </div>
       </q-card-main>
@@ -314,6 +314,20 @@ export default {
       }
     },
     // Teams
+    async createTeamMsg () {
+      try {
+        await this.$q.dialog({
+          title: 'Create Team',
+          color: 'warning',
+          message: 'You are creating a new TEAM named ' + this.teamName + '. Would you like to continue?',
+          ok: 'Yes, create Team ' + this.teamName,
+          cancel: 'Cancel'
+        })
+        this.createTeam()
+      } catch (err) {
+        this.$q.notify('Cancelling Creation of New Team ' + this.teamName)
+      }
+    },
     async createTeam () {
       try {
         await API.createTeam(this.teamName)
@@ -357,7 +371,7 @@ export default {
     async deleteTeam (index) {
       try {
         await this.$q.dialog({
-          title: 'Exit',
+          title: 'Delete Team',
           color: 'warning',
           message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This cannot be undone. Would you like to continue?',
           ok: 'Yes, delete Team: ' + this.allTeams[index].name,
@@ -386,7 +400,7 @@ export default {
     async removeTeamUser (tindex, uindex) {
       try {
         await this.$q.dialog({
-          title: 'Exit',
+          title: 'Remove User',
           color: 'warning',
           message: 'You are removing USER ' + this.allTeams[tindex].researchersKeys[uindex] + ' from TEAM ' + this.allTeams[tindex].name + '. Would you like to continue?',
           ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
@@ -420,7 +434,7 @@ export default {
       let study = this.allStudies[index].generalities
       try {
         await this.$q.dialog({
-          title: 'Exit',
+          title: 'Deleting Study',
           color: 'warning',
           message: 'You are deleting STUDY ' + study.title + ' from the DB. This will affect participants of that study ' +
           ' and they will no longer be associated to that study.This cannot be undone. Would you like to continue?',
@@ -453,7 +467,7 @@ export default {
       let user = this.allUsers[index]
       try {
         await this.$q.dialog({
-          title: 'Exit',
+          title: 'Delete User',
           color: 'warning',
           message: 'You are deleting ' + user.role + ' ' + user.email + ' from the DB. This cannot be undone. Would you like to continue?',
           ok: 'Yes, delete User: ' + user.email,
@@ -491,7 +505,7 @@ export default {
       let participant = this.allParticipants[parIndex]
       try {
         await this.$q.dialog({
-          title: 'Exit',
+          title: 'Remove Participant',
           color: 'warning',
           message: 'You are removing PARTICIPANT ' + participant._key + ' from STUDY ' + participant.acceptedStudies[accIndex].studyDescriptionKey + ' Would you like to continue?',
           ok: 'Yes, remove Participant: ' + participant._key,
