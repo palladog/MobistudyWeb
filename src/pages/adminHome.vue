@@ -33,7 +33,7 @@
           <div class="row">
             <div class="col-7"></div>
             <div class="col-5">
-              <q-btn class="float-right" label="Delete Team" color="negative" icon="remove" @click="deleteTeam(index)"/>
+              <q-btn class="float-right" :label="teamLabel + team.name" color="negative" icon="remove" @click="deleteTeam(index)"/>
             </div>
           </div>
           <div class="row">
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="row q-mt-sm">
-            <q-btn label="Generate new code" color="warning" @click="generateCode(team._key)"/>
+            <q-btn :label="generateLabel + team.name" color="warning" @click="generateCode(team._key)"/>
           </div>
           <q-card-separator v-if="index != allTeams.length-1" class="q-mt-md"/>
         </div>
@@ -234,6 +234,8 @@ export default {
       teamName: '',
       allTeams: [],
       teamMembers: [],
+      teamLabel: 'Delete team: ',
+      generateLabel: 'Generate New Code for ',
       allStudies: [],
       allUsers: [],
       allParticipants: []
@@ -261,8 +263,7 @@ export default {
     async getTeams () {
       try {
         this.allTeams = await API.getTeams()
-        let i = 0
-        for (i; i < this.allTeams.length; i++) {
+        for (let i = 0; i < this.allTeams.length; i++) {
           this.teamMembers[i] = this.allTeams[i].researchersKeys
           let invitationExpiry = this.allTeams[i].invitationExpiry
           // See if invitation date has expired
