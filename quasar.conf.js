@@ -16,10 +16,10 @@ module.exports = function (ctx) {
       // 'mdi',
       // 'fontawesome'
     ],
-    supportIE: false,
+    supportIE: true,
     build: {
       scopeHoisting: true,
-      vueRouterMode: 'history',
+      // vueRouterMode: 'history',
       // vueCompiler: true,
       // gzip: true,
       // analyze: true,

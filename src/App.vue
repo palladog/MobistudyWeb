@@ -15,7 +15,7 @@ export default {
     let resettingpwd = window.location.href.includes('resetPassword')
     if (!user.getUser().loggedin && !resettingpwd) {
       console.log('LOGGED OUT, GOING TO LOGIN')
-      this.$router.push('/login')
+      this.$router.push('login')
       return
     } else {
       if (!resettingpwd) API.setToken(user.getUser().token)
@@ -27,7 +27,7 @@ export default {
       if (error.response.status === 401 && !error.config.url.includes('login')) {
         console.log('Got disconnected !')
         user.logout()
-        window.location = '/#/login'
+        this.$router.push('login')
       }
       return Promise.reject(error)
     })
