@@ -31,8 +31,8 @@
             <p><font color="red"> The Invitation Code for {{team.name}} has EXPIRED. </font></p>
           </div>
           <div class="row">
-            <div class="col-7"></div>
-            <div class="col-5">
+            <div class="col-2"></div>
+            <div class="col-10">
               <q-btn class="float-right" :label="teamLabel + team.name" color="negative" icon="remove" @click="deleteTeam(index)"/>
             </div>
           </div>
@@ -41,6 +41,14 @@
               <q-field label="Team Name: " />
             </div>
             <div class="col-9 exactFit"> {{team.name}} </div>
+          </div>
+          <div class="row q-mt-sm">
+            <div class="col-3">
+               <q-field label="Team Key: " />
+            </div>
+            <div class="col-9 exactFit">
+              {{team._key}}
+            </div>
           </div>
           <div class="row q-mt-sm">
             <div class="col-3">
@@ -132,7 +140,7 @@
               <q-field class="text-weight-bolder" label="TeamKey: " />
             </div>
             <div class="col-9 exactFit">
-              <q-field :label="study.studyTeamKey"/>
+              <q-field :label="study.teamKey"/>
             </div>
           </div>
           <q-card-separator v-if="index != allStudies.length-1" class="q-mt-sm q-mb-sm"/>
@@ -196,7 +204,7 @@
               <q-field class="text-weight-bolder" :label="participant._key"/>
             </div>
           </div>
-            <div v-for="(accepted, accIndex) in participant.acceptedStudies" :key="accIndex">
+            <div v-for="(study, accIndex) in participant.studies" :key="accIndex">
               <div class="row">
                 <div class="col-1">
                   <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeParticipant(parIndex, accIndex)"/>
@@ -205,7 +213,7 @@
                   <q-field class="text-weight-bolder" label="Accepted Study: " />
                 </div>
                 <div class="col-8 exactFit">
-                  <q-field :label="accepted.studyDescriptionKey"/>
+                  <q-field :label="study.studyKey"/>
                 </div>
               </div>
             </div>
@@ -384,15 +392,18 @@ export default {
       }
     },
     async deleteTeamFromDb (index) {
+      let teamName = this.allTeams[index].name
       try {
         await API.deleteTeam(this.allTeams[index]._key)
         this.allTeams.splice(index, 1)
-        this.$q.notify('Team ' + this.allTeams[index].name + ' Deleted')
+        this.$q.notify('Team ' + teamName + ' Deleted')
         this.getTeams()
+        this.getAllStudies()
+        this.getAllParticipants()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
-          message: 'Cannot delete team ' + this.allTeams[index].name,
+          message: 'Cannot delete team ' + teamName,
           icon: 'report_problem'
         })
       }
@@ -486,6 +497,7 @@ export default {
           let partKey = await API.getOneParticipant(user._key)
           await API.deleteParticipant(partKey)
         } else {
+          console.log('DEL USEr: ', user._key)
           await API.deleteUser(user._key)
         }
         this.allUsers.splice(index, 1)
@@ -508,7 +520,7 @@ export default {
         await this.$q.dialog({
           title: 'Remove Participant',
           color: 'warning',
-          message: 'You are removing PARTICIPANT ' + participant._key + ' from STUDY ' + participant.acceptedStudies[accIndex].studyDescriptionKey + ' Would you like to continue?',
+          message: 'You are removing PARTICIPANT ' + participant._key + ' from STUDY ' + participant.studies[accIndex].studyKey + ' Would you like to continue?',
           ok: 'Yes, remove Participant: ' + participant._key,
           cancel: 'Cancel'
         })
@@ -520,11 +532,11 @@ export default {
     async removeParticipantFromStudy (participant, accIndex) {
       let removedOne = {
         partKey: participant._key,
-        studyKey: participant.acceptedStudies[accIndex].studyDescriptionKey
+        studyKey: participant.studies[accIndex].studyKey
       }
       try {
         await API.removeParticipantFromStudy(removedOne)
-        participant.acceptedStudies.splice(accIndex, 1)
+        participant.studies.splice(accIndex, 1)
         this.$q.notify('Participant ' + removedOne.partKey + ' has been removed from Study ' + removedOne.studyKey)
         this.getAllParticipants()
       } catch (err) {
