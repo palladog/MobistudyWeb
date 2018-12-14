@@ -4,9 +4,9 @@
       <q-toolbar-title>
         Study Designer
       </q-toolbar-title>
-      <q-btn class="q-mr-md" v-show="!this.studyDesign.published" size="md" color="warning" label="Save Draft" @click="saveProgress()"/>
-      <q-btn class="float-right q-mr-md" v-show="!this.studyDesign.published" color="negative" label="Publish" @click="publish()"/>
-      <q-btn class="float-right q-mr-md" v-show="this.studyDesign.published" color="blue" label="Published"/>
+      <q-btn class="q-mr-md" v-show="!this.studyDesign.publishedTS" size="md" color="warning" label="Save Draft" @click="saveProgress()"/>
+      <q-btn class="float-right q-mr-md" v-show="!this.studyDesign.publishedTS" color="negative" label="Publish" @click="publish()"/>
+      <q-btn class="float-right q-mr-md" v-show="this.studyDesign.publishedTS" color="blue" label="Published"/>
       <q-btn  class="float-right q-mr-md" round color="black" icon="close" @click="exitDesigner"/>
     </q-toolbar>
 
@@ -43,10 +43,10 @@ export default {
   },
   data () {
     return {
+      keyOfStudy: '',
       studyDesign: {
-        keyOfStudy: '',
-        studyTeamKey: '',
-        published: undefined,
+        teamKey: '',
+        publishedTS: undefined,
         generalities: {
           title: '',
           description: '',
@@ -122,14 +122,14 @@ export default {
     }
   },
   async created () {
-    // Populate the studyTeamKey with the prop value
-    if (this.studyDesign.studyTeamKey === '') {
-      this.studyDesign.studyTeamKey = this.propTeamKey
+    // Populate the teamKey with the prop value
+    if (!this.studyDesign.teamKey || this.studyDesign.teamKey === '') {
+      this.studyDesign.teamKey = this.propTeamKey
     }
     // Populate Study if it has already been created before
     if (this.propStudyKey) {
       try {
-        this.studyDesign = await API.getStudyDescription(this.propTeamKey, this.propStudyKey)
+        this.studyDesign = await API.getStudy(this.propStudyKey)
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -142,6 +142,7 @@ export default {
   },
   methods: {
     checkValidation: function () {
+      // Checking for Errors only in tabs generalities and Error
       var errorGen = false
       var errorCon = false
       this.$v.studyDesign.generalities.$touch()
@@ -159,9 +160,8 @@ export default {
       if (errorGen === true || errorCon === true) return false
     },
     async publish () {
-      let timeStamp = new Date().toISOString()
       // If published not empty, study has already been published
-      if (this.studyDesign.published) {
+      if (this.studyDesign.publishedTS) {
         this.$q.notify({
           color: 'negative',
           position: 'bottom',
@@ -173,8 +173,8 @@ export default {
         if (this.propStudyKey) {
           if (this.checkValidation() !== false) {
             try {
-              this.studyDesign.published = timeStamp
-              await API.updateDraftStudyDesign(this.propStudyKey, this.studyDesign)
+              this.studyDesign.publishedTS = new Date()
+              await API.updateDraftStudy(this.propStudyKey, this.studyDesign)
               this.$q.notify({
                 color: 'primary',
                 position: 'bottom',
@@ -194,8 +194,8 @@ export default {
           // If no studyKey, publish directly if validation passed
           if (this.checkValidation() !== false) {
             try {
-              this.studyDesign.published = timeStamp
-              await API.publishStudyDesign(this.studyDesign)
+              this.studyDesign.publishedTS = new Date()
+              await API.publishStudy(this.studyDesign)
               this.$q.notify({
                 color: 'primary',
                 position: 'bottom',
@@ -217,15 +217,15 @@ export default {
     async saveProgress () {
       var checkStudyKey = ''
       // If there is a propStudykey, use that as the key and update the study only
-      // If there is no propStudykey, then use the studyDesign.keyOfStudy after creating a new study to update
+      // If there is no propStudykey, then use the keyOfStudy after creating a new study to update
       if (this.propStudyKey) {
         checkStudyKey = this.propStudyKey
-      } else if (this.propStudyKey === undefined && this.studyDesign.keyOfStudy) {
-        checkStudyKey = this.studyDesign.keyOfStudy
+      } else if (this.propStudyKey === undefined && this.keyOfStudy) {
+        checkStudyKey = this.keyOfStudy
       }
       if (checkStudyKey) {
         try {
-          await API.updateDraftStudyDesign(checkStudyKey, this.studyDesign)
+          await API.updateDraftStudy(checkStudyKey, this.studyDesign)
           this.$q.notify({
             color: 'primary',
             position: 'bottom',
@@ -243,9 +243,9 @@ export default {
       } else {
         try {
           // If no studyKey in the prop, then save the study for the 1st time
-          this.studyDesign.created = new Date()
-          let response = await API.saveDraftStudyDesign(this.studyDesign)
-          this.studyDesign.keyOfStudy = response.data._key
+          this.studyDesign.createdTS = new Date()
+          let response = await API.saveDraftStudy(this.studyDesign)
+          this.keyOfStudy = response.data._key
           this.$q.notify({
             color: 'primary',
             position: 'bottom',

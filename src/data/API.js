@@ -42,25 +42,40 @@ export default {
     return resp.data
   },
   async addUserToTeam (invitationCode) {
-    return axios.post(BASE_URL + '/teams/addResearcher', { invitationCode: invitationCode }, axiosConfig)
+    return axios.post(BASE_URL + '/teams/researcher/add', { invitationCode: invitationCode }, axiosConfig)
+  },
+  async removeUserFromTeam (userRemoved) {
+    return axios.post(BASE_URL + '/teams/researcher/remove', { userRemoved: userRemoved }, axiosConfig)
+  },
+  async deleteTeam (teamKey) {
+    let resp = await axios.delete(BASE_URL + '/teams/' + teamKey, axiosConfig)
+    return resp.data
   },
   // USER
   async getUserByKey (userKey) {
     let resp = await axios.get(BASE_URL + '/users/' + userKey, axiosConfig)
     return resp.data
   },
+  async getAllDbUsers () {
+    let resp = await axios.get(BASE_URL + '/users/all', axiosConfig)
+    return resp.data
+  },
+  async deleteUser (userKey) {
+    let resp = await axios.delete(BASE_URL + '/users/' + userKey, axiosConfig)
+    return resp.data
+  },
   // STUDY
-  async saveDraftStudyDesign (design) {
+  async saveDraftStudy (design) {
     return axios.post(BASE_URL + '/studies', design, axiosConfig)
   },
-  async updateDraftStudyDesign (studyKey, design) {
+  async updateDraftStudy (studyKey, design) {
     return axios.put(BASE_URL + '/studies/' + studyKey, design, axiosConfig)
   },
-  async publishStudyDesign (design) {
+  async publishStudy (design) {
     return axios.post(BASE_URL + '/studies', design, axiosConfig)
   },
-  async getStudyDescription (teamKey, studyKey) {
-    let resp = await axios.get(BASE_URL + '/studies/' + teamKey + '/' + studyKey, axiosConfig)
+  async getStudy (studyKey) {
+    let resp = await axios.get(BASE_URL + '/studies/' + studyKey, axiosConfig)
     return resp.data
   },
   async getStudies () {
@@ -68,7 +83,11 @@ export default {
     return resp.data
   },
   async getAllTeamStudies (teamKey) {
-    let resp = await axios.get(BASE_URL + '/studies/' + teamKey, axiosConfig)
+    let resp = await axios.get(BASE_URL + '/studies?teamKey=' + teamKey, axiosConfig)
+    return resp.data
+  },
+  async deleteStudy (studyKey) {
+    let resp = await axios.delete(BASE_URL + '/studies/' + studyKey, axiosConfig)
     return resp.data
   },
   // FORMS
@@ -82,5 +101,30 @@ export default {
   },
   async publishForm (form) {
     return axios.post(BASE_URL + '/forms', form, axiosConfig)
+  },
+  // PARTICIPANT
+  async getOneParticipant (userKey) {
+    let resp = await axios.get(BASE_URL + '/participants/' + userKey, axiosConfig)
+    return resp.data
+  },
+  async getParticipants () {
+    let resp = await axios.get(BASE_URL + '/participants', axiosConfig)
+    return resp.data
+  },
+  async getParticipantsOfStudy (studyKey, currentStatus) {
+    let resp
+    if (currentStatus) {
+      resp = await axios.get(BASE_URL + '/participants?studyKey=' + studyKey + '&currentStatus=' + currentStatus, axiosConfig)
+    } else {
+      resp = await axios.get(BASE_URL + '/participants?studyKey=' + studyKey, axiosConfig)
+    }
+    return resp.data
+  },
+  async removeParticipantFromStudy (participantRemoved) {
+    return axios.put(BASE_URL + '/participants/action/withdraw', { withdrawnOne: participantRemoved }, axiosConfig)
+  },
+  async deleteParticipant (participantKey) {
+    let resp = await axios.delete(BASE_URL + '/participants/' + participantKey, axiosConfig)
+    return resp.data
   }
 }

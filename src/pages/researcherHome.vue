@@ -1,10 +1,11 @@
 <template>
   <q-page>
-    <q-card class="q-ma-lg q-pl-lg" color="cyan-2">
+    <q-card class="q-ma-lg q-pl-lg" color="cyan-6">
       <q-card-main>
         {{ welcomeLabel }}
       </q-card-main>
     </q-card>
+
     <q-card class="q-ma-lg q-pl-lg q-pr-lg">
       <q-card-title>Add me to a new team</q-card-title>
       <q-card-main>
@@ -12,6 +13,7 @@
           <q-btn class="q-mt-md"  label="Add" color="warning" @click="addToTeam()"/>
       </q-card-main>
     </q-card>
+
     <q-card class="q-ma-lg q-pa-lg">
       <q-card-title  v-show="teamsListOptions.length === 0">Teams
         <span slot="subtitle">You are not a member of any team. Please contact your mobiStudy admin to be added to one. </span>
@@ -24,24 +26,25 @@
         <q-select v-model="selectedTeamValue" :options="teamsListOptions" @input="selectTeam()"/>
       </q-card-main>
     </q-card>
-    <q-card class="q-ma-lg q-pa-lg" >
+
+    <q-card class="q-ma-lg q-pa-lg" v-show="teamsListOptions.length > 0">
         <q-card-title>Studies
             <span slot="subtitle">List of Studies for {{ this.selectedTeamLabel }}</span>
         </q-card-title>
         <q-card-separator />
         <q-card-main>
-            <div class="shadow-1 q-pa-sm q-mt-lg" v-show="unpublishedStudiesList.length > 0">
+            <div class="shadow-1 q-pa-sm q-mt-lg" v-show="unpublishedStudies.length > 0">
                <q-field class ="q-mt-md" label="Editable studies (NOT published): " />
                <q-card-separator />
-                <div v-for="(study, index) in unpublishedStudiesList" :key="index">
-                    <q-btn class ="row q-mt-md" size="lg" :label="study.title" color="light" @click="goToStudy(index)"/>
+                <div v-for="(study, index) in unpublishedStudies" :key="index">
+                    <q-btn class ="row q-mt-md" size="lg" :label="study.title" color="positive" @click="goToStudy(index)"/>
                 </div>
             </div>
-            <div class="shadow-1 q-pa-sm q-mt-lg" v-show="publishedStudiesList.length > 0">
+            <div class="shadow-1 q-pa-sm q-mt-lg" v-show="publishedStudies.length > 0">
                 <q-field class ="q-mt-md" label="Published Studies (view-only): " />
                 <q-card-separator />
-                <div v-for="(pstudy, index1) in publishedStudiesList" :key="index1">
-                    <q-btn class ="row q-mt-md" size="lg" :label="pstudy.title" color="positive" @click="goToPubStudy(index1)"/>
+                <div v-for="(pstudy, index1) in publishedStudies" :key="index1">
+                    <q-btn class ="row q-mt-md" size="lg" :label="pstudy.title" color="light" @click="goToPubStudy(index1)"/>
                 </div>
             </div>
             <div class ="row q-mt-lg">
@@ -50,6 +53,34 @@
         </q-card-main>
     </q-card>
 
+    <!-- Published Study and Accepted/Withdrawn Participants -->
+    <q-card class="q-ma-lg" v-show="publishedStudies.length != 0">
+      <q-collapsible label="Published Study &amp; Participants (by TEAM): ">
+        <q-card-separator/>
+        <q-card-main>
+        <div class="shadow-1 q-pa-sm q-mt-lg" v-for="(study, index) in publishedStudies" :key="index">
+          <div class="row">
+            <div class="col-3">
+              <q-field class="text-weight-bolder" label="Accepted Study: " />
+            </div>
+            <div class="col-9 exactFit">
+              <q-field class="text-weight-bolder" :label="study.title"/>
+            </div>
+          </div>
+            <div v-for="(participant, accIndex) in study.participants" :key="accIndex">
+              <div class="row">
+                <div class="col-3">
+                  <q-field class="text-weight-bolder" label="Participant: " />
+                </div>
+                <div class="col-9 exactFit">
+                  <q-field :label="participant"/>
+                </div>
+              </div>
+            </div>
+        </div>
+        </q-card-main>
+      </q-collapsible>
+    </q-card>
   </q-page>
 </template>
 
@@ -61,8 +92,8 @@ export default {
   data () {
     return {
       invitationCode: '',
-      unpublishedStudiesList: [],
-      publishedStudiesList: [],
+      unpublishedStudies: [],
+      publishedStudies: [],
       teamsListOptions: [],
       selectedTeamValue: '',
       selectedTeamLabel: '',
@@ -104,10 +135,10 @@ export default {
     },
     async addToTeam () {
       try {
-        await API.addUserToTeam(this.invitationCode)
+        let res = await API.addUserToTeam(this.invitationCode)
         this.$q.dialog({
           title: 'User added to team',
-          message: 'You have been added to the team.',
+          message: 'You have been added to the team ' + res.data.teamName + '.',
           ok: true,
           cancel: false,
           preventClose: true
@@ -122,31 +153,38 @@ export default {
         })
       }
     },
-    async verifyExistence () {
-      // TO DO
-      // Called by addToTeam() ---> verify if the user already exists in the team
-    },
     selectTeam (index) {
       let result = this.teamsListOptions.find(opts => opts.value === this.selectedTeamValue)
       this.selectedTeamLabel = result.label
       this.getAllStudies()
       this.createStudyLabel = 'Create new study for ' + this.selectedTeamLabel
+      this.unpublishedStudies = []
+      this.publishedStudies = []
     },
     async getAllStudies () {
       try {
         // All Studies for a team
-        let userListOfStudies = await API.getAllTeamStudies(this.selectedTeamValue)
-        if (userListOfStudies.length > 0) {
+        let studies = await API.getAllTeamStudies(this.selectedTeamValue)
+        if (studies.length > 0) {
           // Get Published Studies
-          this.publishedStudiesList = userListOfStudies.filter(function (obj) {
-            return obj.published !== ''
+          this.publishedStudies = studies.filter(function (obj) {
+            return obj.publishedTS && obj.publishedTS !== ''
           }).map(function (obj) {
             let pubObj = { 'title': obj.generalities.title, 'study_key': obj._key }
             return pubObj
           })
+          // if there are published studies, list the participants
+          if (this.publishedStudies.length > 0) {
+            for (let i = 0; i < this.publishedStudies.length; i++) {
+              let parts = await API.getParticipantsOfStudy(this.publishedStudies[i].study_key)
+              this.publishedStudies[i].participants = parts.map((p) => {
+                return p._key
+              })
+            }
+          }
           // Get unpublished Studies
-          this.unpublishedStudiesList = userListOfStudies.filter(function (obj) {
-            return obj.published === ''
+          this.unpublishedStudies = studies.filter(function (obj) {
+            return !obj.publishedTS || obj.publishedTS === ''
           }).map(function (obj) {
             let unpubObj = { 'title': obj.generalities.title, 'study_key': obj._key }
             return unpubObj
@@ -173,10 +211,10 @@ export default {
       }
     },
     goToStudy (index) {
-      this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.unpublishedStudiesList[index].study_key)
+      this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.unpublishedStudies[index].study_key)
     },
     goToPubStudy (index) {
-      this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.publishedStudiesList[index].study_key)
+      this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.publishedStudies[index].study_key)
     }
   }
 }

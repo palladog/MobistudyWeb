@@ -7,19 +7,19 @@
           <q-card-title v-show="email">Reset password for {{ email }}</q-card-title>
           <q-card-main>
             <q-card-main>
-              <q-field label="Token" helper="As received on your email." >
-                <q-input v-model="token" type="text" />
+              <q-field label="Token" helper="As received on your email." :error="$v.token.$error" error-label="A token is required." >
+                <q-input v-model.trim="$v.token.$model" type="text" @blur="$v.token.$touch" clearable/>
               </q-field>
-              <q-field class="q-mt-md" label="Password" helper="Enter a new password." >
-                <q-input v-model="newpassword" type="password"/>
+              <q-field class="q-mt-md" label="Password" helper="Enter a new password." :error="$v.newPassword.$error" error-label="A password is required.">
+                <q-input v-model.trim="$v.newPassword.$model" type="password" @blur="$v.newPassword.$touch" clearable/>
               </q-field>
-              <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." >
-                <q-input v-model="newpassword2" type="password" />
+              <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.newPassword2.$error" error-label="A password is required.">
+                <q-input v-model.trim="$v.newPassword2.$model" type="password" @blur="$v.newPassword2.$touch" clearable/>
               </q-field>
             </q-card-main>
           </q-card-main>
           <q-card-actions>
-            <q-btn label="reset" color="primary" @click="resetpassword()"/>
+            <q-btn label="reset" color="primary" @click="validationCheck"/>
           </q-card-actions>
         </q-card>
       </q-page>
@@ -30,6 +30,7 @@
 <script>
 import API from '../data/API.js'
 import userinfo from '../data/userinfo.js'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'ResetPasswordPage',
@@ -37,18 +38,44 @@ export default {
     return {
       email: undefined,
       token: '',
-      newpassword: '',
-      newpassword2: ''
+      newPassword: '',
+      newPassword2: ''
     }
+  },
+  validations: {
+    token: { required },
+    newPassword: { required },
+    newPassword2: { required }
   },
   created () {
     if (this.$route.query.email) this.email = this.$route.query.email
     if (this.$route.query.token) this.token = this.$route.query.token
   },
   methods: {
-    async resetpassword () {
+    validationCheck: function () {
+      this.$v.token.$touch()
+      this.$v.newPassword.$touch()
+      this.$v.newPassword2.$touch()
+      if (this.$v.token.$error || this.$v.newPassword.$error || this.$v.newPassword2.$error) {
+        this.$q.notify('Please correct the indicated fields.')
+      } else this.validatePassword()
+    },
+    validatePassword () {
+      // check if password and password2 match
+      if (this.newPassword2.toUpperCase() !== this.newPassword.toUpperCase()) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Your passwords do not match. Please Check your confirmation password.',
+          icon: 'report_problem'
+        })
+        return
+      }
+      // If no issues, reset Password
+      this.resetUserPassword()
+    },
+    async resetUserPassword () {
       try {
-        await API.resetPassword(this.token, this.newpassword)
+        await API.resetPassword(this.token, this.newPassword)
         userinfo.logout()
 
         this.$q.dialog({
