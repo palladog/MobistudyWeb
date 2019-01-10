@@ -67,6 +67,12 @@ export default {
 
         if (user.role === 'researcher') {
           this.$router.push('researcher')
+        } else if (user.role === 'participant') {
+          this.$q.notify({
+            color: 'negative',
+            message: 'Cannot login participants via web portal',
+            icon: 'report_problem'
+          })
         } else this.$router.push('admin')
       } catch (error) {
         if (error.response && error.response.status === 401) {
