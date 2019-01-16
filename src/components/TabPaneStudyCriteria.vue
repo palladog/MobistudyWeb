@@ -153,6 +153,7 @@ export default {
           this.$q.notify('There has been an error during the retrieval of this query. Please Try again.')
           console.error(error)
           this.loading = false
+          done([])
         })
     },
     selectedDisease (item) {
@@ -191,6 +192,7 @@ export default {
         }, (error) => {
           console.error(error)
           this.loading = false
+          done([])
         })
     },
     selectedMeds (item) {
