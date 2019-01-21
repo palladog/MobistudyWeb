@@ -78,8 +78,8 @@ export default {
               answer: ''
             }
           ],
-          diseases: { },
-          medications: { }
+          diseases: [],
+          medications: []
         },
         tasks: [],
         consent: {
