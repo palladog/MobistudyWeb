@@ -220,6 +220,7 @@ export default {
       // If there is no propStudykey, then use the keyOfStudy after creating a new study to update
       if (this.propStudyKey) {
         checkStudyKey = this.propStudyKey
+        this.keyOfStudy = this.propStudyKey
       } else if (this.propStudyKey === undefined && this.keyOfStudy) {
         checkStudyKey = this.keyOfStudy
       }
@@ -276,12 +277,6 @@ export default {
           this.$q.notify('Cancel')
         })
       } else {
-        this.$q.notify({
-          color: 'primary',
-          position: 'bottom',
-          message: 'Back to User home.',
-          icon: 'arrow_back'
-        })
         this.$router.push('/researcher')
       }
     }
