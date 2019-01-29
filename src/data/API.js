@@ -16,6 +16,9 @@ export default {
     let resp = await axios.post(BASE_URL + '/login', { email: email, password: password })
     return resp.data
   },
+  async sendRegistrationConfirmation (email) {
+    return axios.post(BASE_URL + '/sendConfirmationEmail', { email: email })
+  },
   async askPasswordResetEmail (email) {
     return axios.post(BASE_URL + '/sendResetPasswordEmail', { email: email })
   },
