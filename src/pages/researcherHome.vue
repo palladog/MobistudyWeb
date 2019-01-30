@@ -37,14 +37,21 @@
                <q-field class ="q-mt-md" label="Editable studies (NOT published): " />
                <q-card-separator />
                 <div v-for="(study, index) in unpublishedStudies" :key="index">
-                    <q-btn class ="row q-mt-md" size="lg" :label="study.title" color="positive" @click="goToStudy(index)"/>
+                  <div class="row">
+                    <div class="col">
+                      <q-btn class ="row q-mt-md" size="md" :label="study.title" color="positive" @click="goToStudy(index)"/>
+                    </div>
+                    <div class="col">
+                      <q-btn class ="row q-mt-md sm" round color="negative" size="sm" icon="remove" @click="removeUnpublishedStudy(index)"/>
+                    </div>
+                  </div>
                 </div>
             </div>
             <div class="shadow-1 q-pa-sm q-mt-lg" v-show="publishedStudies.length > 0">
                 <q-field class ="q-mt-md" label="Published Studies (view-only): " />
                 <q-card-separator />
                 <div v-for="(pstudy, index1) in publishedStudies" :key="index1">
-                    <q-btn class ="row q-mt-md" size="lg" :label="pstudy.title" color="light" @click="goToPubStudy(index1)"/>
+                    <q-btn class ="row q-mt-md" size="md" :label="pstudy.title" color="light" @click="goToPubStudy(index1)"/>
                 </div>
             </div>
             <div class ="row q-mt-lg">
@@ -215,6 +222,41 @@ export default {
     },
     goToPubStudy (index) {
       this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.publishedStudies[index].study_key)
+    },
+    async removeUnpublishedStudy (index) {
+      let studyKey = this.unpublishedStudies[index].study_key
+      // Check if the status of the study is published or not
+      try {
+        let study = await API.getStudy(studyKey)
+        if (!study.publishedTS) {
+          try {
+            await this.$q.dialog({
+              title: 'Remove Study',
+              color: 'warning',
+              message: 'You are deleting the draft Study. Would you like to continue?',
+              ok: 'Yes, delete the study.',
+              cancel: 'Cancel'
+            })
+            this.unpublishedStudies.splice(index, 1)
+            // Remove from db
+            await API.deleteStudy(studyKey)
+          } catch (error) {
+            this.$q.notify('Cancelling deletion of study.')
+          }
+        } else {
+          this.$q.notify({
+            color: 'negative',
+            message: 'This study has been published and cannot be removed.',
+            icon: 'report_problem'
+          })
+        }
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve study.',
+          icon: 'report_problem'
+        })
+      }
     }
   }
 }
