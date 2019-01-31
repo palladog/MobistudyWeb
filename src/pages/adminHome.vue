@@ -494,10 +494,12 @@ export default {
       try {
         if (user.role === 'participant') {
           // Get participant Key
+          console.log('UKey 1: ', user._key)
           let partKey = await API.getOneParticipant(user._key)
-          await API.deleteParticipant(partKey)
+          console.log('Part K >> ', partKey)
+          await API.deleteParticipant(partKey._key)
+          await API.deleteUser(user._key)
         } else {
-          console.log('DEL USEr: ', user._key)
           await API.deleteUser(user._key)
         }
         this.allUsers.splice(index, 1)
@@ -526,7 +528,7 @@ export default {
         })
         this.removeParticipantFromStudy(participant, accIndex)
       } catch (error) {
-        this.$q.notify('CancellingRemoving Participant ' + participant._key)
+        this.$q.notify('Cancelling Removing Participant ' + participant._key)
       }
     },
     async removeParticipantFromStudy (participant, accIndex) {
