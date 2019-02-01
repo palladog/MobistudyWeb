@@ -8,8 +8,8 @@
         <q-field label="Title" helper="Short name of the study" :error="v.title.$error" error-label="A title is required.">
           <q-input v-model.trim="v.title.$model" @blur="v.title.$touch" @input="update()" clearable/>
         </q-field>
-        <q-field label="Description" helper="Layman's description of the study" :error="v.description.$error" error-label="A description is required.">
-          <q-input v-model.trim="v.description.$model"  @blur="v.description.$touch" type="textarea" rows="7" @input="update()" clearable/>
+        <q-field label="Short description" helper="Layman's description of the study, in one or two sentences" :error="v.description.$error" error-label="A description is required.">
+          <q-input v-model.trim="v.description.$model"  @blur="v.description.$touch" type="textarea" rows="3" @input="update()" clearable/>
         </q-field>
       </q-card-main>
     </q-card>

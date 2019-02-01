@@ -91,32 +91,22 @@ export default {
   computed: {
     diseasesVue: {
       get: function () {
-        var keys = []
-        for (let key in this.criteria.diseases) {
-          keys.push(key)
-        }
-        return keys
+        return this.criteria.diseases.map(x => x.name)
       },
-      set: function (keys) {
-        for (let key in this.criteria.diseases) {
-          // if key is not in keys, delete
-          if (!keys.includes(key)) delete this.criteria.diseases[key]
-        }
+      set: function (names) {
+        this.criteria.diseases = this.criteria.diseases.filter(x => {
+          return names.includes(x.name)
+        })
       }
     },
     medsVue: {
       get: function () {
-        var keys = []
-        for (let key in this.criteria.medications) {
-          keys.push(key)
-        }
-        return keys
+        return this.criteria.medications.map(x => x.name)
       },
-      set: function (keys) {
-        for (let key in this.criteria.medications) {
-          // if key is not in keys, delete
-          if (!keys.includes(key)) delete this.criteria.medications[key]
-        }
+      set: function (names) {
+        this.criteria.medications = this.criteria.medications.filter(x => {
+          return names.includes(x.name)
+        })
       }
     }
   },
@@ -153,10 +143,16 @@ export default {
           this.$q.notify('There has been an error during the retrieval of this query. Please Try again.')
           console.error(error)
           this.loading = false
+          done([])
         })
     },
     selectedDisease (item) {
-      this.criteria.diseases[item.label] = item.conceptId
+      if (!this.criteria.diseases.find(x => x.name === item.label)) {
+        this.criteria.diseases.push({
+          name: item.label,
+          conceptId: item.conceptId
+        })
+      }
     },
     duplicatedDisease (label) {
       this.$q.notify(`"${label}" already in list`)
@@ -191,10 +187,16 @@ export default {
         }, (error) => {
           console.error(error)
           this.loading = false
+          done([])
         })
     },
     selectedMeds (item) {
-      this.criteria.medications[item.label] = item.conceptId
+      if (!this.criteria.medications.find(x => x.name === item.label)) {
+        this.criteria.medications.push({
+          name: item.label,
+          conceptId: item.conceptId
+        })
+      }
     },
     duplicatedMeds (label) {
       this.$q.notify(`"${label}" already in list`)

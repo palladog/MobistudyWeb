@@ -108,10 +108,10 @@ export default {
           password: this.newPassword,
           role: 'researcher'
         })
-
+        await this.sendConfirmation()
         this.$q.dialog({
           title: 'User created',
-          message: 'Your account has been created, now you need to login.',
+          message: 'Your account has been created. A confirmation email has been sent to your email  address. Now you need to login.',
           ok: true,
           cancel: false,
           preventClose: true
@@ -132,6 +132,17 @@ export default {
             icon: 'report_problem'
           })
         }
+      }
+    },
+    async sendConfirmation () {
+      try {
+        await API.sendRegistrationConfirmation(this.email)
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Confirmation email could not be sent.',
+          icon: 'report_problem'
+        })
       }
     }
   }

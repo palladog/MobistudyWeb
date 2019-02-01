@@ -40,8 +40,8 @@
             <q-item-side>Task {{ (tindex + 1) }}</q-item-side>
             <q-item-main>
               <div class="row items-center">
-                <div class="col-10"><q-input v-model="tt.description" type="text"/></div>
-                <div class="col-1">Optional:</div>
+                <div class="col-9"><q-input v-model="tt.description" type="textarea" rows="3"/></div>
+                <div class="col-2">Optional:</div>
                 <div class="col-1"><q-checkbox v-model="alwaysTrue" readonly disabled/></div>
               </div>
             </q-item-main>
@@ -53,10 +53,10 @@
             <q-item-side>Item {{ (eindex + 1) }}</q-item-side>
             <q-item-main>
               <div class="row items-center">
-                <div class="col-9"><q-input v-model="et.description" type="text"/></div>
-                <div class="col-1">Optional:</div>
+                <div class="col-8"><q-input v-model="et.description" type="textarea" rows="3"/></div>
+                <div class="col-2">Optional:</div>
                 <div class="col-1"><q-checkbox v-model="et.optional" /></div>
-                <div class="col-1"><q-btn round icon="remove" size="sm" color="negative" @click="removeExtraItem(eindex)"></q-btn></div>
+                <div class="col-1"><q-btn round icon="remove" size="xs" color="negative" @click="removeExtraItem(eindex)"></q-btn></div>
               </div>
             </q-item-main>
           </q-item>
