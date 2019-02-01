@@ -494,11 +494,8 @@ export default {
       try {
         if (user.role === 'participant') {
           // Get participant Key
-          console.log('UKey 1: ', user._key)
           let partKey = await API.getOneParticipant(user._key)
-          console.log('Part K >> ', partKey)
           await API.deleteParticipant(partKey._key)
-          await API.deleteUser(user._key)
         } else {
           await API.deleteUser(user._key)
         }
