@@ -11,11 +11,11 @@
             <q-field label="Email" helper="Enter your email." :error="$v.email.$error" error-label="An email address is required.">
               <q-input v-model.trim="$v.email.$model" type="email" placeholder=" e.g. email@email.com" @blur="$v.email.$touch" clearable/>
             </q-field>
-            <q-field class="q-mt-md" label="Password" helper="Enter your password." :error="$v.newPassword.$error" error-label="A password is required.">
-              <q-input v-model.trim="$v.newPassword.$model" type="password" placeholder="xxxxxxxx" @blur="$v.newPassword.$touch" clearable/>
+            <q-field class="q-mt-md" label="Password" helper="Enter your password." :error="$v.password.$error" :error-label="getFirstPwdCheckError(password)">
+              <q-input v-model.trim="$v.password.$model" type="password" placeholder="xxxxxxxx" @blur="$v.password.$touch" clearable/>
             </q-field>
-            <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.confirmPassword.$error" error-label="A password is required.">
-              <q-input v-model.trim="$v.confirmPassword.$model" type="password" placeholder="xxxxxxxx" @blur="$v.confirmPassword.$touch" clearable/>
+            <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.password2.$error" :error-label="getFirstPwdCheckError(password2)">
+              <q-input v-model.trim="$v.password2.$model" type="password" placeholder="xxxxxxxx" @blur="$v.password2.$touch" clearable/>
             </q-field>
             <div class ="row q-mt-md">
               <div class = "col-5">
@@ -43,36 +43,55 @@
 <script>
 import API from '../data/API.js'
 import { required, email } from 'vuelidate/lib/validators'
+import owasp from '../../node_modules/owasp-password-strength-test/owasp-password-strength-test'
+
+const checkPwdStrength = (pwd) => {
+  return owasp.test(pwd).strong
+}
+
+owasp.config({
+  allowPassphrases: true,
+  maxLength: 70,
+  minLength: 8,
+  minPhraseLength: 10,
+  minOptionalTestsToPass: 3
+})
 
 export default {
   data () {
     return {
       email: '',
-      newPassword: '',
-      confirmPassword: ''
+      password: '',
+      password2: ''
     }
   },
   validations: {
     email: { required, email },
-    newPassword: { required },
-    confirmPassword: { required }
+    password: { required, checkPwdStrength },
+    password2: { required, checkPwdStrength }
   },
   methods: {
+    getFirstPwdCheckError (pwd) {
+      let result = owasp.test(pwd)
+      if (!result.strong) {
+        return result.errors[0]
+      } else return 'All OK'
+    },
     cancelRegistration () {
       this.$router.push('/login')
     },
     validationCheck: function () {
       this.$v.email.$touch()
-      this.$v.newPassword.$touch()
-      this.$v.confirmPassword.$touch()
-      if (this.$v.email.$error || this.$v.newPassword.$error || this.$v.confirmPassword.$error) {
+      this.$v.password.$touch()
+      this.$v.password2.$touch()
+      if (this.$v.email.$error || this.$v.password.$error || this.$v.password2.$error) {
         this.$q.notify('Please correct the indicated fields.')
       } else this.validatePassword()
     },
     validatePassword () {
       let userName = this.email.substring(0, this.email.indexOf('@'))
       // check if password includes spaces
-      if (this.newPassword.indexOf(' ') >= 0) {
+      if (this.password.indexOf(' ') >= 0) {
         this.$q.notify({
           color: 'negative',
           message: 'You cannot include spaces in your password. Please Change it.',
@@ -81,7 +100,7 @@ export default {
         return
       }
       // check if password includes name in email
-      if (this.newPassword.toUpperCase().includes(userName.toUpperCase())) {
+      if (this.password.toUpperCase().includes(userName.toUpperCase())) {
         this.$q.notify({
           color: 'negative',
           message: 'Your password includes your username. Please Change it.',
@@ -89,8 +108,8 @@ export default {
         })
         return
       }
-      // check if password and confirmPassword match
-      if (this.confirmPassword.toUpperCase() !== this.newPassword.toUpperCase()) {
+      // check if password and password2 match
+      if (this.password2.toUpperCase() !== this.password.toUpperCase()) {
         this.$q.notify({
           color: 'negative',
           message: 'Your passwords do not match. Please Check your confirmation password.',
@@ -105,7 +124,7 @@ export default {
       try {
         await API.createUser({
           email: this.email,
-          password: this.newPassword,
+          password: this.password,
           role: 'researcher'
         })
         await this.sendConfirmation()
