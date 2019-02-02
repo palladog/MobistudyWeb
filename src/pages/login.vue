@@ -67,6 +67,8 @@ export default {
 
         if (user.role === 'researcher') {
           this.$router.push('researcher')
+        } else if (user.role === 'participant') {
+          this.$q.notify('You are a participant. You cannot access this system.')
         } else this.$router.push('admin')
       } catch (error) {
         if (error.response && error.response.status === 401) {

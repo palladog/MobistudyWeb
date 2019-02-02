@@ -107,9 +107,7 @@ export default {
   },
   // PARTICIPANT
   async getOneParticipant (userKey) {
-    console.log('RESP 1 >> : ', userKey)
     let resp = await axios.get(BASE_URL + '/participants/byuserkey/' + userKey, axiosConfig)
-    console.log('RESP 2 >> : ', resp)
     return resp.data
   },
   async getParticipants () {
