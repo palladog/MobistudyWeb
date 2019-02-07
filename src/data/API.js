@@ -16,9 +16,6 @@ export default {
     let resp = await axios.post(BASE_URL + '/login', { email: email, password: password })
     return resp.data
   },
-  async sendRegistrationConfirmation (email) {
-    return axios.post(BASE_URL + '/sendConfirmationEmail', { email: email })
-  },
   async askPasswordResetEmail (email) {
     return axios.post(BASE_URL + '/sendResetPasswordEmail', { email: email })
   },
@@ -128,6 +125,25 @@ export default {
   },
   async deleteParticipant (participantKey) {
     let resp = await axios.delete(BASE_URL + '/participants/' + participantKey, axiosConfig)
+    return resp.data
+  },
+  // Audit LOG
+  async getLogEventTypes () {
+    let resp = await axios.get(BASE_URL + '/auditlog/eventTypes', axiosConfig)
+    return resp.data
+  },
+  async getLogs (countOnly, filter) {
+    let queryParams = ''
+    let firstParam = true
+    for (let param in filter) {
+      if (filter[param]) {
+        queryParams += (firstParam ? '' : '&') + param + '=' + encodeURIComponent(filter[param])
+        firstParam = false
+      }
+    }
+    let URL = BASE_URL + '/auditlog' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
+    console.log(URL)
+    let resp = await axios.get(URL, axiosConfig)
     return resp.data
   }
 }
