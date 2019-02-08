@@ -2,8 +2,11 @@
   <q-page>
     <q-tabs>
       <q-tab default slot="title" name="logs" icon="message" label="Logs" />
-      <q-tab slot="title" name="tab-2" icon="fingerprint" label="Other" />
-
+      <q-tab slot="title" name="tab-teams" icon="fingerprint" label="Teams" />
+      <q-tab slot="title" name="tab-studies" icon="fingerprint" label="Studies" />
+      <q-tab slot="title" name="tab-users" icon="fingerprint" label="Users" />
+      <q-tab slot="title" name="tab-participants" icon="fingerprint" label="Participants" />
+      <!-- Tab Logs -->
       <q-tab-pane name="logs">
         <q-table title="Audit logs" ref="table" color="primary" :data="logs.logs" :columns="logs.columns" :filter="logs.filter" row-key="_key" :pagination.sync="logs.pagination"  @request="loadLogs" :loading="logs.loading">
           <template slot="top-right" slot-scope="props">
@@ -17,8 +20,8 @@
           </q-td>
         </q-table>
       </q-tab-pane>
-      <q-tab-pane name="tab-2">
-
+      <!-- Tab Teams -->
+      <q-tab-pane name="tab-teams">
         <!-- Create New Teams -->
         <q-card class="q-ma-lg">
           <q-card-title>
@@ -121,6 +124,9 @@
             </q-card-main>
           </q-collapsible>
         </q-card>
+      </q-tab-pane>
+      <!-- Tab Studies -->
+      <q-tab-pane name="tab-studies">
         <!-- Studies  -->
         <q-card class="q-ma-lg" v-show="allStudies.length != 0">
           <q-collapsible label="Studies &amp; Details:">
@@ -162,6 +168,9 @@
             </q-card-main>
           </q-collapsible>
         </q-card>
+      </q-tab-pane>
+      <!-- Tab Users -->
+      <q-tab-pane name="tab-users">
         <!-- List of Users  -->
         <q-card class="q-ma-lg" v-show="allUsers.length != 0">
           <q-collapsible label="All Users &amp; Details:">
@@ -203,6 +212,9 @@
             </q-card-main>
           </q-collapsible>
         </q-card>
+      </q-tab-pane>
+      <!-- Tab Participants -->
+      <q-tab-pane name="tab-participants">
         <!-- Participants and Studies -->
         <q-card class="q-ma-lg" v-show="allParticipants.length != 0">
           <q-collapsible label="Participants &amp; Studies: ">
