@@ -480,7 +480,7 @@ export default {
         await this.$q.dialog({
           title: 'Delete Team',
           color: 'warning',
-          message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This cannot be undone. Would you like to continue?',
+          message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This will also delete any associated studies and the corresponding data. This cannot be undone. Would you like to continue?',
           ok: 'Yes, delete Team: ' + this.allTeams[index].name,
           cancel: 'Cancel'
         })
