@@ -422,7 +422,6 @@ export default {
     },
     // Teams
     async createTeamMsg () {
-      console.log('tNAME >> ', this.teamName)
       if (this.teamName === '') {
         this.$q.notify({
           color: 'negative',

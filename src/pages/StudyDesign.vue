@@ -71,6 +71,7 @@ export default {
           minAge: undefined,
           maxAge: undefined,
           gender: [],
+          numberOfParticipants: undefined,
           lifestyle: { active: 'notrequired', smoker: 'notrequired' },
           criteriaQuestions: [
             {

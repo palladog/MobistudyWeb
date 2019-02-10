@@ -3,10 +3,10 @@
     <!-- Inclusion Criteria Tab Card -->
     <q-card class="form-card">
       <q-card-title>Inclusion Criteria
-        <span slot18="subtitle">Criteria to filter participants in the study</span>
+        <span slot18="subtitle">Criteria to filter participants for the study</span>
       </q-card-title>
       <q-card-main>
-        <!-- Age Range & Sex -->
+      <!-- Age Range & Sex -->
         <q-field label="Age range:" helper="Desired age range of the participants.">
           <div class="row gutter-lg justify-center">
             <div class="col-6">
@@ -21,6 +21,14 @@
           <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Male" color="secondary" val="male" />
           <q-checkbox class="q-mr-lg" v-model="criteria.gender" label="Female" color="secondary" val="female" />
           <q-checkbox v-model="criteria.gender" label="Other" color="secondary" val="other" />
+        </q-field>
+      </q-card-main>
+    </q-card>
+    <q-card class="form-card">
+      <q-card-main>
+      <!-- Number of Participants -->
+        <q-field label="Maximum number of participants:" helper="This is optional and consists of participants who will have either accepted, completed or withdrawn from the study.">
+          <q-input v-model.trim="criteria.numberOfParticipants" type="number" align="center" min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57" clearable/>
         </q-field>
       </q-card-main>
     </q-card>
