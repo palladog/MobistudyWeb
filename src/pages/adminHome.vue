@@ -422,17 +422,26 @@ export default {
     },
     // Teams
     async createTeamMsg () {
-      try {
-        await this.$q.dialog({
-          title: 'Create Team',
-          color: 'warning',
-          message: 'You are creating a new TEAM named ' + this.teamName + '. Would you like to continue?',
-          ok: 'Yes, create Team ' + this.teamName,
-          cancel: 'Cancel'
+      console.log('tNAME >> ', this.teamName)
+      if (this.teamName === '') {
+        this.$q.notify({
+          color: 'negative',
+          message: 'The team name is missing. Please add it in to order to create a Team.',
+          icon: 'report_problem'
         })
-        this.createTeam()
-      } catch (err) {
-        this.$q.notify('Cancelling Creation of New Team ' + this.teamName)
+      } else {
+        try {
+          await this.$q.dialog({
+            title: 'Create Team',
+            color: 'warning',
+            message: 'You are creating a new TEAM named ' + this.teamName + '. Would you like to continue?',
+            ok: 'Yes, create Team ' + this.teamName,
+            cancel: 'Cancel'
+          })
+          this.createTeam()
+        } catch (err) {
+          this.$q.notify('Cancelling Creation of New Team ' + this.teamName)
+        }
       }
     },
     async createTeam () {
