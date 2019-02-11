@@ -49,7 +49,8 @@ export default {
         publishedTS: undefined,
         generalities: {
           title: '',
-          description: '',
+          shortDescription: '',
+          longDescription: '',
           startDate: undefined,
           endDate: undefined,
           principalInvestigators: [
@@ -96,7 +97,8 @@ export default {
     studyDesign: {
       generalities: {
         title: { required },
-        description: { required },
+        shortDescription: { required },
+        longDescription: { required },
         principalInvestigators: {
           required,
           $each: {

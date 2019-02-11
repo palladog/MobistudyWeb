@@ -8,8 +8,13 @@
         <q-field label="Title" helper="Short name of the study" :error="v.title.$error" error-label="A title is required.">
           <q-input v-model.trim="v.title.$model" @blur="v.title.$touch" @input="update()" clearable/>
         </q-field>
-        <q-field label="Short description" helper="Layman's description of the study, in one or two sentences" :error="v.description.$error" error-label="A description is required.">
-          <q-input v-model.trim="v.description.$model"  @blur="v.description.$touch" type="textarea" rows="3" @input="update()" clearable/>
+        <q-field label="Short description" helper="Describe the study in one brief sentence. This appears with the notification inviting the participant to check the study. Make it appealing!"
+        :error="v.shortDescription.$error" error-label="A description is required.">
+          <q-input v-model.trim="v.shortDescription.$model"  @blur="v.shortDescription.$touch" type="textarea" rows="2" @input="update()" clearable/>
+        </q-field>
+        <q-field label="Long description" helper="A longer description (few sentences) of the study, in layman terms. This is shown when the future or current participant wants to know more about the study."
+        :error="v.longDescription.$error" error-label="A description is required.">
+          <q-input v-model.trim="v.longDescription.$model"  @blur="v.longDescription.$touch" type="textarea" rows="3" @input="update()" clearable/>
         </q-field>
       </q-card-main>
     </q-card>
