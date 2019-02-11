@@ -60,10 +60,13 @@
             <q-input v-model.trim="inst.contact.$model" type="textarea" rows="4" @blur="inst.contact.$touch" @input="update()" clearable/>
           </q-field>
           <q-field class="q-mt-md" label="Data Access:" helper="Data access per institution. Please select the level of access to grant or not."
-          :error="inst.dataAccess.$error" error-label="THe level of Data Access is required." @input="update()">
+          :error="inst.dataAccess.$error" error-label="The level of Data Access is required." @input="update()">
             <q-radio v-model.trim="inst.dataAccess.$model" val="no" color="secondary" label="No" @input="update()"/>
             <q-radio v-model.trim="inst.dataAccess.$model" val="anonymised" color="secondary" label="Anonymised" @input="update()" style="margin-left: 10px"/>
             <q-radio v-model.trim="inst.dataAccess.$model" val="full" color="secondary" label="Full" @input="update()" style="margin-left: 10px"/>
+          </q-field>
+          <q-field label="Reason for Data Access:" helper="Please provide a brief sentence for a valid reason." :error="inst.contact.$error" error-label="The reason for data access is required.">
+            <q-input v-model.trim="inst.reasonForDataAccess.$model" type="textarea" rows="2" @blur="inst.reasonForDataAccess.$touch" @input="update()" clearable/>
           </q-field>
           <div class="row justify-center">
             <div class="col">

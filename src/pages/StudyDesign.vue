@@ -64,7 +64,8 @@ export default {
             {
               name: '',
               contact: '',
-              dataAccess: ''
+              dataAccess: '',
+              reasonForDataAccess: ''
             }
           ]
         },
@@ -112,7 +113,8 @@ export default {
           $each: {
             name: { required },
             contact: { required },
-            dataAccess: { required }
+            dataAccess: { required },
+            reasonForDataAccess: { required }
           }
         },
         startDate: { required },
