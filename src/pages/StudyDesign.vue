@@ -49,7 +49,8 @@ export default {
         publishedTS: undefined,
         generalities: {
           title: '',
-          description: '',
+          shortDescription: '',
+          longDescription: '',
           startDate: undefined,
           endDate: undefined,
           principalInvestigators: [
@@ -63,7 +64,8 @@ export default {
             {
               name: '',
               contact: '',
-              dataAccess: ''
+              dataAccess: '',
+              reasonForDataAccess: ''
             }
           ]
         },
@@ -96,7 +98,8 @@ export default {
     studyDesign: {
       generalities: {
         title: { required },
-        description: { required },
+        shortDescription: { required },
+        longDescription: { required },
         principalInvestigators: {
           required,
           $each: {
@@ -110,7 +113,8 @@ export default {
           $each: {
             name: { required },
             contact: { required },
-            dataAccess: { required }
+            dataAccess: { required },
+            reasonForDataAccess: { required }
           }
         },
         startDate: { required },
