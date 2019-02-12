@@ -19,7 +19,7 @@
       <tab-pane-study-generalities name="tab-gen" v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></tab-pane-study-generalities>
       <tab-pane-study-criteria name="tab-crit" :criteria="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria" ></tab-pane-study-criteria>
       <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" :v="$v.studyDesign.tasks" ></tab-pane-study-tasks>
-      <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent" :tasks="studyDesign.tasks" :v="$v.studyDesign.consent" ></tab-pane-study-consent>
+      <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent" :tasks="studyDesign.tasks" :generalities="studyDesign.generalities" :v="$v.studyDesign.consent" ></tab-pane-study-consent>
     </q-tabs>
   </q-page>
 </template>
