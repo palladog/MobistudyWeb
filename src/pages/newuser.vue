@@ -19,12 +19,12 @@
             </q-field>
             <div class ="row q-mt-md">
               <div class = "col-5">
-                <q-btn label="Cancel Registration" color="warning" @click="cancelRegistration"/>
+                <q-btn label="Cancel" color="warning" @click="cancelRegistration"/>
               </div>
               <div class = "col-4">
               </div>
               <div class = "col-3">
-                <q-btn label="Register" color="primary" @click="validationCheck"/>
+                <q-btn label="Register" color="primary" @click="registerUser"/>
               </div>
             </div>
           </q-card-main>
@@ -41,13 +41,10 @@
 </style>
 
 <script>
+import owasp from 'owasp-password-strength-test'
+import PWDchecker from 'zxcvbn'
 import API from '../data/API.js'
-import { required, email } from 'vuelidate/lib/validators'
-import owasp from '../../node_modules/owasp-password-strength-test/owasp-password-strength-test'
-
-const checkPwdStrength = (pwd) => {
-  return owasp.test(pwd).strong
-}
+import { required, email, sameAs } from 'vuelidate/lib/validators'
 
 owasp.config({
   allowPassphrases: true,
@@ -56,6 +53,23 @@ owasp.config({
   minPhraseLength: 10,
   minOptionalTestsToPass: 3
 })
+
+function checkPwdStrength (pwd) {
+  if (this.email) {
+    // check if password includes name in email
+    let i = this.email.indexOf('@')
+    if (i > 0) {
+      let userName = this.email.substring(0, i)
+      if (pwd.toUpperCase().includes(userName.toUpperCase())) {
+        return false
+      }
+    }
+  }
+  if (owasp.test(pwd).strong) {
+    let strength = PWDchecker(pwd)
+    return strength.score >= 2
+  } else return false
+}
 
 export default {
   data () {
@@ -68,74 +82,61 @@ export default {
   validations: {
     email: { required, email },
     password: { required, checkPwdStrength },
-    password2: { required, checkPwdStrength }
+    password2: { required, sameAsPassword: sameAs('password') }
   },
   methods: {
     getFirstPwdCheckError (pwd) {
+      if (this.email) {
+        // check if password includes name in email
+        let i = this.email.indexOf('@')
+        if (i > 0) {
+          let userName = this.email.substring(0, i)
+          if (pwd.toUpperCase().includes(userName.toUpperCase())) {
+            return 'Password cannot contain email'
+          }
+        }
+      }
       let result = owasp.test(pwd)
       if (!result.strong) {
         return result.errors[0]
-      } else return 'All OK'
+      } else {
+        result = PWDchecker(pwd)
+        if (result.feedback) {
+          let mesg = 'The password is too simple'
+          if (result.feedback.warning) mesg = result.feedback.warning
+          // if (result.feedback.suggestions && result.feedback.suggestions.length) {
+          //   mesg += '.\nSuggestion: ' + result.feedback.suggestions[0]
+          // }
+          return mesg
+        } else return 'All OK'
+      }
     },
     cancelRegistration () {
       this.$router.push('/login')
     },
-    validationCheck: function () {
-      this.$v.email.$touch()
-      this.$v.password.$touch()
-      this.$v.password2.$touch()
-      if (this.$v.email.$error || this.$v.password.$error || this.$v.password2.$error) {
-        this.$q.notify('Please correct the indicated fields.')
-      } else this.validatePassword()
-    },
-    validatePassword () {
-      let userName = this.email.substring(0, this.email.indexOf('@'))
-      // check if password includes spaces
-      if (this.password.indexOf(' ') >= 0) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'You cannot include spaces in your password. Please Change it.',
-          icon: 'report_problem'
-        })
-        return
-      }
-      // check if password includes name in email
-      if (this.password.toUpperCase().includes(userName.toUpperCase())) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Your password includes your username. Please Change it.',
-          icon: 'report_problem'
-        })
-        return
-      }
-      // check if password and password2 match
-      if (this.password2.toUpperCase() !== this.password.toUpperCase()) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Your passwords do not match. Please Check your confirmation password.',
-          icon: 'report_problem'
-        })
-        return
-      }
-      // If no issues, register user
-      this.registerUser()
-    },
     async registerUser () {
       try {
-        await API.createUser({
-          email: this.email,
-          password: this.password,
-          role: 'researcher'
-        })
-        this.$q.dialog({
-          title: 'User created',
-          message: 'Your account has been created. A confirmation email has been sent to your email  address. Now you need to login.',
-          ok: true,
-          cancel: false,
-          preventClose: true
-        }).then(() => {
-          this.$router.push('/login')
-        })
+        this.$v.email.$touch()
+        this.$v.password.$touch()
+        this.$v.password2.$touch()
+        if (this.$v.email.$error || this.$v.password.$error || this.$v.password2.$error) {
+          this.$q.notify('Please correct the indicated fields.')
+        } else {
+          await API.createUser({
+            email: this.email,
+            password: this.password,
+            role: 'researcher'
+          })
+          this.$q.dialog({
+            title: 'User created',
+            message: 'Your account has been created. You can now login into the system.',
+            ok: true,
+            cancel: false,
+            preventClose: true
+          }).then(() => {
+            this.$router.push('/login')
+          })
+        }
       } catch (error) {
         if (error.response && error.response.status === 409) {
           this.$q.notify({
