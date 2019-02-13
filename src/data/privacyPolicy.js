@@ -45,7 +45,7 @@ export default {
     let stringRights = 'What are my rights?'
     stringRights += '\n\u2022 You can withdraw from the study whenever you want. The data you have produced so far within a study will be kept.'
     stringRights += '\n\u2022 You can remove your account from Mobistudy. This will remove all your data, produced in all the studies, except the technical logs (which need to be kept for security reasons, but will be deleted after 5 years).'
-    stringRights += '\n\u2022 You can download the data in a machine-readable format. Contact [snatpht@gmail.com](mailto:snatpht@gmail.com) if you need to.'
+    stringRights += '\n\u2022 You can download the data in a machine-readable format. Contact snatpht@gmail.com if you need to.'
     stringRights += '\n For any other general question, please contact one of the principal investigators: '
     stringRights += stringInv
     let stringPolicy = stringData + '\n' + stringStorage + '\n' + stringAccess + '\n' + stringRights
