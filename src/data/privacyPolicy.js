@@ -1,7 +1,6 @@
 export default {
-  createPrivacyPolicy (principalInvestigators, institutions) {
+  createPrivacyPolicy (principalInvestigators, institutions, tasks) {
     let investigators = principalInvestigators
-    let insti = institutions
     let stringInv = ''
     if (investigators.length > 0) {
       for (let i = 0; i < investigators.length; i++) {
@@ -10,16 +9,29 @@ export default {
       }
     }
     let stringInsti = ''
-    if (insti.length > 0) {
-      for (let j = 0; j < insti.length; j++) {
-        stringInsti += '\n\u2022 ' + insti[j].name
-        stringInsti += ' would like ' + insti[j].dataAccess + ' data Acccess. '
-        stringInsti += '\n Reason: ' + insti[j].reasonForDataAccess
+    if (institutions.length > 0) {
+      for (let j = 0; j < institutions.length; j++) {
+        stringInsti += '\n\u2022 ' + institutions[j].name
+        stringInsti += ' would like ' + institutions[j].dataAccess + ' data Acccess. '
+        stringInsti += '\n Reason: ' + institutions[j].reasonForDataAccess
+      }
+    }
+    let stringTasks = ''
+    if (tasks.length > 0) {
+      for (let k = 0; k < tasks.length; k++) {
+        let taskType = tasks[k].type
+        if (taskType === 'dataQuery') {
+          stringTasks += '\n\u2022 ' + tasks[k].dataType + ' from GoogleFit (Android phones) or HealthKit (iPhones)'
+        }
+        if (taskType === 'form') {
+          stringTasks += '\n\u2022 answers given to FORM: ' + tasks[k].formName
+        }
       }
     }
     let stringData = 'What personal data will be collected?'
     stringData += '\n\u2022 Your general profile information like email address, name, surname, date of birth, main health conditions, long-term treatments and lifestyle.'
     stringData += '\n\u2022 Your participation into the studies and the times you complete a task.'
+    stringData += stringTasks
     let stringStorage = 'Where will this data be stored?'
     stringStorage += '\n On your phone: '
     stringStorage += '\n\u2022 Your profile'

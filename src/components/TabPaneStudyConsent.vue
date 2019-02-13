@@ -118,7 +118,8 @@ export default {
     generatePrivacy () {
       let principalInvestigators = this.generalities.principalInvestigators
       let institutions = this.generalities.institutions
-      let string = privacyPolicy.createPrivacyPolicy(principalInvestigators, institutions)
+      let tasks = this.tasks
+      let string = privacyPolicy.createPrivacyPolicy(principalInvestigators, institutions, tasks)
       this.consent.privacyPolicy = string
     }
   }
