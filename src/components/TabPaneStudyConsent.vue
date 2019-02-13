@@ -20,7 +20,8 @@
         <span slot="subtitle">Privacy information viewed by participant.</span>
       </q-card-title>
       <q-card-main>
-        <q-field label="Privacy Message" helper="This the privacy policy for the study."
+        <q-btn label="Generate Privacy Policy" color="primary" @click="generatePrivacy()"/>
+        <q-field class="q-mt-md" helper="This the privacy policy for the study. This is editable by the clinician only before publishing the study."
         :error="v.privacyPolicy.$error" error-label="A Privacy message is required.">
           <q-input v-model.trim="consent.privacyPolicy"  @blur="v.privacyPolicy.$touch" type="textarea" rows="7"/>
         </q-field>
@@ -70,10 +71,11 @@
 <script>
 import { schedulingToString } from '../data/Scheduling.js'
 import QueryDataTypeEnum from '../data/QueryDataTypeEnum.js'
+import privacyPolicy from '../data/privacyPolicy.js'
 
 export default {
   name: 'TabPaneStudyConsent',
-  props: ['consent', 'tasks', 'v'],
+  props: ['consent', 'tasks', 'generalities', 'v'],
   data () {
     return {
       alwaysTrue: true
@@ -112,6 +114,13 @@ export default {
     },
     removeExtraItem (index) {
       this.consent.extraItems.splice(index, 1)
+    },
+    generatePrivacy () {
+      let principalInvestigators = this.generalities.principalInvestigators
+      let institutions = this.generalities.institutions
+      let tasks = this.tasks
+      let string = privacyPolicy.createPrivacyPolicy(principalInvestigators, institutions, tasks)
+      this.consent.privacyPolicy = string
     }
   }
 }

@@ -1,227 +1,255 @@
 <template>
   <q-page>
-    <q-card class="q-ma-lg q-pl-lg" color="cyan-6">
-      <q-card-main>
-        {{ welcomeLabel }}
-      </q-card-main>
-    </q-card>
-    <!-- Create New Teams -->
-    <q-card class="q-ma-lg">
-      <q-card-title>
-        Create new team
-      </q-card-title>
-      <q-card-main>
-        <div class="row">
-          <div class="col-10 self-center">
-            <q-input v-model="teamName" class="col-8 self-center" float-label="Team name" type="text" />
-          </div>
-          <div class="col-2 self-center">
-            <q-btn label="Add Team" color="warning" @click="createTeamMsg()"/>
-          </div>
-        </div>
-      </q-card-main>
-    </q-card>
-    <!-- Teams and Invitation Codes -->
-    <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-      <q-collapsible label="Teams &amp; Invitation Codes">
-        <q-card-separator/>
-        <q-card-main>
-        <div v-for="(team, index) in allTeams" :key="index" class="q-mt-sm">
-          <div class="row" v-show="codeExpired[index]">
-            <p><font color="red"> The Invitation Code for {{team.name}} has EXPIRED. </font></p>
-          </div>
-          <div class="row">
-            <div class="col-2"></div>
-            <div class="col-10">
-              <q-btn class="float-right" :label="teamLabel + team.name" color="negative" icon="remove" @click="deleteTeam(index)"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3">
-              <q-field label="Team Name: " />
-            </div>
-            <div class="col-9 exactFit"> {{team.name}} </div>
-          </div>
-          <div class="row q-mt-sm">
-            <div class="col-3">
-               <q-field label="Team Key: " />
-            </div>
-            <div class="col-9 exactFit">
-              {{team._key}}
-            </div>
-          </div>
-          <div class="row q-mt-sm">
-            <div class="col-3">
-               <q-field label="Code: " />
-            </div>
-            <div class="col-9 exactFit">
-              {{team.invitationCode}}
-            </div>
-          </div>
-          <div class="row q-mt-sm">
-            <div class="col-3">
-               <q-field label="Expiry date: " />
-            </div>
-            <div class="col-9 exactFit">
-              {{ niceDate(team.invitationExpiry) }}
-            </div>
-          </div>
-          <div class="row q-mt-sm">
-            <q-btn :label="generateLabel + team.name" color="warning" @click="generateCode(team._key)"/>
-          </div>
-          <q-card-separator v-if="index != allTeams.length-1" class="q-mt-md"/>
-        </div>
-        </q-card-main>
-      </q-collapsible>
-    </q-card>
-    <!-- Teams and their Researchers -->
-    <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-      <q-collapsible label="Teams &amp; Researchers:">
-        <q-card-separator/>
-        <q-card-main>
-        <div v-for="(team, tindex) in allTeams" :key="tindex">
-          <div class="row">
-            <div class="col-1"></div>
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="Team: " />
-            </div>
-            <div class="col-8 exactFit">
-              <q-field class="text-weight-bolder" :label="team.name"/>
-            </div>
-          </div>
-          <div v-for="(user, uindex) in teamMembers[tindex]" :key="uindex">
+    <q-tabs>
+      <q-tab default slot="title" name="logs" icon="message" label="Logs" />
+      <q-tab slot="title" name="tab-teams" icon="fingerprint" label="Teams" />
+      <q-tab slot="title" name="tab-studies" icon="fingerprint" label="Studies" />
+      <q-tab slot="title" name="tab-users" icon="fingerprint" label="Users" />
+      <q-tab slot="title" name="tab-participants" icon="fingerprint" label="Participants" />
+      <!-- Tab Logs -->
+      <q-tab-pane name="logs">
+        <q-table title="Audit logs" ref="table" color="primary" :data="logs.logs" :columns="logs.columns" :filter="logs.filter" row-key="_key" :pagination.sync="logs.pagination"  @request="loadLogs" :loading="logs.loading">
+          <template slot="top-right" slot-scope="props">
+            <q-select :options="logs.eventTypesOpts" v-model="logs.filter.eventType" float-label="Event type" @input="updateFilters()" class="q-mr-sm"/>
+            <q-datetime v-model="logs.filter.after" type="date" float-label="From date" clearable @input="updateFilters()" class="q-mr-sm"/>
+            <q-datetime v-model="logs.filter.before" type="date" float-label="To date" clearable @input="updateFilters()" class="q-mr-sm"/>
+            <q-input v-model="logs.filter.userEmail" type="text" float-label="User email" clearable @input="updateFilters()"/>
+          </template>
+          <q-td slot="body-cell-timestamp" slot-scope="props" :props="props">
+            {{ niceTimestamp(props.value) }}
+          </q-td>
+        </q-table>
+      </q-tab-pane>
+      <!-- Tab Teams -->
+      <q-tab-pane name="tab-teams">
+        <!-- Create New Teams -->
+        <q-card class="q-ma-lg">
+          <q-card-title>
+            Create new team
+          </q-card-title>
+          <q-card-main>
             <div class="row">
-              <div class="col-1">
-                <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeTeamUser(tindex, uindex)"/>
+              <div class="col-10 self-center">
+                <q-input v-model="teamName" class="col-8 self-center" float-label="Team name" type="text" />
               </div>
-              <div class="col-3">
-                <q-field class="text-weight-bold" label="Researcher: " />
-              </div>
-              <div class="col-8 exactFit">
-                <q-field :label="user"/>
+              <div class="col-2 self-center">
+                <q-btn label="Add Team" color="warning" @click="createTeamMsg()"/>
               </div>
             </div>
-          </div>
-          <q-card-separator v-if="tindex != allTeams.length-1" class="q-mt-sm"/>
-        </div>
-        </q-card-main>
-      </q-collapsible>
-    </q-card>
-    <!-- Studies  -->
-    <q-card class="q-ma-lg" v-show="allStudies.length != 0">
-      <q-collapsible label="Studies &amp; Details:">
-        <q-card-separator/>
-        <q-card-main>
-        <div v-for="(study, index) in allStudies" :key="index">
-          <div class="row">
-            <div class="col-7"></div>
-            <div class="col-5">
-              <q-btn class="float-right" label="Delete Study from Db" color="negative" icon="remove" @click="deleteStudy(index)"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="Study Key: " />
-            </div>
-            <div class="col-9 exactFit">
-              <q-field class="text-weight-bolder" :label="study._key"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="Title: " />
-            </div>
-            <div class="col-9 exactFit">
-              <q-field :label="study.generalities.title"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="TeamKey: " />
-            </div>
-            <div class="col-9 exactFit">
-              <q-field :label="study.teamKey"/>
-            </div>
-          </div>
-          <q-card-separator v-if="index != allStudies.length-1" class="q-mt-sm q-mb-sm"/>
-          </div>
-        </q-card-main>
-      </q-collapsible>
-    </q-card>
-    <!-- List of Users  -->
-    <q-card class="q-ma-lg" v-show="allUsers.length != 0">
-      <q-collapsible label="All Users &amp; Details:">
-        <q-card-separator/>
-        <q-card-main>
-        <div v-for="(user, index) in allUsers" :key="index">
-          <div class="row">
-            <div class="col-7"></div>
-            <div class="col-5">
-              <q-btn class="float-right" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="User Key: " />
-            </div>
-            <div class="col-9 exactFit">
-              <q-field class="text-weight-bolder" :label="user._key"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="Role: " />
-            </div>
-            <div class="col-9 exactFit">
-              <q-field :label="user.role"/>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="Name: " />
-            </div>
-            <div class="col-9 exactFit">
-              <q-field :label="user.email"/>
-            </div>
-          </div>
-          <q-card-separator v-if="index != allUsers.length-1" class="q-mt-sm q-mb-sm"/>
-          </div>
-        </q-card-main>
-      </q-collapsible>
-    </q-card>
-    <!-- Participants and Studies -->
-    <q-card class="q-ma-lg" v-show="allParticipants.length != 0">
-      <q-collapsible label="Participants &amp; Studies: ">
-        <q-card-separator/>
-        <q-card-main>
-        <div v-for="(participant, parIndex) in allParticipants" :key="parIndex">
-          <div class="row">
-            <div class="col-1"></div>
-            <div class="col-3">
-              <q-field class="text-weight-bolder" label="Participant Key: " />
-            </div>
-            <div class="col-8 exactFit">
-              <q-field class="text-weight-bolder" :label="participant._key"/>
-            </div>
-          </div>
-            <div v-for="(study, accIndex) in participant.studies" :key="accIndex">
-              <div class="row">
-                <div class="col-1">
-                  <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeParticipant(parIndex, accIndex)"/>
+          </q-card-main>
+        </q-card>
+        <!-- Teams and Invitation Codes -->
+        <q-card class="q-ma-lg" v-show="allTeams.length != 0">
+          <q-collapsible label="Teams &amp; Invitation Codes">
+            <q-card-separator/>
+            <q-card-main>
+              <div v-for="(team, index) in allTeams" :key="index" class="q-mt-sm">
+                <div class="row" v-show="codeExpired[index]">
+                  <p><font color="red"> The Invitation Code for {{team.name}} has EXPIRED. </font></p>
                 </div>
-                <div class="col-3">
-                  <q-field class="text-weight-bolder" label="Accepted Study: " />
+                <div class="row">
+                  <div class="col-2"></div>
+                  <div class="col-10">
+                    <q-btn class="float-right" :label="teamLabel + team.name" color="negative" icon="remove" @click="deleteTeam(index)"/>
+                  </div>
                 </div>
-                <div class="col-8 exactFit">
-                  <q-field :label="study.studyKey"/>
+                <div class="row">
+                  <div class="col-3">
+                    <q-field label="Team Name: " />
+                  </div>
+                  <div class="col-9 exactFit"> {{team.name}} </div>
                 </div>
+                <div class="row q-mt-sm">
+                  <div class="col-3">
+                    <q-field label="Team Key: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    {{team._key}}
+                  </div>
+                </div>
+                <div class="row q-mt-sm">
+                  <div class="col-3">
+                    <q-field label="Code: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    {{team.invitationCode}}
+                  </div>
+                </div>
+                <div class="row q-mt-sm">
+                  <div class="col-3">
+                    <q-field label="Expiry date: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    {{ niceDate(team.invitationExpiry) }}
+                  </div>
+                </div>
+                <div class="row q-mt-sm">
+                  <q-btn :label="generateLabel + team.name" color="warning" @click="generateCode(team._key)"/>
+                </div>
+                <q-card-separator v-if="index != allTeams.length-1" class="q-mt-md"/>
               </div>
-            </div>
-          <q-card-separator v-if="parIndex != participant.length-1" class="q-mt-sm q-mb-sm"/>
-          </div>
-        </q-card-main>
-      </q-collapsible>
-    </q-card>
+            </q-card-main>
+          </q-collapsible>
+        </q-card>
+        <!-- Teams and their Researchers -->
+        <q-card class="q-ma-lg" v-show="allTeams.length != 0">
+          <q-collapsible label="Teams &amp; Researchers:">
+            <q-card-separator/>
+            <q-card-main>
+              <div v-for="(team, tindex) in allTeams" :key="tindex">
+                <div class="row">
+                  <div class="col-1"></div>
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="Team: " />
+                  </div>
+                  <div class="col-8 exactFit">
+                    <q-field class="text-weight-bolder" :label="team.name"/>
+                  </div>
+                </div>
+                <div v-for="(user, uindex) in teamMembers[tindex]" :key="uindex">
+                  <div class="row">
+                    <div class="col-1">
+                      <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeTeamUser(tindex, uindex)"/>
+                    </div>
+                    <div class="col-3">
+                      <q-field class="text-weight-bold" label="Researcher: " />
+                    </div>
+                    <div class="col-8 exactFit">
+                      <q-field :label="user"/>
+                    </div>
+                  </div>
+                </div>
+                <q-card-separator v-if="tindex != allTeams.length-1" class="q-mt-sm"/>
+              </div>
+            </q-card-main>
+          </q-collapsible>
+        </q-card>
+      </q-tab-pane>
+      <!-- Tab Studies -->
+      <q-tab-pane name="tab-studies">
+        <!-- Studies  -->
+        <q-card class="q-ma-lg" v-show="allStudies.length != 0">
+          <q-collapsible label="Studies &amp; Details:">
+            <q-card-separator/>
+            <q-card-main>
+              <div v-for="(study, index) in allStudies" :key="index">
+                <div class="row">
+                  <div class="col-7"></div>
+                  <div class="col-5">
+                    <q-btn class="float-right" label="Delete Study from Db" color="negative" icon="remove" @click="deleteStudy(index)"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="Study Key: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    <q-field class="text-weight-bolder" :label="study._key"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="Title: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    <q-field :label="study.generalities.title"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="TeamKey: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    <q-field :label="study.teamKey"/>
+                  </div>
+                </div>
+                <q-card-separator v-if="index != allStudies.length-1" class="q-mt-sm q-mb-sm"/>
+              </div>
+            </q-card-main>
+          </q-collapsible>
+        </q-card>
+      </q-tab-pane>
+      <!-- Tab Users -->
+      <q-tab-pane name="tab-users">
+        <!-- List of Users  -->
+        <q-card class="q-ma-lg" v-show="allUsers.length != 0">
+          <q-collapsible label="All Users &amp; Details:">
+            <q-card-separator/>
+            <q-card-main>
+              <div v-for="(user, index) in allUsers" :key="index">
+                <div class="row">
+                  <div class="col-7"></div>
+                  <div class="col-5">
+                    <q-btn class="float-right" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="User Key: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    <q-field class="text-weight-bolder" :label="user._key"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="Role: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    <q-field :label="user.role"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="Name: " />
+                  </div>
+                  <div class="col-9 exactFit">
+                    <q-field :label="user.email"/>
+                  </div>
+                </div>
+                <q-card-separator v-if="index != allUsers.length-1" class="q-mt-sm q-mb-sm"/>
+              </div>
+            </q-card-main>
+          </q-collapsible>
+        </q-card>
+      </q-tab-pane>
+      <!-- Tab Participants -->
+      <q-tab-pane name="tab-participants">
+        <!-- Participants and Studies -->
+        <q-card class="q-ma-lg" v-show="allParticipants.length != 0">
+          <q-collapsible label="Participants &amp; Studies: ">
+            <q-card-separator/>
+            <q-card-main>
+              <div v-for="(participant, parIndex) in allParticipants" :key="parIndex">
+                <div class="row">
+                  <div class="col-1"></div>
+                  <div class="col-3">
+                    <q-field class="text-weight-bolder" label="Participant Key: " />
+                  </div>
+                  <div class="col-8 exactFit">
+                    <q-field class="text-weight-bolder" :label="participant._key"/>
+                  </div>
+                </div>
+                <div v-for="(study, accIndex) in participant.studies" :key="accIndex">
+                  <div class="row">
+                    <div class="col-1">
+                      <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeParticipant(parIndex, accIndex)"/>
+                    </div>
+                    <div class="col-3">
+                      <q-field class="text-weight-bolder" label="Accepted Study: " />
+                    </div>
+                    <div class="col-8 exactFit">
+                      <q-field :label="study.studyKey"/>
+                    </div>
+                  </div>
+                </div>
+                <q-card-separator v-if="parIndex != participant.length-1" class="q-mt-sm q-mb-sm"/>
+              </div>
+            </q-card-main>
+          </q-collapsible>
+        </q-card>
+      </q-tab-pane>
+    </q-tabs>
   </q-page>
 </template>
 <style>
@@ -232,12 +260,30 @@ div .exactFit {
 
 <script>
 import API from '../data/API.js'
-import userinfo from '../data/userinfo.js'
 import { date } from 'quasar'
 
 export default {
   data () {
     return {
+      logs: {
+        logs: [],
+        pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0 },
+        columns: [
+          { name: 'timestamp', required: true, label: 'Datetime', align: 'left', field: 'timestamp', sortable: true },
+          { name: 'event', required: true, label: 'Event', align: 'right', field: 'event', sortable: false },
+          { name: 'userEmail', required: true, label: 'User', align: 'right', field: 'userEmail', sortable: false },
+          { name: 'message', required: true, label: 'Message', align: 'right', field: 'message', sortable: false }
+        ],
+        filter: {
+          after: undefined,
+          before: undefined,
+          eventType: 'all',
+          userEmail: undefined,
+          sortDirection: undefined
+        },
+        eventTypesOpts: [],
+        loading: false
+      },
       codeExpired: [],
       teamName: '',
       allTeams: [],
@@ -250,23 +296,75 @@ export default {
     }
   },
   async created () {
-    this.init()
+    this.getLogsEventTypes()
+    this.getTeams()
+    this.getAllStudies()
+    this.getAllUsers()
+    this.getAllParticipants()
   },
-  computed: {
-    welcomeLabel () {
-      return 'Hello ' + userinfo.getUser().email + '. You are logged in as ' + userinfo.getUser().role + '.'
-    }
+  async mounted () {
+    this.loadLogs({
+      pagination: this.logs.pagination,
+      filter: this.logs.filter
+    })
   },
   methods: {
     niceDate (timeStamp) {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
     },
-    // Initialisation
-    init () {
-      this.getTeams()
-      this.getAllStudies()
-      this.getAllUsers()
-      this.getAllParticipants()
+    niceTimestamp (timeStamp) {
+      return date.formatDate(timeStamp, 'DD/MM/YYYY HH:mm:ss')
+    },
+    async updateFilters () {
+      this.loadLogs({
+        filter: this.logs.filter,
+        pagination: this.logs.pagination
+      })
+    },
+    async loadLogs (params) {
+      console.log('GETTING LOGS, FILTER', params)
+      this.logs.loading = true
+      this.pagination = params.pagination
+      try {
+        let queryParams = {
+          after: params.filter.after,
+          before: params.filter.before,
+          eventType: params.filter.eventType === 'all' ? undefined : params.filter.eventType,
+          studyKey: params.filter.studyKey,
+          taskId: params.filter.taskId,
+          userEmail: params.filter.userEmail,
+          sortDirection: params.pagination.descending ? 'DESC' : 'ASC',
+          offset: (params.pagination.page - 1) * params.pagination.rowsPerPage,
+          count: params.pagination.rowsPerPage
+        }
+        this.logs.pagination.rowsNumber = await API.getLogs(true, queryParams)
+        this.logs.logs = await API.getLogs(false, queryParams)
+      } catch (err) {
+        console.error(err)
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve audit log' + err.message,
+          icon: 'report_problem'
+        })
+      }
+      this.logs.loading = false
+    },
+    async getLogsEventTypes () {
+      try {
+        let types = await API.getLogEventTypes()
+        if (types) {
+          this.logs.eventTypesOpts = types.map(evt => {
+            return { label: evt, value: evt }
+          })
+        }
+        this.logs.eventTypesOpts.unshift({ label: 'All', value: 'all' })
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve logs event types',
+          icon: 'report_problem'
+        })
+      }
     },
     async getTeams () {
       try {
@@ -324,17 +422,25 @@ export default {
     },
     // Teams
     async createTeamMsg () {
-      try {
-        await this.$q.dialog({
-          title: 'Create Team',
-          color: 'warning',
-          message: 'You are creating a new TEAM named ' + this.teamName + '. Would you like to continue?',
-          ok: 'Yes, create Team ' + this.teamName,
-          cancel: 'Cancel'
+      if (this.teamName === '') {
+        this.$q.notify({
+          color: 'negative',
+          message: 'The team name is missing. Please add it in to order to create a Team.',
+          icon: 'report_problem'
         })
-        this.createTeam()
-      } catch (err) {
-        this.$q.notify('Cancelling Creation of New Team ' + this.teamName)
+      } else {
+        try {
+          await this.$q.dialog({
+            title: 'Create Team',
+            color: 'warning',
+            message: 'You are creating a new TEAM named ' + this.teamName + '. Would you like to continue?',
+            ok: 'Yes, create Team ' + this.teamName,
+            cancel: 'Cancel'
+          })
+          this.createTeam()
+        } catch (err) {
+          this.$q.notify('Cancelling Creation of New Team ' + this.teamName)
+        }
       }
     },
     async createTeam () {
@@ -382,7 +488,7 @@ export default {
         await this.$q.dialog({
           title: 'Delete Team',
           color: 'warning',
-          message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This cannot be undone. Would you like to continue?',
+          message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This will also delete any associated studies and the corresponding data. This cannot be undone. Would you like to continue?',
           ok: 'Yes, delete Team: ' + this.allTeams[index].name,
           cancel: 'Cancel'
         })

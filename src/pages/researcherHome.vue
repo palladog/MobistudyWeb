@@ -153,11 +153,18 @@ export default {
         this.invitationCode = ''
         this.initTeams()
       } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot add your account to any team. Please check the invitation code again or ask for a new one.',
-          icon: 'report_problem'
-        })
+        if (err.response.status === 409) {
+          this.$q.notify({
+            color: 'positive',
+            message: 'You are already a member of this team!'
+          })
+        } else {
+          this.$q.notify({
+            color: 'negative',
+            message: 'Cannot add your account to the team. Please check the invitation code again or ask for a new one.',
+            icon: 'report_problem'
+          })
+        }
       }
     },
     selectTeam (index) {

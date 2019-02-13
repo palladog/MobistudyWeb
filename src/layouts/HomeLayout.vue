@@ -4,7 +4,7 @@
       <q-toolbar color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'" >
         <q-toolbar-title>
           MobiStudy
-          <span slot="subtitle">Version {{ version }}</span>
+          <span slot="subtitle">{{ welcomeLabel }}</span>
         </q-toolbar-title>
         <q-btn flat round dense icon="exit_to_app" @click="logout()" aria-label="Logout" />
       </q-toolbar>
@@ -26,6 +26,11 @@ export default {
   data () {
     return {
       version: version
+    }
+  },
+  computed: {
+    welcomeLabel () {
+      return 'Hello ' + userinfo.getUser().email + '. You are logged in as ' + userinfo.getUser().role + '.'
     }
   },
   methods: {
