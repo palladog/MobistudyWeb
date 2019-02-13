@@ -10,10 +10,10 @@
               <q-field label="Token" helper="As received on your email." :error="$v.token.$error" error-label="A token is required." >
                 <q-input v-model.trim="$v.token.$model" type="text" @blur="$v.token.$touch" clearable/>
               </q-field>
-              <q-field class="q-mt-md" label="Password" helper="Enter a new password." :error="$v.newPassword.$error" error-label="A password is required.">
+              <q-field class="q-mt-md" label="Password" helper="Enter a new password." :error="$v.newPassword.$error" :error-label="getFirstPwdCheckError(newPassword)">
                 <q-input v-model.trim="$v.newPassword.$model" type="password" @blur="$v.newPassword.$touch" clearable/>
               </q-field>
-              <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.newPassword2.$error" error-label="A password is required.">
+              <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.newPassword2.$error" :error-label="getFirstPwdCheckError(newPassword2)">
                 <q-input v-model.trim="$v.newPassword2.$model" type="password" @blur="$v.newPassword2.$touch" clearable/>
               </q-field>
             </q-card-main>
@@ -31,6 +31,19 @@
 import API from '../data/API.js'
 import userinfo from '../data/userinfo.js'
 import { required } from 'vuelidate/lib/validators'
+import owasp from '../../node_modules/owasp-password-strength-test/owasp-password-strength-test'
+
+const checkPwdStrength = (pwd) => {
+  return owasp.test(pwd).strong
+}
+
+owasp.config({
+  allowPassphrases: true,
+  maxLength: 70,
+  minLength: 8,
+  minPhraseLength: 10,
+  minOptionalTestsToPass: 3
+})
 
 export default {
   name: 'ResetPasswordPage',
@@ -44,14 +57,20 @@ export default {
   },
   validations: {
     token: { required },
-    newPassword: { required },
-    newPassword2: { required }
+    newPassword: { required, checkPwdStrength },
+    newPassword2: { required, checkPwdStrength }
   },
   created () {
     if (this.$route.query.email) this.email = this.$route.query.email
     if (this.$route.query.token) this.token = this.$route.query.token
   },
   methods: {
+    getFirstPwdCheckError (pwd) {
+      let result = owasp.test(pwd)
+      if (!result.strong || daysToCrack < 365) {
+        return result.errors[0]
+      } else return 'All OK'
+    },
     validationCheck: function () {
       this.$v.token.$touch()
       this.$v.newPassword.$touch()
