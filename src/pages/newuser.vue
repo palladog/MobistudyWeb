@@ -9,13 +9,13 @@
           <q-card-separator />
           <q-card-main>
             <q-field label="Email" helper="Enter your email." :error="$v.email.$error" error-label="An email address is required.">
-              <q-input v-model.trim="$v.email.$model" type="email" placeholder=" e.g. email@email.com" @blur="$v.email.$touch" clearable/>
+              <q-input v-model.trim="$v.email.$model" type="email" placeholder=" e.g. email@email.com" @blur="$v.email.$touch"/>
             </q-field>
             <q-field class="q-mt-md" label="Password" helper="Enter your password." :error="$v.password.$error" :error-label="getFirstPwdCheckError(password)">
-              <q-input v-model.trim="$v.password.$model" type="password" placeholder="xxxxxxxx" @blur="$v.password.$touch" clearable/>
+              <q-input v-model.trim="$v.password.$model" type="password" @blur="$v.password.$touch"/>
             </q-field>
-            <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.password2.$error" :error-label="getFirstPwdCheckError(password2)">
-              <q-input v-model.trim="$v.password2.$model" type="password" placeholder="xxxxxxxx" @blur="$v.password2.$touch" clearable/>
+            <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.password2.$error" error-label="Passwords must match">
+              <q-input v-model.trim="$v.password2.$model" type="password" @blur="$v.password2.$touch"/>
             </q-field>
             <div class ="row q-mt-md">
               <div class = "col-5">
