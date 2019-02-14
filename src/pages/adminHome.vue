@@ -1,14 +1,14 @@
 <template>
   <q-page>
     <q-tabs>
-      <q-tab default slot="title" name="logs" icon="message" label="Logs" />
-      <q-tab slot="title" name="tab-teams" icon="fingerprint" label="Teams" />
-      <q-tab slot="title" name="tab-studies" icon="fingerprint" label="Studies" />
-      <q-tab slot="title" name="tab-users" icon="fingerprint" label="Users" />
-      <q-tab slot="title" name="tab-participants" icon="fingerprint" label="Participants" />
+      <q-tab default slot="title" name="logs" icon="format_align_justify" label="Logs" />
+      <q-tab slot="title" name="tab-teams" icon="group" label="Teams" />
+      <q-tab slot="title" name="tab-studies" icon="local_library" label="Studies" />
+      <q-tab slot="title" name="tab-users" icon="person" label="Users" />
+      <q-tab slot="title" name="tab-participants" icon="face" label="Participants" />
       <!-- Tab Logs -->
       <q-tab-pane name="logs">
-        <q-table title="Audit logs" ref="table" color="primary" :data="logs.logs" :columns="logs.columns" :filter="logs.filter" row-key="_key" :pagination.sync="logs.pagination"  @request="loadLogs" :loading="logs.loading">
+        <q-table title="Audit logs" ref="table" color="primary" :data="logs.logs" selection="none" :columns="logs.columns" :filter="logs.filter" row-key="_key" :pagination.sync="logs.pagination"  @request="loadLogs" :loading="logs.loading">
           <template slot="top-right" slot-scope="props">
             <q-select :options="logs.eventTypesOpts" v-model="logs.filter.eventType" float-label="Event type" @input="updateFilters()" class="q-mr-sm"/>
             <q-datetime v-model="logs.filter.after" type="date" float-label="From date" clearable @input="updateFilters()" class="q-mr-sm"/>
@@ -267,7 +267,7 @@ export default {
     return {
       logs: {
         logs: [],
-        pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0 },
+        pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0, sortBy: 'timestamp', descending: true },
         columns: [
           { name: 'timestamp', required: true, label: 'Datetime', align: 'left', field: 'timestamp', sortable: true },
           { name: 'event', required: true, label: 'Event', align: 'right', field: 'event', sortable: false },
@@ -278,8 +278,7 @@ export default {
           after: undefined,
           before: undefined,
           eventType: 'all',
-          userEmail: undefined,
-          sortDirection: undefined
+          userEmail: undefined
         },
         eventTypesOpts: [],
         loading: false
@@ -322,9 +321,10 @@ export default {
       })
     },
     async loadLogs (params) {
-      console.log('GETTING LOGS, FILTER', params)
+      console.log('sortby', params.pagination.sortBy)
+      console.log('descending?', params.pagination.descending)
       this.logs.loading = true
-      this.pagination = params.pagination
+      this.logs.pagination = params.pagination
       try {
         let queryParams = {
           after: params.filter.after,

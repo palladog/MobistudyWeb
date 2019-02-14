@@ -140,13 +140,12 @@ export default {
     let queryParams = ''
     let firstParam = true
     for (let param in filter) {
-      if (filter[param]) {
+      if (filter[param] || filter[param] === 0) {
         queryParams += (firstParam ? '' : '&') + param + '=' + encodeURIComponent(filter[param])
         firstParam = false
       }
     }
     let URL = BASE_URL + '/auditlog' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
-    console.log(URL)
     let resp = await axios.get(URL, axiosConfig)
     return resp.data
   }
