@@ -20,12 +20,13 @@ export default {
     if (s === 'Calories') return 'calories'
     if (s === 'Distance') return 'distance'
   },
-  allowAggregated (v) {
+  allowsAggregated (v) {
     if (v === 'steps') return true
     if (v === 'activity') return true
     if (v === 'calories') return true
     if (v === 'distance') return true
     // TODO: add those missing
+    // steps, distance, calories, calories.active, calories.basal, activity, duration, walking, nutrition, nutrition.x
 
     return false
   }
