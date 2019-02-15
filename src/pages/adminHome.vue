@@ -18,6 +18,9 @@
           <q-td slot="body-cell-timestamp" slot-scope="props" :props="props">
             {{ niceTimestamp(props.value) }}
           </q-td>
+          <q-td slot="body-cell-data" slot-scope="props" :props="props">
+            <q-btn v-if="props.value" label="show" @click="showLogData(props.value)"></q-btn>
+          </q-td>
         </q-table>
       </q-tab-pane>
       <!-- Tab Teams -->
@@ -250,6 +253,16 @@
         </q-card>
       </q-tab-pane>
     </q-tabs>
+    <q-modal v-model="logDataModal" :content-css="{minWidth: '50vw'}">
+      <div class="q-pa-md">
+        <p class="q-title">
+          Data:
+        </p>
+        <pre>
+          {{ logDataModalContent }}
+        </pre>
+      </div>
+    </q-modal>
   </q-page>
 </template>
 <style>
@@ -272,7 +285,8 @@ export default {
           { name: 'timestamp', required: true, label: 'Datetime', align: 'left', field: 'timestamp', sortable: true },
           { name: 'event', required: true, label: 'Event', align: 'right', field: 'event', sortable: false },
           { name: 'userEmail', required: true, label: 'User', align: 'right', field: 'userEmail', sortable: false },
-          { name: 'message', required: true, label: 'Message', align: 'right', field: 'message', sortable: false }
+          { name: 'message', required: true, label: 'Message', align: 'right', field: 'message', sortable: false },
+          { name: 'data', required: false, label: 'Data', align: 'right', field: 'data', sortable: false }
         ],
         filter: {
           after: undefined,
@@ -283,6 +297,8 @@ export default {
         eventTypesOpts: [],
         loading: false
       },
+      logDataModal: false,
+      logDataModalContent: undefined,
       codeExpired: [],
       teamName: '',
       allTeams: [],
@@ -321,8 +337,6 @@ export default {
       })
     },
     async loadLogs (params) {
-      console.log('sortby', params.pagination.sortBy)
-      console.log('descending?', params.pagination.descending)
       this.logs.loading = true
       this.logs.pagination = params.pagination
       try {
@@ -365,6 +379,11 @@ export default {
           icon: 'report_problem'
         })
       }
+    },
+    showLogData (data) {
+      this.logDataModalContent = JSON.stringify(data, null, 2)
+      console.log(JSON.stringify(data, null, 2))
+      this.logDataModal = true
     },
     async getTeams () {
       try {
