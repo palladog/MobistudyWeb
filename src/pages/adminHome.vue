@@ -8,21 +8,9 @@
       <q-tab slot="title" name="tab-participants" icon="face" label="Participants" />
       <!-- Tab Logs -->
       <q-tab-pane name="logs">
-        <q-table title="Audit logs" ref="table" color="primary" :data="logs.logs" selection="none" :columns="logs.columns" :filter="logs.filter" row-key="_key" :pagination.sync="logs.pagination"  @request="loadLogs" :loading="logs.loading">
-          <template slot="top-right" slot-scope="props">
-            <q-select :options="logs.eventTypesOpts" v-model="logs.filter.eventType" float-label="Event type" @input="updateFilters()" class="q-mr-sm"/>
-            <q-datetime v-model="logs.filter.after" type="date" float-label="From date" clearable @input="updateFilters()" class="q-mr-sm"/>
-            <q-datetime v-model="logs.filter.before" type="date" float-label="To date" clearable @input="updateFilters()" class="q-mr-sm"/>
-            <q-input v-model="logs.filter.userEmail" type="text" float-label="User email" clearable @input="updateFilters()"/>
-          </template>
-          <q-td slot="body-cell-timestamp" slot-scope="props" :props="props">
-            {{ niceTimestamp(props.value) }}
-          </q-td>
-          <q-td slot="body-cell-data" slot-scope="props" :props="props">
-            <q-btn v-if="props.value" label="show" @click="showLogData(props.value)"></q-btn>
-          </q-td>
-        </q-table>
+        <table-audit-log/>
       </q-tab-pane>
+
       <!-- Tab Teams -->
       <q-tab-pane name="tab-teams">
         <!-- Create New Teams -->
@@ -253,16 +241,6 @@
         </q-card>
       </q-tab-pane>
     </q-tabs>
-    <q-modal v-model="logDataModal" :content-css="{minWidth: '50vw'}">
-      <div class="q-pa-md">
-        <p class="q-title">
-          Data:
-        </p>
-        <pre>
-          {{ logDataModalContent }}
-        </pre>
-      </div>
-    </q-modal>
   </q-page>
 </template>
 <style>
@@ -274,31 +252,15 @@ div .exactFit {
 <script>
 import API from '../data/API.js'
 import { date } from 'quasar'
+import TableAuditLog from '../components/TableAuditLog'
 
 export default {
+  name: 'AdminHomePage',
+  components: {
+    TableAuditLog
+  },
   data () {
     return {
-      logs: {
-        logs: [],
-        pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0, sortBy: 'timestamp', descending: true },
-        columns: [
-          { name: 'timestamp', required: true, label: 'Datetime', align: 'left', field: 'timestamp', sortable: true },
-          { name: 'event', required: true, label: 'Event', align: 'right', field: 'event', sortable: false },
-          { name: 'userEmail', required: true, label: 'User', align: 'right', field: 'userEmail', sortable: false },
-          { name: 'message', required: true, label: 'Message', align: 'right', field: 'message', sortable: false },
-          { name: 'data', required: false, label: 'Data', align: 'right', field: 'data', sortable: false }
-        ],
-        filter: {
-          after: undefined,
-          before: undefined,
-          eventType: 'all',
-          userEmail: undefined
-        },
-        eventTypesOpts: [],
-        loading: false
-      },
-      logDataModal: false,
-      logDataModalContent: undefined,
       codeExpired: [],
       teamName: '',
       allTeams: [],
@@ -311,79 +273,14 @@ export default {
     }
   },
   async created () {
-    this.getLogsEventTypes()
     this.getTeams()
     this.getAllStudies()
     this.getAllUsers()
     this.getAllParticipants()
   },
-  async mounted () {
-    this.loadLogs({
-      pagination: this.logs.pagination,
-      filter: this.logs.filter
-    })
-  },
   methods: {
     niceDate (timeStamp) {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
-    },
-    niceTimestamp (timeStamp) {
-      return date.formatDate(timeStamp, 'DD/MM/YYYY HH:mm:ss')
-    },
-    async updateFilters () {
-      this.loadLogs({
-        filter: this.logs.filter,
-        pagination: this.logs.pagination
-      })
-    },
-    async loadLogs (params) {
-      this.logs.loading = true
-      this.logs.pagination = params.pagination
-      try {
-        let queryParams = {
-          after: params.filter.after,
-          before: params.filter.before,
-          eventType: params.filter.eventType === 'all' ? undefined : params.filter.eventType,
-          studyKey: params.filter.studyKey,
-          taskId: params.filter.taskId,
-          userEmail: params.filter.userEmail,
-          sortDirection: params.pagination.descending ? 'DESC' : 'ASC',
-          offset: (params.pagination.page - 1) * params.pagination.rowsPerPage,
-          count: params.pagination.rowsPerPage
-        }
-        this.logs.pagination.rowsNumber = await API.getLogs(true, queryParams)
-        this.logs.logs = await API.getLogs(false, queryParams)
-      } catch (err) {
-        console.error(err)
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot retrieve audit log' + err.message,
-          icon: 'report_problem'
-        })
-      }
-      this.logs.loading = false
-    },
-    async getLogsEventTypes () {
-      try {
-        let types = await API.getLogEventTypes()
-        if (types) {
-          this.logs.eventTypesOpts = types.map(evt => {
-            return { label: evt, value: evt }
-          })
-        }
-        this.logs.eventTypesOpts.unshift({ label: 'All', value: 'all' })
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot retrieve logs event types',
-          icon: 'report_problem'
-        })
-      }
-    },
-    showLogData (data) {
-      this.logDataModalContent = JSON.stringify(data, null, 2)
-      console.log(JSON.stringify(data, null, 2))
-      this.logDataModal = true
     },
     async getTeams () {
       try {

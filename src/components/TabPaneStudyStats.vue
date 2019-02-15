@@ -38,6 +38,12 @@
             </div>
           </div>
         </div>
+
+        <div class="row q-ma-lg">
+          <q-btn label="Download data"></q-btn>
+        </div>
+
+        <table-audit-log :studyKey="studyDesign._key"/>
       </q-card-main>
     </q-card>
 
@@ -46,10 +52,14 @@
 
 <script>
 import API from '../data/API'
+import TableAuditLog from '../components/TableAuditLog'
 
 export default {
   name: 'TabPaneStudyStats',
   props: ['studyDesign'],
+  components: {
+    TableAuditLog
+  },
   data () {
     return {
       participants: {

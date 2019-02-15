@@ -146,6 +146,8 @@ export default {
       }
     }
     let URL = BASE_URL + '/auditlog' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
+    console.log(URL)
+    console.log(filter)
     let resp = await axios.get(URL, axiosConfig)
     return resp.data
   }
