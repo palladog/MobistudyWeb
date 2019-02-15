@@ -63,7 +63,7 @@ import { date } from 'quasar'
 
 export default {
   name: 'TableAuditLog',
-  props: ['studyKey', 'taskId'],
+  props: ['studyKey', 'taskId'], // if set to -1, means that logs shouldn't be loaded until they are set a different value
   data () {
     return {
       logs: [],
@@ -91,9 +91,16 @@ export default {
   async created () {
     this.getLogsEventTypes()
   },
+  async mounted () {
+    if (!this.studyKey || this.studyKey !== -1) {
+      this.loadLogs({
+        pagination: this.pagination,
+        filter: this.filter
+      })
+    }
+  },
   watch: {
     async studyKey () {
-      console.log('STUDY KEY CHANGED!!', this.studyKey)
       this.filter.studyKey = this.studyKey
       this.loadLogs({
         pagination: this.pagination,
@@ -112,6 +119,7 @@ export default {
       })
     },
     async loadLogs (params) {
+      console.log('Loading logs...', this.studyKey)
       this.loading = true
       this.pagination = params.pagination
       try {

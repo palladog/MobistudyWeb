@@ -5,7 +5,7 @@
       </q-card-title>
       <q-card-main>
         <div class="row justify-around">
-          <div class="col-3">
+          <div >
             <div class="q-title">
               Joined
             </div>
@@ -13,7 +13,7 @@
               {{ participants.joined }}
             </div>
           </div>
-          <div class="col-3">
+          <div >
             <div class="q-title">
               Active
             </div>
@@ -21,7 +21,7 @@
               {{ participants.active }}
             </div>
           </div>
-          <div class="col-3">
+          <div >
             <div class="q-title">
               Completed
             </div>
@@ -29,7 +29,7 @@
               {{ participants.completed }}
             </div>
           </div>
-          <div class="col-3">
+          <div >
             <div class="q-title">
               Withdrawn
             </div>
@@ -39,8 +39,11 @@
           </div>
         </div>
 
-        <div class="row q-ma-lg">
-          <q-btn label="Download data"></q-btn>
+        <div class="row q-ma-lg justify-around">
+          <!-- <q-btn label="Download study design" @click="downloadStudyDesign()"></q-btn> -->
+          <q-btn label="Download participants" @click="downloadParticipants()"></q-btn>
+          <q-btn label="Download answers" @click="downloadAnswers()"></q-btn>
+          <q-btn label="Download health data" @click="downloadHealthStoreData()"></q-btn>
         </div>
 
         <table-audit-log :studyKey="studyDesign._key"/>
@@ -53,6 +56,16 @@
 <script>
 import API from '../data/API'
 import TableAuditLog from '../components/TableAuditLog'
+
+const downloadFile = function (filename, json) {
+  let element = document.createElement('a')
+  element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(json))
+  element.setAttribute('download', filename)
+  element.style.display = 'none'
+  document.body.appendChild(element)
+  element.click()
+  document.body.removeChild(element)
+}
 
 export default {
   name: 'TabPaneStudyStats',
@@ -69,6 +82,10 @@ export default {
         withdrawn: 0
       }
     }
+  },
+  created () {
+    // set the study key to -1 to avoid loading data in the audit log table
+    if (!this.studyDesign._key) this.studyDesign._key = -1
   },
   watch: {
     async studyDesign () {
@@ -98,6 +115,27 @@ export default {
           })
         }
       }
+    }
+  },
+  methods: {
+    async downloadParticipants () {
+      try {
+        let parts = await API.getParticipantsOfStudy(this.studyDesign._key)
+        downloadFile('participants.json', JSON.stringify(parts))
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'bottom',
+          message: 'Cannot retrieve the study participants. ' + error.message,
+          icon: 'report_problem'
+        })
+      }
+    },
+    async downloadAnswers () {
+      // TODO
+    },
+    async downloadHealthStoreData () {
+      // TODO
     }
   }
 }
