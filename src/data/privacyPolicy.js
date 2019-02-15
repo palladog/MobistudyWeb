@@ -1,3 +1,5 @@
+import QueryDataTypeEnum from './QueryDataTypeEnum'
+
 export default {
   createPrivacyPolicy (principalInvestigators, institutions, tasks) {
     let investigators = principalInvestigators
@@ -21,10 +23,10 @@ export default {
       for (let k = 0; k < tasks.length; k++) {
         let taskType = tasks[k].type
         if (taskType === 'dataQuery') {
-          stringTasks += '\n\u2022 ' + tasks[k].dataType + ' from GoogleFit (Android phones) or HealthKit (iPhones)'
+          stringTasks += '\n\u2022 ' + QueryDataTypeEnum.valueToString(tasks[k].dataType) + ' from GoogleFit (Android phones) or HealthKit (iPhones)'
         }
         if (taskType === 'form') {
-          stringTasks += '\n\u2022 answers given to FORM: ' + tasks[k].formName
+          stringTasks += '\n\u2022 answers given to ' + tasks[k].formName + ' form'
         }
       }
     }
@@ -32,18 +34,21 @@ export default {
     stringData += '\n\u2022 Your general profile information like email address, name, surname, date of birth, main health conditions, long-term treatments and lifestyle.'
     stringData += '\n\u2022 Your participation into the studies and the times you complete a task.'
     stringData += stringTasks
-    let stringStorage = 'Where will this data be stored?'
+
+    let stringStorage = '\nWhere will this data be stored?'
     stringStorage += '\n On your phone: '
     stringStorage += '\n\u2022 Your profile'
     stringStorage += '\n\u2022 Your participation activity into the studies and their tasks'
     stringStorage += '\n On Mobistudy servers: '
     stringStorage += '\n\u2022 All the data mentioned before'
     stringStorage += '\n\u2022 Technical information about access to the server (eg logins) for security reasons'
-    let stringAccess = 'Who will have access to this data?'
+
+    let stringAccess = '\nWho will have access to this data?'
     stringAccess += '\n The following institution(s) will have access: '
     stringAccess += stringInsti
-    let stringRights = 'What are my rights?'
-    stringRights += '\n\u2022 You can withdraw from the study whenever you want. The data you have produced so far within a study will be kept.'
+
+    let stringRights = '\nWhat are my rights?'
+    stringRights += '\n\u2022 You can withdraw from this study whenever you want. The data you have produced so far will be kept.'
     stringRights += '\n\u2022 You can remove your account from Mobistudy. This will remove all your data, produced in all the studies, except the technical logs (which need to be kept for security reasons, but will be deleted after 5 years).'
     stringRights += '\n\u2022 You can download the data in a machine-readable format. Contact snatpht@gmail.com if you need to.'
     stringRights += '\n For any other general question, please contact one of the principal investigators: '

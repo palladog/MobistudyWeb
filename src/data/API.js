@@ -127,6 +127,10 @@ export default {
     let resp = await axios.delete(BASE_URL + '/participants/' + participantKey, axiosConfig)
     return resp.data
   },
+  async getParticipantsStatusStats (studyKey) {
+    let resp = await axios.get(BASE_URL + '/participants/statusStats/' + studyKey, axiosConfig)
+    return resp.data
+  },
   // Audit LOG
   async getLogEventTypes () {
     let resp = await axios.get(BASE_URL + '/auditlog/eventTypes', axiosConfig)

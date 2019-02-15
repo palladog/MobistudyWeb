@@ -4,9 +4,10 @@
       <q-toolbar-title>
         Study Designer
       </q-toolbar-title>
-      <q-btn class="q-mr-md" v-show="!this.studyDesign.publishedTS" size="md" color="warning" label="Save Draft" @click="saveProgress()"/>
-      <q-btn class="float-right q-mr-md" v-show="!this.studyDesign.publishedTS" color="negative" label="Publish" @click="publish()"/>
-      <q-btn class="float-right q-mr-md" v-show="this.studyDesign.publishedTS" color="blue" label="Published"/>
+      <q-btn class="q-mr-md" v-show="studyKey && !studyDesign.publishedTS" color="negative" label="Delete Draft" @click="removeDraftStudy()"/>
+      <q-btn class="q-mr-md" v-show="!studyDesign.publishedTS" color="warning" label="Save Draft" @click="saveProgress()"/>
+      <q-btn class="float-right q-mr-md" v-show="!studyDesign.publishedTS" color="positive" label="Publish" @click="publish()"/>
+      <q-btn class="float-right q-mr-md" v-show="studyDesign.publishedTS" disabled color="blue" label="Published"/>
       <q-btn  class="float-right q-mr-md" round color="black" icon="close" @click="exitDesigner"/>
     </q-toolbar>
 
@@ -126,6 +127,19 @@ export default {
       }
     }
   },
+  computed: {
+    studyKey () {
+      let key = false
+      // If there is a propStudykey, use that as the key and update the study only
+      // If there is no propStudykey, then use the keyOfStudy after creating a new study to update
+      if (this.propStudyKey) {
+        key = this.propStudyKey
+      } else if (this.propStudyKey === undefined && this.keyOfStudy) {
+        key = this.keyOfStudy
+      }
+      return key
+    }
+  },
   async created () {
     // Populate the teamKey with the prop value
     if (!this.studyDesign.teamKey || this.studyDesign.teamKey === '') {
@@ -220,18 +234,9 @@ export default {
       }
     },
     async saveProgress () {
-      var checkStudyKey = ''
-      // If there is a propStudykey, use that as the key and update the study only
-      // If there is no propStudykey, then use the keyOfStudy after creating a new study to update
-      if (this.propStudyKey) {
-        checkStudyKey = this.propStudyKey
-        this.keyOfStudy = this.propStudyKey
-      } else if (this.propStudyKey === undefined && this.keyOfStudy) {
-        checkStudyKey = this.keyOfStudy
-      }
-      if (checkStudyKey) {
+      if (this.studyKey) {
         try {
-          await API.updateDraftStudy(checkStudyKey, this.studyDesign)
+          await API.updateDraftStudy(this.studyKey, this.studyDesign)
           this.$q.notify({
             color: 'primary',
             position: 'bottom',
@@ -268,12 +273,39 @@ export default {
         }
       }
     },
+    async removeDraftStudy () {
+      if (this.studyKey && !this.studyDesign.publishedTS) {
+        try {
+          await this.$q.dialog({
+            title: 'Remove Study',
+            color: 'warning',
+            message: 'You are deleting the draft Study. Would you like to continue?',
+            ok: 'Yes, delete the study.',
+            cancel: 'Cancel'
+          })
+          // Remove from db
+          try {
+            await API.deleteStudy(this.studyKey)
+            this.$router.push('/researcher')
+          } catch (error) {
+            this.$q.notify({
+              color: 'negative',
+              position: 'bottom',
+              message: 'Cannot delete the study: ' + error.message,
+              icon: 'report_problem'
+            })
+          }
+        } catch (error) {
+          // nothing to do
+        }
+      }
+    },
     exitDesigner () {
       if (this.keyOfStudy === '') {
         this.$q.dialog({
           title: 'Exit',
           color: 'warning',
-          message: 'You have not saved this draft. Would you like to continue exiting yet?',
+          message: 'You have not saved this draft. Would you like to continue exiting?',
           ok: 'Yes, exit without saving',
           cancel: 'Cancel'
         }).then(() => {
