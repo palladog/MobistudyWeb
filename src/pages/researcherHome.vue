@@ -49,7 +49,6 @@
 
 <script>
 import API from '../data/API.js'
-import userinfo from '../data/userinfo.js'
 
 export default {
   data () {
@@ -71,11 +70,6 @@ export default {
         message: 'Cannot initialise home page. Please check our connection.',
         icon: 'report_problem'
       })
-    }
-  },
-  computed: {
-    welcomeLabel () {
-      return 'Hello ' + userinfo.getUser().email + '. You are logged in as a ' + userinfo.getUser().role + '.'
     }
   },
   methods: {
@@ -109,7 +103,7 @@ export default {
         // Set default value displayed to that of first element
         this.selectedTeamValue = teams[0]._key
         this.selectedTeamLabel = teams[0].name
-        this.createStudyLabel = 'Create new study for ' + this.selectedTeamLabel
+        this.createStudyLabel = 'Create new study for Team: ' + this.selectedTeamLabel
         this.getAllStudies()
       }
     },
