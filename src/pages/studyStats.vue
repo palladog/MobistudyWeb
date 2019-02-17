@@ -8,8 +8,8 @@
     </q-toolbar>
 
     <q-tabs color="secondary">
-      <q-tab default slot="title" name="tab-study-stats" icon="bar_chart" label="Study"/>
-      <q-tab slot="title" name="tab-study-description" icon="subject" label="Description"/>
+      <q-tab slot="title" name="tab-study-stats" icon="bar_chart" label="Study"/>
+      <q-tab default slot="title" name="tab-study-description" icon="subject" label="Description"/>
       <tab-pane-study-stats name="tab-study-stats" :studyDesign="studyDesign"/>
       <tab-pane-study-description name="tab-study-description" :studyDesign="studyDesign"/>
     </q-tabs>
@@ -33,7 +33,10 @@ export default {
       studyDesign: {
         generalities: {
           title: ''
-        }
+        },
+        inclusionCriteria: {},
+        tasks: {},
+        consent: {}
       }
     }
   },
