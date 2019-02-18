@@ -1,5 +1,5 @@
 <template>
-  <q-tab-pane name="tab-study-description">
+  <q-tab-pane v-if="studyDesign._key != -1" name="tab-study-description">
     <q-card class="form-card">
       <q-card-title> {{ studyDesign.generalities.title }} </q-card-title>
         <q-card-main>
@@ -103,7 +103,9 @@
         <q-card-title> Consent: </q-card-title>
         <q-card-main>
             <q-field label="Invitation:"> {{ studyDesign.consent.invitation }} </q-field>
-            <q-field label="Privacy Policy:"> {{ studyDesign.consent.privacyPolicy }} </q-field>
+            <q-field label="Privacy Policy:">
+              <div v-html="studyDesign.consent.privacyPolicy.replace(new RegExp('\n', 'g'), '<br>')"/>
+            </q-field>
             <div class="q-pa-lg q-mt-sm shadow-1 bg-green-1"> Tasks Items:
               <div v-for="(tkItem, tsIndex) in studyDesign.consent.taskItems" :key="tsIndex">
                 <q-field label="Task ID:"> {{ tkItem.taskId }}</q-field>
