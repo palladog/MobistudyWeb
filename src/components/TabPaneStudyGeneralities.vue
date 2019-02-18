@@ -65,8 +65,8 @@
             <q-radio v-model.trim="inst.dataAccess.$model" val="anonymised" color="secondary" label="Anonymised" @input="update()" style="margin-left: 10px"/>
             <q-radio v-model.trim="inst.dataAccess.$model" val="full" color="secondary" label="Full" @input="update()" style="margin-left: 10px"/>
           </q-field>
-          <q-field label="Reason for Data Access:" helper="Please provide a brief sentence for a valid reason." :error="inst.contact.$error" error-label="The reason for data access is required.">
-            <q-input v-model.trim="inst.reasonForDataAccess.$model" type="textarea" rows="2" @blur="inst.reasonForDataAccess.$touch" @input="update()" clearable/>
+          <q-field label="Reason for Data Access:" helper="Please provide a brief sentence for a valid reason." :error="inst.reasonForDataAccess.$error" error-label="The reason for data access is required.">
+            <q-input :readonly="inst.dataAccess.$model === 'no'" v-model.trim="inst.reasonForDataAccess.$model" type="textarea" rows="2" @blur="inst.reasonForDataAccess.$touch" @input="update()" clearable/>
           </q-field>
           <div class="row justify-center">
             <div class="col">
