@@ -15,10 +15,10 @@
         <q-field label="From:" helper="Optional. Enter the number of days from the start">
           <q-input type="number" v-model="start" @input="update()" />
         </q-field>
-        <q-field label="To:" helper="Optional. The number of days from the start.">
+        <q-field label="To:" helper="Optional. The number of days from the start. If this and occurrences are not specified, this task will run until the end date of the study.">
           <q-input type="number" v-model="until"  @input="update()" />
         </q-field>
-        <q-field label="occurrences:" helper="Optional. The number of occurrences.">
+        <q-field label="occurrences:" helper="Optional. The maximum number of occurrences. If this and To are not specified, this task will run until the end date of the study.">
           <q-input type="number" v-model="occurrences"  @input="update()" />
         </q-field>
       </div>
@@ -35,13 +35,13 @@
         <q-select @input="update()" v-show="intervalType == 'm'"   v-model="monthlyInterval" :options="monthlyIntervalOptions" />
         <q-select @input="update()" v-show="intervalType == 'y'"   v-model="yearlyInterval" :options="yearlyIntervalOptions" />
       </q-field>
-      <q-field label="Week days:" helper="Optional. Specify week days.">
+      <q-field label="Week days:" helper="Optional. Specify the days in the week when this task is allowed. If not specified, all week days are eligible.">
         <q-checkbox v-for="(opt, ind) in weekDaysOpts" :key="ind" @input="update()" v-model="weekDays" :val="opt.value" :label="opt.label" />
       </q-field>
       <q-field label="Months:" helper="Optional. Specify months.">
         <q-checkbox v-for="(monOpt, ind2) in monthsOpts" :key="ind2" @input="update()" v-model="months" :val="monOpt.value" :label="monOpt.label" />
       </q-field>
-      <q-field label="Days of the month:" helper="Optional. Specify the days of the mont.">
+      <q-field label="Days of the month:" helper="Optional. Specify the days of the month when this task is allowed. If not specified, all month days are eligible.">
         <q-checkbox @input="update()" v-for="monthday in 31" v-model="monthDays" :key="monthday" :val="monthday" :label="monthday.toString()" />
       </q-field>
   </q-card-main>

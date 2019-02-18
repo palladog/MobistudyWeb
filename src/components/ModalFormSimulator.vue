@@ -96,17 +96,20 @@ export default {
       let nextQId
       if (type === 'freetext' || type === 'multiChoice') {
         if (this.currentQuestion.nextDefaultId) nextQId = this.currentQuestion.nextDefaultId
-        else if (this.currentIndex === (this.form.questions.length - 1)) nextQId = -1
-        else nextQId = 'Q' + (this.currentIndex + 2)
       } else if (type === 'singleChoice') {
         if (this.currentAnswerSingleChoice) {
-          let anschoice = this.currentQuestion.answerChoices.find((a) => { return a.id === this.currentAnswerSingleChoice })
-          if (anschoice.nextQuestionId) {
+          let anschoice = this.currentQuestion.answerChoices.find((a) => { return a.id ? a.id === this.currentAnswerSingleChoice : false })
+          if (anschoice && anschoice.nextQuestionId) {
             nextQId = anschoice.nextQuestionId
           } else {
             nextQId = this.currentQuestion.nextDefaultId
           }
         } else nextQId = this.currentQuestion.nextDefaultId
+      }
+
+      if (!nextQId) {
+        if (this.currentIndex === (this.form.questions.length - 1)) nextQId = 'ENDFORM'
+        else nextQId = 'Q' + (this.currentIndex + 2)
       }
 
       if (nextQId === 'ENDFORM') {
