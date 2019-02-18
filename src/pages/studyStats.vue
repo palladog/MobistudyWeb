@@ -8,9 +8,10 @@
     </q-toolbar>
 
     <q-tabs color="secondary">
-      <q-tab default slot="title" name="tab-study-stats" icon="bar_chart" label="Study"/>
-
+      <q-tab slot="title" name="tab-study-stats" icon="bar_chart" label="Study"/>
+      <q-tab default slot="title" name="tab-study-description" icon="subject" label="Description"/>
       <tab-pane-study-stats name="tab-study-stats" :studyDesign="studyDesign"/>
+      <tab-pane-study-description name="tab-study-description" :studyDesign="studyDesign"/>
     </q-tabs>
   </q-page>
 </template>
@@ -18,17 +19,24 @@
 <script>
 import API from '../data/API.js'
 import TabPaneStudyStats from '../components/TabPaneStudyStats'
+import TabPaneStudyDescription from '../components/TabPaneStudyDescription'
 
 export default {
   name: 'StudyStats',
   props: ['studyKey'],
-  components: { 'tab-pane-study-stats': TabPaneStudyStats },
+  components: {
+    'tab-pane-study-stats': TabPaneStudyStats,
+    'tab-pane-study-description': TabPaneStudyDescription
+  },
   data () {
     return {
       studyDesign: {
         generalities: {
           title: ''
-        }
+        },
+        inclusionCriteria: {},
+        tasks: {},
+        consent: {}
       }
     }
   },

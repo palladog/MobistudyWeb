@@ -11,7 +11,7 @@
                  autocomplete="on" @blur="$v.email.$touch"/>
               </q-field>
               <q-field :error="$v.password.$error" error-label="A password is required.">
-                <q-input v-model.trim="$v.password.$model" type="password" float-label="Password" autocomplete="on" @blur="$v.password.$touch" @keyup.enter="validationCheck"/>
+                <q-input v-model.trim="$v.password.$model" type="password" float-label="Password" autocomplete="on" @blur="$v.password.$touch" @keyup.enter="login()"/>
               </q-field>
             </form>
           </q-card-main>

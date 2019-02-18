@@ -143,7 +143,7 @@
                     <q-field class="text-weight-bolder" label="Title: " />
                   </div>
                   <div class="col-9 exactFit">
-                    <q-field :label="study.generalities.title"/>
+                    <q-field :label="study.title"/>
                   </div>
                 </div>
                 <div class="row">
