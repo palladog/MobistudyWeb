@@ -31,7 +31,7 @@ import TabPaneStudyCriteria from '../components/TabPaneStudyCriteria'
 import TabPaneStudyTasks from '../components/TabPaneStudyTasks'
 import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
 import API from '../data/API.js'
-import { required } from 'vuelidate/lib/validators'
+import { required, requiredIf } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
@@ -115,7 +115,11 @@ export default {
             name: { required },
             contact: { required },
             dataAccess: { required },
-            reasonForDataAccess: { required }
+            reasonForDataAccess: {
+              required: requiredIf(function (institution) {
+                return institution.dataAccess !== 'no'
+              })
+            }
           }
         },
         startDate: { required },
