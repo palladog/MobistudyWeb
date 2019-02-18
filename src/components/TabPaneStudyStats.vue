@@ -132,10 +132,30 @@ export default {
       }
     },
     async downloadAnswers () {
-      // TODO
+      try {
+        let parts = await API.getAnswersOfStudy(this.studyDesign._key)
+        downloadFile('answers.json', JSON.stringify(parts))
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'bottom',
+          message: 'Cannot retrieve the answers. ' + error.message,
+          icon: 'report_problem'
+        })
+      }
     },
     async downloadHealthStoreData () {
-      // TODO
+      try {
+        let parts = await API.getHealthStoreDataOfStudy(this.studyDesign._key)
+        downloadFile('healthStoreData.json', JSON.stringify(parts))
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'bottom',
+          message: 'Cannot retrieve the health store Data. ' + error.message,
+          icon: 'report_problem'
+        })
+      }
     }
   }
 }
