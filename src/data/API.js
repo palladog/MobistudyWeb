@@ -133,12 +133,12 @@ export default {
   },
   // Answers
   async getAnswersOfStudy (studyKey) {
-    let resp = await axios.get(BASE_URL + '/answers/' + studyKey, axiosConfig)
+    let resp = await axios.get(BASE_URL + '/answers?studyKey=' + studyKey, axiosConfig)
     return resp.data
   },
   // Health Store Data
   async getHealthStoreDataOfStudy (studyKey) {
-    let resp = await axios.get(BASE_URL + '/healthStoreData/' + studyKey, axiosConfig)
+    let resp = await axios.get(BASE_URL + '/healthStoreData?studyKey=' + studyKey, axiosConfig)
     return resp.data
   },
   // Audit LOG
