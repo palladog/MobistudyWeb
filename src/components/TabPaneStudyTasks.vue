@@ -33,7 +33,7 @@
           <q-field v-if="task.type === 'dataQuery'" label="Data type:" helper="Please select the data type to be collected.">
             <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery"/>
           </q-field>
-          <q-field v-if="task.type === 'dataQuery'" label="Aggregated:" helper="If aggregated, the data will be summed.">
+          <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Aggregated:" helper="If aggregated, the data will be summed.">
             <q-checkbox color="secondary" v-model="task.aggregated" />
           </q-field>
           <q-field v-if="task.type === 'dataQuery'" label="Bucket:" helper="You can sum the data into buckets.">
@@ -149,6 +149,10 @@ export default {
     },
     schedulingToString (sc) {
       return schedulingToString(sc)
+    },
+    allowAggregated (v) {
+      let state = QueryDataTypeEnum.allowsAggregated(v)
+      return state
     },
     addDT () {
       this.tasks.push({
