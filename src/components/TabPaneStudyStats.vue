@@ -40,7 +40,6 @@
         </div>
 
         <div class="row q-ma-lg justify-around">
-          <!-- <q-btn label="Download study design" @click="downloadStudyDesign()"></q-btn> -->
           <q-btn label="Download participants" @click="downloadParticipants()"></q-btn>
           <q-btn label="Download answers" @click="downloadAnswers()"></q-btn>
           <q-btn label="Download health data" @click="downloadHealthStoreData()"></q-btn>
@@ -132,10 +131,30 @@ export default {
       }
     },
     async downloadAnswers () {
-      // TODO
+      try {
+        let parts = await API.getAnswersOfStudy(this.studyDesign._key)
+        downloadFile('answers.json', JSON.stringify(parts))
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'bottom',
+          message: 'Cannot retrieve the answers. ' + error.message,
+          icon: 'report_problem'
+        })
+      }
     },
     async downloadHealthStoreData () {
-      // TODO
+      try {
+        let parts = await API.getHealthStoreDataOfStudy(this.studyDesign._key)
+        downloadFile('healthStoreData.json', JSON.stringify(parts))
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          position: 'bottom',
+          message: 'Cannot retrieve the health store Data. ' + error.message,
+          icon: 'report_problem'
+        })
+      }
     }
   }
 }

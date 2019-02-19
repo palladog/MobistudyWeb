@@ -131,6 +131,16 @@ export default {
     let resp = await axios.get(BASE_URL + '/participants/statusStats/' + studyKey, axiosConfig)
     return resp.data
   },
+  // Answers
+  async getAnswersOfStudy (studyKey) {
+    let resp = await axios.get(BASE_URL + '/answers?studyKey=' + studyKey, axiosConfig)
+    return resp.data
+  },
+  // Health Store Data
+  async getHealthStoreDataOfStudy (studyKey) {
+    let resp = await axios.get(BASE_URL + '/healthStoreData?studyKey=' + studyKey, axiosConfig)
+    return resp.data
+  },
   // Audit LOG
   async getLogEventTypes () {
     let resp = await axios.get(BASE_URL + '/auditlog/eventTypes', axiosConfig)

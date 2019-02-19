@@ -44,7 +44,7 @@ export default {
   },
   data () {
     return {
-      keyOfStudy: '',
+      keyOfStudy: undefined,
       studyDesign: {
         teamKey: '',
         publishedTS: undefined,
@@ -192,9 +192,9 @@ export default {
           icon: 'report_problem'
         })
       } else {
-        // If there is a studyKey and validation passed, a draft exists
-        if (this.propStudyKey) {
-          if (this.checkValidation() !== false) {
+        if (this.checkValidation() !== false) {
+          if (this.studyKey) {
+            // If there is a studyKey, a draft exists
             try {
               this.studyDesign.publishedTS = new Date()
               await API.updateDraftStudy(this.propStudyKey, this.studyDesign)
@@ -212,10 +212,8 @@ export default {
                 icon: 'report_problem'
               })
             }
-          }
-        } else {
-          // If no studyKey, publish directly if validation passed
-          if (this.checkValidation() !== false) {
+          } else {
+            // If no studyKey, publish directly
             try {
               this.studyDesign.publishedTS = new Date()
               await API.publishStudy(this.studyDesign)
