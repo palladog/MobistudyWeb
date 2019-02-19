@@ -25,8 +25,12 @@ export default {
     if (v === 'activity') return true
     if (v === 'calories') return true
     if (v === 'distance') return true
-    // TODO: add those missing
-    // steps, distance, calories, calories.active, calories.basal, activity, duration, walking, nutrition, nutrition.x
+    if (v === 'calories.active') return true
+    if (v === 'calories.basal') return true
+    if (v === 'duration') return true
+    if (v === 'walking') return true
+    if (v === 'nutrition') return true
+    if (v === 'nutrition.x') return true
 
     return false
   }
