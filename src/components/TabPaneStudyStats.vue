@@ -40,7 +40,6 @@
         </div>
 
         <div class="row q-ma-lg justify-around">
-          <!-- <q-btn label="Download study design" @click="downloadStudyDesign()"></q-btn> -->
           <q-btn label="Download participants" @click="downloadParticipants()"></q-btn>
           <q-btn label="Download answers" @click="downloadAnswers()"></q-btn>
           <q-btn label="Download health data" @click="downloadHealthStoreData()"></q-btn>
