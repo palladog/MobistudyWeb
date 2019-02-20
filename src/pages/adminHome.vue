@@ -63,7 +63,7 @@
                     <q-field label="Code: " />
                   </div>
                   <div class="col-9 exactFit">
-                    {{team.invitationCode}}
+                    <q-input type="textarea" :value="team.invitationCode" ref="invCode" readonly/>
                   </div>
                 </div>
                 <div class="row q-mt-sm">
@@ -74,8 +74,9 @@
                     {{ niceDate(team.invitationExpiry) }}
                   </div>
                 </div>
-                <div class="row q-mt-sm">
+                <div class="row q-mt-sm justify-between">
                   <q-btn :label="generateLabel + team.name" color="warning" @click="generateCode(team._key)"/>
+                  <q-btn color="primary" round sm icon="file_copy" @click="copyCode(index)"/>
                 </div>
                 <q-card-separator v-if="index != allTeams.length-1" class="q-mt-md"/>
               </div>
@@ -394,6 +395,23 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot generate invitation code',
+          icon: 'report_problem'
+        })
+      }
+    },
+    copyCode (index) {
+      try {
+        this.$refs.invCode[index].select()
+        document.execCommand('copy')
+        this.$q.notify({
+          color: 'primary',
+          position: 'bottom',
+          message: 'Invitation code copied to clipboard'
+        })
+      } catch (error) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot copy invitation code',
           icon: 'report_problem'
         })
       }
