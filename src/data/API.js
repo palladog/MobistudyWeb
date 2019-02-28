@@ -158,5 +158,9 @@ export default {
     let URL = BASE_URL + '/auditlog' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
     let resp = await axios.get(URL, axiosConfig)
     return resp.data
+  },
+  // Test stuff
+  async sendTestEmail (email, content) {
+    return axios.post(BASE_URL + '/tester/sendemail/', { address: email, content: content }, axiosConfig)
   }
 }
