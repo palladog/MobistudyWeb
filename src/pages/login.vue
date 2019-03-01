@@ -58,7 +58,7 @@ export default {
         this.$q.notify('Please correct the indicated fields.')
       } else {
         try {
-          let user = await API.login(this.email, this.password)
+          let user = await API.login(this.email.toLowerCase(), this.password)
           API.setToken(user.token)
           userinfo.login(user)
 
@@ -91,7 +91,7 @@ export default {
     async resetPassword () {
       try {
         if (this.email !== '') {
-          await API.askPasswordResetEmail(this.email)
+          await API.askPasswordResetEmail(this.email.toLowerCase())
           this.$q.dialog({
             title: 'Password reset',
             message: 'An email was sent to ' + this.email + ' with instructions about how to reset your password.',

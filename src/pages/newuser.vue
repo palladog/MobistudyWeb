@@ -123,7 +123,7 @@ export default {
           this.$q.notify('Please correct the indicated fields.')
         } else {
           await API.createUser({
-            email: this.email,
+            email: this.email.toLowerCase(),
             password: this.password,
             role: 'researcher'
           })
