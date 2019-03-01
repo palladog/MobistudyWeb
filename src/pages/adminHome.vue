@@ -1,13 +1,15 @@
 <template>
   <q-page>
     <q-tabs>
-      <q-tab default slot="title" name="logs" icon="format_align_justify" label="Logs" />
+      <q-tab default slot="title" name="tab-logs" icon="format_align_justify" label="Logs" />
       <q-tab slot="title" name="tab-teams" icon="group" label="Teams" />
       <q-tab slot="title" name="tab-studies" icon="local_library" label="Studies" />
       <q-tab slot="title" name="tab-users" icon="person" label="Users" />
       <q-tab slot="title" name="tab-participants" icon="face" label="Participants" />
+      <q-tab slot="title" name="tab-tester" icon="verified_user" label="Tests"/>
+
       <!-- Tab Logs -->
-      <q-tab-pane name="logs">
+      <q-tab-pane name="tab-logs">
         <table-audit-log/>
       </q-tab-pane>
 
@@ -241,6 +243,11 @@
           </q-collapsible>
         </q-card>
       </q-tab-pane>
+
+      <q-tab-pane name="tab-tester">
+        <h3>Testing tools</h3>
+        <q-card-email-tester/>
+      </q-tab-pane>
     </q-tabs>
   </q-page>
 </template>
@@ -254,11 +261,13 @@ div .exactFit {
 import API from '../data/API.js'
 import { date } from 'quasar'
 import TableAuditLog from '../components/TableAuditLog'
+import QCardEmailTester from '../components/QCardEmailTester'
 
 export default {
   name: 'AdminHomePage',
   components: {
-    TableAuditLog
+    TableAuditLog,
+    QCardEmailTester
   },
   data () {
     return {

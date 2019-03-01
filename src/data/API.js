@@ -160,7 +160,7 @@ export default {
     return resp.data
   },
   // Test stuff
-  async sendTestEmail (email, content) {
-    return axios.post(BASE_URL + '/tester/sendemail/', { address: email, content: content }, axiosConfig)
+  async sendTestEmail (email, subject, content) {
+    return axios.post(BASE_URL + '/tester/sendemail/', { address: email, subject: subject, content: content }, axiosConfig)
   }
 }
