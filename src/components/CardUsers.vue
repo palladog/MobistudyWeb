@@ -11,30 +11,21 @@
             <q-btn class="float-right" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
           </div>
         </div>
-        <div class="row">
-          <div class="col-3">
-            <q-field class="text-weight-bolder" label="User Key: " />
-          </div>
+        <q-field class="text-weight-bolder" label="User Key: ">
           <div class="col-9 exactFit">
-            <q-field class="text-weight-bolder" :label="user._key"/>
+            {{user._key}}
           </div>
-        </div>
-        <div class="row">
-          <div class="col-3">
-            <q-field class="text-weight-bolder" label="Role: " />
-          </div>
+        </q-field>
+        <q-field class="text-weight-bolder" label="Role: ">
           <div class="col-9 exactFit">
-            <q-field :label="user.role"/>
+            {{user.role}}
           </div>
-        </div>
-        <div class="row">
-          <div class="col-3">
-            <q-field class="text-weight-bolder" label="Name: " />
-          </div>
+        </q-field>
+        <q-field class="text-weight-bolder" label="Name: ">
           <div class="col-9 exactFit">
-            <q-field :label="user.email"/>
+            {{user.email}}
           </div>
-        </div>
+        </q-field>
         <q-card-separator v-if="index != users.length-1" class="q-mt-sm q-mb-sm"/>
       </div>
     </q-card-main>
@@ -100,6 +91,7 @@ export default {
       }
     },
     // Remove researcher from a team
+    // TODO: when the user is a researcher list the studies he's in and add a button to remove him from study
     async removeUserFromTeam (tindex, uindex) {
       try {
         await this.$q.dialog({

@@ -12,8 +12,8 @@
       </q-tab-pane>
 
       <q-tab-pane name="tab-teams">
-        <card-new-team @newTeam="getTeams()"/>
-        <card-teams-invitations @teamDeleted="refresh()"/>
+        <card-new-team @newTeam="refreshTeams()"/>
+        <card-teams-invitations ref="invitations" @teamDeleted="refreshStudies()"/>
       </q-tab-pane>
       <!-- Tab Studies -->
       <q-tab-pane name="tab-studies">
@@ -101,13 +101,16 @@ export default {
     }
   },
   async created () {
-    this.refresh()
+    this.getAllStudies()
   },
   methods: {
     niceDate (timeStamp) {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
     },
-    async refresh () {
+    async refreshTeams () {
+      this.$refs.invitations.getTeams()
+    },
+    async refreshStudies () {
       this.getAllStudies()
     },
     async getAllStudies () {
