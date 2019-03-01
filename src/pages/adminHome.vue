@@ -5,7 +5,6 @@
       <q-tab slot="title" name="tab-teams" icon="group" label="Teams" />
       <q-tab slot="title" name="tab-studies" icon="local_library" label="Studies" />
       <q-tab slot="title" name="tab-users" icon="person" label="Users" />
-      <q-tab slot="title" name="tab-participants" icon="face" label="Participants" />
       <q-tab slot="title" name="tab-tester" icon="verified_user" label="Tests"/>
 
       <!-- Tab Logs -->
@@ -139,42 +138,6 @@
           </q-collapsible>
         </q-card>
       </q-tab-pane>
-      <!-- Tab Participants -->
-      <q-tab-pane name="tab-participants">
-        <!-- Participants and Studies -->
-        <q-card class="q-ma-lg" v-show="allParticipants.length != 0">
-          <q-collapsible label="Participants &amp; Studies: ">
-            <q-card-separator/>
-            <q-card-main>
-              <div v-for="(participant, parIndex) in allParticipants" :key="parIndex">
-                <div class="row">
-                  <div class="col-1"></div>
-                  <div class="col-3">
-                    <q-field class="text-weight-bolder" label="Participant Key: " />
-                  </div>
-                  <div class="col-8 exactFit">
-                    <q-field class="text-weight-bolder" :label="participant._key"/>
-                  </div>
-                </div>
-                <div v-for="(study, accIndex) in participant.studies" :key="accIndex">
-                  <div class="row">
-                    <div class="col-1">
-                      <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeParticipant(parIndex, accIndex)"/>
-                    </div>
-                    <div class="col-3">
-                      <q-field class="text-weight-bolder" label="Accepted Study: " />
-                    </div>
-                    <div class="col-8 exactFit">
-                      <q-field :label="study.studyKey"/>
-                    </div>
-                  </div>
-                </div>
-                <q-card-separator v-if="parIndex != participant.length-1" class="q-mt-sm q-mb-sm"/>
-              </div>
-            </q-card-main>
-          </q-collapsible>
-        </q-card>
-      </q-tab-pane>
 
       <q-tab-pane name="tab-tester">
         <h3>Testing tools</h3>
@@ -210,8 +173,7 @@ export default {
       allTeams: [],
       teamMembers: [],
       allStudies: [],
-      allUsers: [],
-      allParticipants: []
+      allUsers: []
     }
   },
   async created () {
@@ -225,7 +187,6 @@ export default {
       this.getTeams()
       this.getAllStudies()
       this.getAllUsers()
-      this.getAllParticipants()
     },
     async getTeams () {
       try {
@@ -259,17 +220,6 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot retrieve users list',
-          icon: 'report_problem'
-        })
-      }
-    },
-    async getAllParticipants () {
-      try {
-        this.allParticipants = await API.getParticipants()
-      } catch (error) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot retrieve participants list',
           icon: 'report_problem'
         })
       }
@@ -374,40 +324,6 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot delete user ' + user.email,
-          icon: 'report_problem'
-        })
-      }
-    },
-    // Remove Participant from DB
-    async removeParticipant (parIndex, accIndex) {
-      let participant = this.allParticipants[parIndex]
-      try {
-        await this.$q.dialog({
-          title: 'Remove Participant',
-          color: 'warning',
-          message: 'You are removing PARTICIPANT ' + participant._key + ' from STUDY ' + participant.studies[accIndex].studyKey + ' Would you like to continue?',
-          ok: 'Yes, remove Participant: ' + participant._key,
-          cancel: 'Cancel'
-        })
-        this.removeParticipantFromStudy(participant, accIndex)
-      } catch (error) {
-        this.$q.notify('Cancelling Removing Participant ' + participant._key)
-      }
-    },
-    async removeParticipantFromStudy (participant, accIndex) {
-      let removedOne = {
-        partKey: participant._key,
-        studyKey: participant.studies[accIndex].studyKey
-      }
-      try {
-        await API.removeParticipantFromStudy(removedOne)
-        participant.studies.splice(accIndex, 1)
-        this.$q.notify('Participant ' + removedOne.partKey + ' has been removed from Study ' + removedOne.studyKey)
-        this.getAllParticipants()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot remove Participant ' + removedOne.partKey + ' from Study ' + removedOne.studyKey,
           icon: 'report_problem'
         })
       }
