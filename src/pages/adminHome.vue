@@ -7,48 +7,13 @@
       <q-tab slot="title" name="tab-users" icon="person" label="Users" />
       <q-tab slot="title" name="tab-tester" icon="verified_user" label="Tests"/>
 
-      <!-- Tab Logs -->
       <q-tab-pane name="tab-logs">
         <table-audit-log/>
       </q-tab-pane>
 
-      <!-- Tab Teams -->
       <q-tab-pane name="tab-teams">
         <card-new-team @newTeam="getTeams()"/>
-        <card-teams-invitations :teams="allTeams" @teamDeleted="refresh()" @codeGenerated="getTeams()"/>
-        <!-- Teams and their Researchers -->
-        <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-          <q-collapsible label="Teams &amp; Researchers:">
-            <q-card-separator/>
-            <q-card-main>
-              <div v-for="(team, tindex) in allTeams" :key="tindex">
-                <div class="row">
-                  <div class="col-1"></div>
-                  <div class="col-3">
-                    <q-field class="text-weight-bolder" label="Team: " />
-                  </div>
-                  <div class="col-8 exactFit">
-                    <q-field class="text-weight-bolder" :label="team.name"/>
-                  </div>
-                </div>
-                <div v-for="(user, uindex) in teamMembers[tindex]" :key="uindex">
-                  <div class="row">
-                    <div class="col-1">
-                      <q-btn class="q-mb-sm" icon="remove" round size="xs" color="negative" @click="removeTeamUser(tindex, uindex)"/>
-                    </div>
-                    <div class="col-3">
-                      <q-field class="text-weight-bold" label="Researcher: " />
-                    </div>
-                    <div class="col-8 exactFit">
-                      <q-field :label="user"/>
-                    </div>
-                  </div>
-                </div>
-                <q-card-separator v-if="tindex != allTeams.length-1" class="q-mt-sm"/>
-              </div>
-            </q-card-main>
-          </q-collapsible>
-        </q-card>
+        <card-teams-invitations @teamDeleted="refresh()"/>
       </q-tab-pane>
       <!-- Tab Studies -->
       <q-tab-pane name="tab-studies">
@@ -94,49 +59,8 @@
           </q-collapsible>
         </q-card>
       </q-tab-pane>
-      <!-- Tab Users -->
       <q-tab-pane name="tab-users">
-        <!-- List of Users  -->
-        <q-card class="q-ma-lg" v-show="allUsers.length != 0">
-          <q-collapsible label="All Users &amp; Details:">
-            <q-card-separator/>
-            <q-card-main>
-              <div v-for="(user, index) in allUsers" :key="index">
-                <div class="row">
-                  <div class="col-7"></div>
-                  <div class="col-5">
-                    <q-btn class="float-right" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-3">
-                    <q-field class="text-weight-bolder" label="User Key: " />
-                  </div>
-                  <div class="col-9 exactFit">
-                    <q-field class="text-weight-bolder" :label="user._key"/>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-3">
-                    <q-field class="text-weight-bolder" label="Role: " />
-                  </div>
-                  <div class="col-9 exactFit">
-                    <q-field :label="user.role"/>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-3">
-                    <q-field class="text-weight-bolder" label="Name: " />
-                  </div>
-                  <div class="col-9 exactFit">
-                    <q-field :label="user.email"/>
-                  </div>
-                </div>
-                <q-card-separator v-if="index != allUsers.length-1" class="q-mt-sm q-mb-sm"/>
-              </div>
-            </q-card-main>
-          </q-collapsible>
-        </q-card>
+          <card-users :users="allUsers" @userDeleted="getAllUsers()"/>
       </q-tab-pane>
 
       <q-tab-pane name="tab-tester">
@@ -158,6 +82,7 @@ import { date } from 'quasar'
 import TableAuditLog from '../components/TableAuditLog'
 import CardNewTeam from '../components/CardNewTeam'
 import CardTeamsInvitations from '../components/CardTeamsInvitations'
+import CardUsers from '../components/CardUsers'
 import CardEmailTester from '../components/CardEmailTester'
 
 export default {
@@ -166,11 +91,11 @@ export default {
     TableAuditLog,
     CardNewTeam,
     CardTeamsInvitations,
+    CardUsers,
     CardEmailTester
   },
   data () {
     return {
-      allTeams: [],
       teamMembers: [],
       allStudies: [],
       allUsers: []
@@ -184,23 +109,8 @@ export default {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
     },
     async refresh () {
-      this.getTeams()
       this.getAllStudies()
       this.getAllUsers()
-    },
-    async getTeams () {
-      try {
-        this.allTeams = await API.getTeams()
-        for (let i = 0; i < this.allTeams.length; i++) {
-          this.teamMembers[i] = this.allTeams[i].researchersKeys
-        }
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot retrieve teams list',
-          icon: 'report_problem'
-        })
-      }
     },
     async getAllStudies () {
       try {
@@ -220,39 +130,6 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot retrieve users list',
-          icon: 'report_problem'
-        })
-      }
-    },
-    // Remove USER from Db
-    async removeTeamUser (tindex, uindex) {
-      try {
-        await this.$q.dialog({
-          title: 'Remove User',
-          color: 'warning',
-          message: 'You are removing USER ' + this.allTeams[tindex].researchersKeys[uindex] + ' from TEAM ' + this.allTeams[tindex].name + '. Would you like to continue?',
-          ok: 'Yes, remove User: ' + this.allTeams[tindex].researchersKeys[uindex],
-          cancel: 'Cancel'
-        })
-        this.removeUserFromTeamDb(tindex, uindex)
-      } catch (error) {
-        this.$q.notify('Cancelling Removing User ' + this.allTeams[tindex].researchersKeys[uindex])
-      }
-    },
-    async removeUserFromTeamDb (tindex, uindex) {
-      let userRemoved = {
-        teamKey: this.allTeams[tindex]._key,
-        userKey: this.allTeams[tindex].researchersKeys[uindex]
-      }
-      try {
-        await API.removeUserFromTeam(userRemoved)
-        this.allTeams.splice(tindex, 1)
-        this.$q.notify('User ' + userRemoved.userKey + ' has been removed from Team ' + userRemoved.teamKey)
-        this.getTeams()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot remove User ' + userRemoved.userKey + ' from Team ' + this.allTeams[tindex].name,
           icon: 'report_problem'
         })
       }
@@ -286,44 +163,6 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot delete study ' + study.generalities.title,
-          icon: 'report_problem'
-        })
-      }
-    },
-    // Delete Users from Db
-    async deleteUser (index) {
-      let user = this.allUsers[index]
-      try {
-        await this.$q.dialog({
-          title: 'Delete User',
-          color: 'warning',
-          message: 'You are deleting ' + user.role + ' ' + user.email + ' from the DB. This cannot be undone. Would you like to continue?',
-          ok: 'Yes, delete User: ' + user.email,
-          cancel: 'Cancel'
-        })
-        this.deleteUserFromDb(user, index)
-      } catch (error) {
-        this.$q.notify('Cancelling Deletion of User ' + user.email)
-      }
-    },
-    async deleteUserFromDb (user, index) {
-      try {
-        if (user.role === 'participant') {
-          // Get participant Key
-          let partKey = await API.getOneParticipant(user._key)
-          await API.deleteParticipant(partKey._key)
-        } else {
-          await API.deleteUser(user._key)
-        }
-        this.allUsers.splice(index, 1)
-        this.$q.notify('User ' + user.email + ' Deleted')
-        this.getAllUsers()
-        this.getTeams()
-        this.getAllParticipants()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot delete user ' + user.email,
           icon: 'report_problem'
         })
       }

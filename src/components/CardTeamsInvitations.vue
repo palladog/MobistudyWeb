@@ -43,7 +43,11 @@ import { date } from 'quasar'
 
 export default {
   name: 'CardTeamsInvitations',
-  props: [ 'teams' ],
+  data () {
+    return {
+      teams: []
+    }
+  },
   computed: {
     codeExpired () {
       let expired = []
@@ -59,14 +63,29 @@ export default {
       return expired
     }
   },
+  created () {
+    this.getTeams()
+  },
   methods: {
+    async getTeams () {
+      try {
+        this.teams = await API.getTeams()
+      } catch (err) {
+        console.error(err)
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve teams list',
+          icon: 'report_problem'
+        })
+      }
+    },
     niceDate (timeStamp) {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
     },
     async generateCode (key) {
       try {
         await API.generateTeamCode(key)
-        this.$emit('codeGenerated', key)
+        this.getTeams()
       } catch (err) {
         this.$q.notify({
           color: 'negative',
@@ -108,6 +127,7 @@ export default {
           await API.deleteTeam(this.teams[index]._key)
           this.teams.splice(index, 1)
           this.$q.notify('Team ' + teamName + ' Deleted')
+          this.getTeams()
           this.$emit('teamDeleted', this.teams[index]._key)
         } catch (err) {
           this.$q.notify({
