@@ -15,76 +15,8 @@
 
       <!-- Tab Teams -->
       <q-tab-pane name="tab-teams">
-        <!-- Create New Teams -->
-        <q-card class="q-ma-lg">
-          <q-card-title>
-            Create new team
-          </q-card-title>
-          <q-card-main>
-            <div class="row">
-              <div class="col-10 self-center">
-                <q-input v-model="teamName" class="col-8 self-center" float-label="Team name" type="text" />
-              </div>
-              <div class="col-2 self-center">
-                <q-btn label="Add Team" color="warning" @click="createTeamMsg()"/>
-              </div>
-            </div>
-          </q-card-main>
-        </q-card>
-        <!-- Teams and Invitation Codes -->
-        <q-card class="q-ma-lg" v-show="allTeams.length != 0">
-          <q-collapsible label="Teams &amp; Invitation Codes">
-            <q-card-separator/>
-            <q-card-main>
-              <div v-for="(team, index) in allTeams" :key="index" class="q-mt-sm">
-                <div class="row" v-show="codeExpired[index]">
-                  <p><font color="red"> The Invitation Code for {{team.name}} has EXPIRED. </font></p>
-                </div>
-                <div class="row">
-                  <div class="col-2"></div>
-                  <div class="col-10">
-                    <q-btn class="float-right" :label="teamLabel + team.name" color="negative" icon="remove" @click="deleteTeam(index)"/>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-3">
-                    <q-field label="Team Name: " />
-                  </div>
-                  <div class="col-9 exactFit"> {{team.name}} </div>
-                </div>
-                <div class="row q-mt-sm">
-                  <div class="col-3">
-                    <q-field label="Team Key: " />
-                  </div>
-                  <div class="col-9 exactFit">
-                    {{team._key}}
-                  </div>
-                </div>
-                <div class="row q-mt-sm">
-                  <div class="col-3">
-                    <q-field label="Code: " />
-                  </div>
-                  <div class="col-9 exactFit">
-                    <q-input type="textarea" :value="team.invitationCode" ref="invCode" readonly/>
-                  </div>
-                </div>
-                <div class="row q-mt-sm">
-                  <div class="col-3">
-                    <q-field label="Expiry date: " />
-                  </div>
-                  <div class="col-9 exactFit">
-                    {{ niceDate(team.invitationExpiry) }}
-                  </div>
-                </div>
-                <div class="row q-mt-sm justify-between">
-                  <q-btn :label="generateLabel + team.name" color="warning" @click="generateCode(team._key)"/>
-                  <q-btn color="primary" round sm icon="file_copy" @click="copyCode(index)"/>
-                </div>
-                <q-card-separator v-if="index != allTeams.length-1" class="q-mt-md"/>
-              </div>
-            </q-card-main>
-          </q-collapsible>
-        </q-card>
+        <card-new-team @newTeam="getTeams()"/>
+        <card-teams-invitations :teams="allTeams" @teamDeleted="refresh()" @codeGenerated="getTeams()"/>
         <!-- Teams and their Researchers -->
         <q-card class="q-ma-lg" v-show="allTeams.length != 0">
           <q-collapsible label="Teams &amp; Researchers:">
@@ -261,49 +193,45 @@ div .exactFit {
 import API from '../data/API.js'
 import { date } from 'quasar'
 import TableAuditLog from '../components/TableAuditLog'
+import CardNewTeam from '../components/CardNewTeam'
+import CardTeamsInvitations from '../components/CardTeamsInvitations'
 import CardEmailTester from '../components/CardEmailTester'
 
 export default {
   name: 'AdminHomePage',
   components: {
     TableAuditLog,
+    CardNewTeam,
+    CardTeamsInvitations,
     CardEmailTester
   },
   data () {
     return {
-      codeExpired: [],
-      teamName: '',
       allTeams: [],
       teamMembers: [],
-      teamLabel: 'Delete team: ',
-      generateLabel: 'Generate New Code for ',
       allStudies: [],
       allUsers: [],
       allParticipants: []
     }
   },
   async created () {
-    this.getTeams()
-    this.getAllStudies()
-    this.getAllUsers()
-    this.getAllParticipants()
+    this.refresh()
   },
   methods: {
     niceDate (timeStamp) {
       return date.formatDate(timeStamp, 'DD/MM/YYYY')
+    },
+    async refresh () {
+      this.getTeams()
+      this.getAllStudies()
+      this.getAllUsers()
+      this.getAllParticipants()
     },
     async getTeams () {
       try {
         this.allTeams = await API.getTeams()
         for (let i = 0; i < this.allTeams.length; i++) {
           this.teamMembers[i] = this.allTeams[i].researchersKeys
-          let invitationExpiry = this.allTeams[i].invitationExpiry
-          // See if invitation date has expired
-          if (Date.now() > new Date(invitationExpiry)) {
-            this.codeExpired.push(true)
-          } else {
-            this.codeExpired.push(false)
-          }
         }
       } catch (err) {
         this.$q.notify({
@@ -342,117 +270,6 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot retrieve participants list',
-          icon: 'report_problem'
-        })
-      }
-    },
-    // Teams
-    async createTeamMsg () {
-      if (this.teamName === '') {
-        this.$q.notify({
-          color: 'negative',
-          message: 'The team name is missing. Please add it in to order to create a Team.',
-          icon: 'report_problem'
-        })
-      } else {
-        try {
-          await this.$q.dialog({
-            title: 'Create Team',
-            color: 'warning',
-            message: 'You are creating a new TEAM named ' + this.teamName + '. Would you like to continue?',
-            ok: 'Yes, create Team ' + this.teamName,
-            cancel: 'Cancel'
-          })
-          this.createTeam()
-        } catch (err) {
-          this.$q.notify('Cancelling Creation of New Team ' + this.teamName)
-        }
-      }
-    },
-    async createTeam () {
-      try {
-        await API.createTeam(this.teamName)
-        this.$q.notify({
-          color: 'positive',
-          message: 'Team ' + this.teamName + ' created!',
-          icon: 'thumb_up'
-        })
-        this.teamName = ''
-        this.getTeams()
-      } catch (err) {
-        if (err.response && err.response.status === 409) {
-          this.$q.notify({
-            color: 'negative',
-            message: 'A team with the same name: ' + this.teamName + ' already exists.',
-            icon: 'report_problem'
-          })
-        } else {
-          this.$q.notify({
-            color: 'negative',
-            message: 'Cannot create team ' + this.teamName,
-            icon: 'report_problem'
-          })
-        }
-      }
-    },
-    async generateCode (key) {
-      try {
-        await API.generateTeamCode(key)
-        this.codeExpired = []
-        this.getTeams()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot generate invitation code',
-          icon: 'report_problem'
-        })
-      }
-    },
-    copyCode (index) {
-      try {
-        this.$refs.invCode[index].select()
-        document.execCommand('copy')
-        this.$q.notify({
-          color: 'primary',
-          position: 'bottom',
-          message: 'Invitation code copied to clipboard'
-        })
-      } catch (error) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot copy invitation code',
-          icon: 'report_problem'
-        })
-      }
-    },
-    // Delete TEAM from Db
-    async deleteTeam (index) {
-      try {
-        await this.$q.dialog({
-          title: 'Delete Team',
-          color: 'warning',
-          message: 'You are deleting TEAM ' + this.allTeams[index].name + ' from the DB. This will also delete any associated studies and the corresponding data. This cannot be undone. Would you like to continue?',
-          ok: 'Yes, delete Team: ' + this.allTeams[index].name,
-          cancel: 'Cancel'
-        })
-        this.deleteTeamFromDb(index)
-      } catch (err) {
-        this.$q.notify('Cancelling Deletion of Team ' + this.allTeams[index].name)
-      }
-    },
-    async deleteTeamFromDb (index) {
-      let teamName = this.allTeams[index].name
-      try {
-        await API.deleteTeam(this.allTeams[index]._key)
-        this.allTeams.splice(index, 1)
-        this.$q.notify('Team ' + teamName + ' Deleted')
-        this.getTeams()
-        this.getAllStudies()
-        this.getAllParticipants()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot delete team ' + teamName,
           icon: 'report_problem'
         })
       }
