@@ -24,7 +24,7 @@ import API from '../data/API'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {
-  name: 'EmailTester',
+  name: 'CardEmailTester',
   data () {
     return {
       emailAddress: '',
