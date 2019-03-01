@@ -60,7 +60,7 @@
         </q-card>
       </q-tab-pane>
       <q-tab-pane name="tab-users">
-          <card-users :users="allUsers" @userDeleted="getAllUsers()"/>
+          <card-users />
       </q-tab-pane>
 
       <q-tab-pane name="tab-tester">
@@ -97,8 +97,7 @@ export default {
   data () {
     return {
       teamMembers: [],
-      allStudies: [],
-      allUsers: []
+      allStudies: []
     }
   },
   async created () {
