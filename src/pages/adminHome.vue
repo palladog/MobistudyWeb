@@ -246,7 +246,7 @@
 
       <q-tab-pane name="tab-tester">
         <h3>Testing tools</h3>
-        <q-card-email-tester/>
+        <card-email-tester/>
       </q-tab-pane>
     </q-tabs>
   </q-page>
@@ -261,13 +261,13 @@ div .exactFit {
 import API from '../data/API.js'
 import { date } from 'quasar'
 import TableAuditLog from '../components/TableAuditLog'
-import QCardEmailTester from '../components/QCardEmailTester'
+import CardEmailTester from '../components/CardEmailTester'
 
 export default {
   name: 'AdminHomePage',
   components: {
     TableAuditLog,
-    QCardEmailTester
+    CardEmailTester
   },
   data () {
     return {
