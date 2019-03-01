@@ -11,7 +11,7 @@
       </q-field>
     </q-card-main>
     <q-card-actions>
-      <q-btn label="Send" color="primary" @click="createTeam"/>
+      <q-btn label="Create" color="primary" @click="createTeam"/>
     </q-card-actions>
   </q-card>
 </template>

@@ -60,6 +60,7 @@ export default {
       this.$refs.invitations.getTeams()
     },
     async refreshStudies () {
+      console.log(this.$refs)
       this.$refs.studies.geStudies()
     }
   }

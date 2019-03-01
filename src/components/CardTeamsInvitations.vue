@@ -113,7 +113,6 @@ export default {
     },
     // Delete TEAM from Db
     async deleteTeam (index) {
-      console.log('deleting ', index)
       try {
         await this.$q.dialog({
           title: 'Delete Team',
@@ -138,7 +137,6 @@ export default {
         }
       } catch (n) {
         // nothing to do here
-        console.log(n)
       }
     }
   }

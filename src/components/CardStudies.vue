@@ -58,9 +58,9 @@ export default {
         await this.$q.dialog({
           title: 'Deleting Study',
           color: 'warning',
-          message: 'You are deleting STUDY ' + study.generalities.title + ' from the DB. This will affect participants of that study ' +
+          message: 'You are deleting the study ' + study.generalities.title + ' from the DB. This will affect participants of that study ' +
           ' and they will no longer be associated to that study.This cannot be undone. Would you like to continue?',
-          ok: 'Yes, delete Study: ' + study.generalities.title,
+          ok: 'Yes, delete Study',
           cancel: 'Cancel'
         })
         try {
@@ -75,8 +75,8 @@ export default {
             icon: 'report_problem'
           })
         }
-      } catch (error) {
-        this.$q.notify('Cancelling Deletion of Study ' + study.title)
+      } catch (n) {
+        // nothing to do here
       }
     }
   }
