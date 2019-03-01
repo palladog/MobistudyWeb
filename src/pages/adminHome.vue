@@ -110,7 +110,6 @@ export default {
     },
     async refresh () {
       this.getAllStudies()
-      this.getAllUsers()
     },
     async getAllStudies () {
       try {
@@ -119,17 +118,6 @@ export default {
         this.$q.notify({
           color: 'negative',
           message: 'Cannot retrieve studies list',
-          icon: 'report_problem'
-        })
-      }
-    },
-    async getAllUsers () {
-      try {
-        this.allUsers = await API.getAllDbUsers()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot retrieve users list',
           icon: 'report_problem'
         })
       }

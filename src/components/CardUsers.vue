@@ -46,8 +46,26 @@ import API from '../data/API'
 
 export default {
   name: 'CardUsers',
-  props: [ 'users' ],
+  data () {
+    return {
+      users: []
+    }
+  },
+  created () {
+    this.getUsers()
+  },
   methods: {
+    async getUsers () {
+      try {
+        this.users = await API.getAllDbUsers()
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve users list',
+          icon: 'report_problem'
+        })
+      }
+    },
     // Delete Users from Db
     async deleteUser (index) {
       let user = this.users[index]
@@ -69,7 +87,7 @@ export default {
           }
           this.users.splice(index, 1)
           this.$q.notify('User ' + user.email + ' Deleted')
-          this.$emit('userDeleted', user)
+          this.getUsers()
         } catch (err) {
           this.$q.notify({
             color: 'negative',
