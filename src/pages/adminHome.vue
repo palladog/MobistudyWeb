@@ -60,6 +60,7 @@ export default {
       this.$refs.invitations.getTeams()
     },
     async refreshStudies () {
+      // FIXME: sometimes tudies is undefined! probably because of lazy loading?
       console.log(this.$refs)
       this.$refs.studies.geStudies()
     }
