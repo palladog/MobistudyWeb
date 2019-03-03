@@ -57,12 +57,10 @@ export default {
   },
   methods: {
     async refreshTeams () {
-      this.$refs.invitations.getTeams()
+      if (this.$refs.invitations) this.$refs.invitations.getTeams()
     },
     async refreshStudies () {
-      // FIXME: sometimes tudies is undefined! probably because of lazy loading?
-      console.log(this.$refs)
-      this.$refs.studies.geStudies()
+      if (this.$refs.studies) this.$refs.studies.geStudies()
     }
   }
 }
