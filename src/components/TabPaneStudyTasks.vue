@@ -36,7 +36,7 @@
           <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Aggregated:" helper="If aggregated, the data will be summed.">
             <q-checkbox color="secondary" v-model="task.aggregated" />
           </q-field>
-          <q-field v-if="task.type === 'dataQuery'" label="Bucket:" helper="You can sum the data into buckets.">
+          <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Bucket:" helper="You can sum the data into buckets.">
             <q-select color="secondary" v-model="task.bucket" :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated"/>
           </q-field>
           <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
