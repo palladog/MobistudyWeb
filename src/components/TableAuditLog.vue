@@ -63,7 +63,10 @@ import { date } from 'quasar'
 
 export default {
   name: 'TableAuditLog',
-  props: ['studyKey', 'taskId'], // if set to -1, means that logs shouldn't be loaded until they are set a different value
+  props: [
+    'studyKey', // if set to -1, means that logs shouldn't be loaded until they are set a different value
+    'taskId'
+  ],
   data () {
     return {
       logs: [],
