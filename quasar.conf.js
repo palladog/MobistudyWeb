@@ -31,6 +31,10 @@ module.exports = function (ctx) {
           loader: 'eslint-loader',
           exclude: /(node_modules|quasar)/
         })
+      },
+      env: {
+        WEB_VERSION: JSON.stringify(require('./package.json').version),
+        API_ENDPOINT: JSON.stringify('http://api.mobistudytest.org/api')
       }
     },
     devServer: {
