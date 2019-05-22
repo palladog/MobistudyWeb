@@ -25,3 +25,17 @@ The code is written mostly in ES6 and uses ES6 modules, please be consistent.
 ## Deploy it
 
 Run `quasar build`. This will generate the material UI interfaces and make it available under `./dist/`
+
+
+## Docker
+
+Build the docker instance:
+
+    docker build -t mobistudyweb .
+
+Then run it with:
+
+    docker run -d -p 80:80 --name mobistudyweb mobistudyweb
+
+This will launch an ngnix instance that serves the static content, but not the API.
+You will need the API running as well!
