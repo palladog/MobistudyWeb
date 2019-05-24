@@ -34,7 +34,7 @@ module.exports = function (ctx) {
       },
       env: {
         WEB_VERSION: JSON.stringify(require('./package.json').version),
-        API_ENDPOINT: JSON.stringify('http://api.mobistudytest.org/api')
+        API_ENDPOINT: JSON.stringify('/api') // you can specify the full address here if served on another domain
       }
     },
     devServer: {
@@ -42,8 +42,7 @@ module.exports = function (ctx) {
       // https: true,
       port: 8181,
       proxy: {
-        // proxy all requests starting with /api to jsonplaceholder
-        '/api': {
+        '/api': { // <- this must be the same as API_ENDPOINT
           target: 'http://127.0.0.1:3000',
           changeOrigin: true
         }
