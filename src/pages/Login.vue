@@ -3,8 +3,8 @@
     <q-page-container>
       <q-page class="flex flex-center">
         <q-card class="q-pa-sm loginBox">
-          <q-card-title>Sign In</q-card-title>
-          <q-card-main>
+          <q-card-section><div class="text-h6">Sign In</div></q-card-section>
+          <q-card-section>
             <form autocomplete="on">
               <q-field :error="$v.email.$error" error-label="An email address is required.">
                 <q-input v-model.trim="$v.email.$model" type="email" float-label="Email" placeholder="e.g. email@email.com"
@@ -14,7 +14,7 @@
                 <q-input v-model.trim="$v.password.$model" type="password" float-label="Password" autocomplete="on" @blur="$v.password.$touch" @keyup.enter="login()"/>
               </q-field>
             </form>
-          </q-card-main>
+          </q-card-section>
           <q-card-actions>
             <q-btn label="login" color="primary" @click="login()"/>
             <q-btn label="New User" color="secondary" @click="newUser()"/>

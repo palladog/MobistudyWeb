@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-layout-header>
+    <q-header>
       <q-toolbar color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'" >
         <q-toolbar-title>
           MobiStudy
@@ -9,7 +9,7 @@
         <q-btn flat round dense icon="exit_to_app" @click="logout()" aria-label="Logout" />
       </q-toolbar>
 
-    </q-layout-header>
+    </q-header>
     <q-page-container>
       <router-view />
     </q-page-container>

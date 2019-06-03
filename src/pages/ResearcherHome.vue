@@ -1,30 +1,35 @@
 <template>
   <q-page>
     <q-card class="q-ma-lg q-pa-lg">
-      <q-card-title  v-show="teamsListOptions.length === 0">Teams
-        <span slot="subtitle">You are not a member of any team. Please contact your mobiStudy admin to be added to one. </span>
-      </q-card-title>
-      <q-card-title  v-show="teamsListOptions.length > 0">Teams
-        <span slot="subtitle">You are a member of the following team(s). Please select one from the List to continue: </span>
-      </q-card-title>
-      <q-card-separator />
-      <q-card-main v-show="teamsListOptions.length > 0">
+      <q-card-section v-show="teamsListOptions.length === 0">
+        <div class="text-h6">Teams</div>
+      </q-card-section>
+      <q-card-section v-show="teamsListOptions.length === 0">
+        <div class="text-subtitle">You are not a member of any team. Please contact your Mobistudy admin to be added to one.</div>
+      </q-card-section>
+      <q-card-section v-show="teamsListOptions.length > 0">
+        <div class="text-subtitle">You are a member of the following team(s). Please select one from the List to continue:</div>
         <div class="row">
-          <q-select v-model="selectedTeamValue" :options="teamsListOptions" @input="selectTeam()"/>
+          <q-select emit-value map-options v-model="selectedTeamValue" :options="teamsListOptions" @input="selectTeam()"/>
         </div>
-      </q-card-main>
-      <q-card-separator />
+      </q-card-section>
+      <q-separator />
       <q-card-actions>
         <q-btn color="positive" label="Add me to a team" @click="promptAddTeam()"/>
       </q-card-actions>
     </q-card>
 
     <q-card class="q-ma-lg q-pa-lg" v-show="teamsListOptions.length > 0">
-      <q-card-title>Studies
-        <span slot="subtitle">List of Studies for team {{ this.selectedTeamLabel }}</span>
-      </q-card-title>
-      <q-card-separator />
-      <q-card-main>
+      <q-card-section>
+        <div class="text-h6">Studies</div>
+      </q-card-section>
+      <q-card-section>
+        <div class="text-subtitle">List of Studies for team {{ this.selectedTeamLabel }}</div>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-section>
         <div v-show="unpublishedStudies.length > 0">
           <p>
             Draft studies (not published):
@@ -42,7 +47,7 @@
         <div class ="row q-mt-lg">
           <q-btn :label="createStudyLabel" color="positive" @click="createNewStudy()"/>
         </div>
-      </q-card-main>
+      </q-card-section>
     </q-card>
   </q-page>
 </template>
