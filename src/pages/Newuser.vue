@@ -3,11 +3,12 @@
     <q-page-container>
       <q-page class="flex flex-center">
         <q-card class="q-pa-lg newUserBox">
-          <q-card-title>User Registration
-            <span slot="subtitle">Only available to researchers</span>
-          </q-card-title>
-          <q-card-separator />
-          <q-card-main>
+          <q-card-section>
+            <div class="text-h6">User Registration</div>
+            <div class="text-subtitle">Only available to researchers</div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
             <q-field label="Email" helper="Enter your email." :error="$v.email.$error" error-label="An email address is required.">
               <q-input v-model.trim="$v.email.$model" type="email" placeholder=" e.g. email@email.com" @blur="$v.email.$touch"/>
             </q-field>
@@ -27,7 +28,7 @@
                 <q-btn label="Register" color="primary" @click="registerUser"/>
               </div>
             </div>
-          </q-card-main>
+          </q-card-section>
         </q-card>
       </q-page>
     </q-page-container>
