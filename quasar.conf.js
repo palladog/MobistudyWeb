@@ -94,9 +94,15 @@ module.exports = function (ctx) {
     },
 
     devServer: {
+      open: true, // opens browser window automatically,
       // https: true,
-      // port: 8080,
-      open: true // opens browser window automatically
+      port: 8181,
+      proxy: {
+        '/api': { // <- this must be the same as API_ENDPOINT
+          target: 'http://127.0.0.1:3000',
+          changeOrigin: true
+        }
+      }
     },
 
     // animations: 'all', // --- includes all animations
