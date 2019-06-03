@@ -5,6 +5,7 @@ module.exports = function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
+      'axios', 'vuelidate'
     ],
 
     css: [
@@ -24,19 +25,40 @@ module.exports = function (ctx) {
       // all: true, // --- includes everything; for dev only!
 
       components: [
-        'QLayout',
-        'QHeader',
+        'QBtn',
+        'QBtnDropdown',
+        'QCard',
+        'QCardActions',
+        'QCardSection',
+        'QCheckbox',
+        'QDate',
+        'QDialog',
         'QDrawer',
+        'QExpansionItem',
+        'QField',
+        'QHeader',
+        'QIcon',
+        'QInput',
+        'QItem',
+        'QItemLabel',
+        'QItemSection',
+        'QLayout',
+        'QList',
+        'QOptionGroup',
         'QPageContainer',
         'QPage',
+        'QRadio',
+        'QSelect',
+        'QSeparator',
+        'QSpinner',
+        'QTab',
+        'QTabs',
+        'QTabPanel',
+        'QTable',
+        'QTd',
         'QToolbar',
         'QToolbarTitle',
-        'QBtn',
-        'QIcon',
-        'QList',
-        'QItem',
-        'QItemSection',
-        'QItemLabel'
+        'QRouteTab'
       ],
 
       directives: [
@@ -45,7 +67,7 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Notify'
+        'Notify', 'Dialog'
       ]
 
       // iconSet: 'ionicons-v4'
