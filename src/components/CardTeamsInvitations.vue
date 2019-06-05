@@ -1,39 +1,36 @@
 <template>
   <q-card>
-    <q-card-title>
-      Teams &amp; Invitation Codes
-    </q-card-title>
-    <q-card-main>
+    <q-card-section> <div class="text-h6"> Teams &amp; Invitation Codes </div> </q-card-section>
+    <q-card-section>
       <div v-for="(team, index) in teams" :key="index" class="q-mt-sm">
-        <div class="row">
-          <div class="col-2"></div>
-          <div class="col-10">
-            <q-btn class="float-right" label="Delete team" color="negative" icon="remove" @click="deleteTeam(index)"/>
-          </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold">Team Name: </div>
+          <div class="col">{{team.name}}</div>
         </div>
-        <q-field label="Team Name: ">
-          <div class="col-9 exactFit"> {{team.name}} </div>
-        </q-field>
-        <q-field label="Team Key: ">
-          <div class="col-9 exactFit">
-            {{team._key}}
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold">Team Key: </div>
+          <div class="col">{{team._key}}</div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold">Code: </div>
+          <div class="col">
+            <q-input type="textarea" :error="codeExpired[index]" error-message="This invitation code has EXPIRED" :value="team.invitationCode" ref="invCode" readonly/>
           </div>
-        </q-field>
-        <q-field label="Code: " :error="codeExpired[index]" error-label="This invitation code has EXPIRED.">
-          <q-input type="textarea" :value="team.invitationCode" ref="invCode" readonly/>
-        </q-field>
-        <q-field label="Expiry date: ">
-          <div class="col-9 exactFit">
+          <div class="q-ml-sm"><q-btn color="primary" round sm icon="file_copy" @click="copyCode(index)"/></div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold">Expiry date: </div>
+          <div class="col">
             {{ niceDate(team.invitationExpiry) }}
           </div>
-        </q-field>
-        <div class="row q-mt-sm justify-between">
-          <q-btn label="Generate new invitation code" color="warning" @click="generateCode(team._key)"/>
-          <q-btn color="primary" round sm icon="file_copy" @click="copyCode(index)"/>
         </div>
-        <q-card-separator v-if="index != teams.length-1" class="q-mt-md"/>
+        <div class="row q-mt-sm justify-between">
+          <q-btn label="Generate new invitation code" color="accent" @click="generateCode(team._key)"/>
+          <q-btn class="float-right" label="Delete team" color="negative" icon="remove" @click="deleteTeam(index)"/>
+        </div>
+        <q-separator v-if="index != teams.length-1" class="q-mt-md"/>
       </div>
-    </q-card-main>
+    </q-card-section>
   </q-card>
 </template>
 
@@ -113,31 +110,29 @@ export default {
     },
     // Delete TEAM from Db
     async deleteTeam (index) {
-      try {
-        await this.$q.dialog({
-          title: 'Delete Team',
-          color: 'warning',
-          message: 'You are deleting team ' + this.teams[index].name + ' from the system. This will also delete all associated studies and corresponding data. This cannot be undone. Would you like to continue?',
-          ok: 'Yes, delete Team: ' + this.teams[index].name,
-          cancel: 'Cancel'
-        })
+      this.$q.dialog({
+        title: 'Delete Team',
+        color: 'warning',
+        message: 'You are deleting team ' + this.teams[index].name + ' from the system. This will also delete all associated studies and corresponding data. This cannot be undone. Would you like to continue?',
+        ok: 'Yes, delete Team: ' + this.teams[index].name,
+        cancel: 'Cancel'
+      }).onOk(async () => {
         let teamName = this.teams[index].name
+        let teamKey = this.teams[index]._key
         try {
-          await API.deleteTeam(this.teams[index]._key)
-          this.teams.splice(index, 1)
+          await API.deleteTeam(teamKey)
           this.$q.notify('Team ' + teamName + ' Deleted')
-          this.getTeams()
-          this.$emit('teamDeleted', this.teams[index]._key)
         } catch (err) {
+          console.error(err)
           this.$q.notify({
             color: 'negative',
             message: 'Cannot delete team ' + teamName,
             icon: 'report_problem'
           })
         }
-      } catch (n) {
-        // nothing to do here
-      }
+        this.getTeams()
+        this.$emit('teamDeleted', teamKey)
+      })
     }
   }
 }

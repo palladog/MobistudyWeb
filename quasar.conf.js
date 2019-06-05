@@ -47,13 +47,16 @@ module.exports = function (ctx) {
         'QOptionGroup',
         'QPageContainer',
         'QPage',
+        'QPopupProxy',
         'QRadio',
         'QSelect',
         'QSeparator',
+        'QSpace',
         'QSpinner',
         'QTab',
         'QTabs',
         'QTabPanel',
+        'QTabPanels',
         'QTable',
         'QTd',
         'QToolbar',
@@ -62,7 +65,8 @@ module.exports = function (ctx) {
       ],
 
       directives: [
-        'Ripple'
+        'Ripple',
+        'ClosePopup'
       ],
 
       // Quasar plugins

@@ -1,28 +1,29 @@
 <template>
   <q-card>
-    <q-card-title>
-      Studies
-    </q-card-title>
-    <q-card-main>
+    <q-card-section> <div class="text-h6"> Studies </div> </q-card-section>
+    <q-card-section>
       <div v-for="(study, index) in studies" :key="index">
         <div class="row">
           <div class="col-7"></div>
           <div class="col-5">
-            <q-btn class="float-right" label="Delete Study from Db" color="negative" icon="remove" @click="deleteStudy(index)"/>
+            <q-btn class="float-right" label="Delete" color="negative" icon="remove" @click="deleteStudy(index)"/>
           </div>
         </div>
-        <q-field class="text-weight-bolder" label="Study Key: ">
-          {{study._key}}
-        </q-field>
-        <q-field class="text-weight-bolder" label="Title: ">
-          {{study.generalities.title}}
-        </q-field>
-        <q-field class="text-weight-bolder" label="TeamKey: ">
-          {{study.teamKey}}
-        </q-field>
-        <q-card-separator v-if="index != studies.length-1" class="q-mt-sm q-mb-sm"/>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> Study Key: </div>
+          <div class="col"> {{study._key}} </div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold">Title: </div>
+          <div class="col"> {{study.generalities.title}} </div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold">TeamKey: </div>
+          <div class="col"> {{study.teamKey}} </div>
+        </div>
+        <q-separator v-if="index != studies.length-1" class="q-mt-sm q-mb-sm"/>
       </div>
-    </q-card-main>
+    </q-card-section>
   </q-card>
 </template>
 
@@ -54,15 +55,14 @@ export default {
     // Delete STUDY from Db
     async deleteStudy (index) {
       let study = this.studies[index]
-      try {
-        await this.$q.dialog({
-          title: 'Deleting Study',
-          color: 'warning',
-          message: 'You are deleting the study ' + study.generalities.title + ' from the DB. This will affect participants of that study ' +
-          ' and they will no longer be associated to that study.This cannot be undone. Would you like to continue?',
-          ok: 'Yes, delete Study',
-          cancel: 'Cancel'
-        })
+      this.$q.dialog({
+        title: 'Deleting Study',
+        color: 'warning',
+        message: 'You are deleting the study ' + study.generalities.title + ' from the DB. This will affect participants of that study ' +
+        ' and they will no longer be associated to that study. This cannot be undone. Would you like to continue?',
+        ok: 'Yes, delete Study',
+        cancel: 'Cancel'
+      }).onOk(async () => {
         try {
           await API.deleteStudy(study._key)
           this.allUsers.splice(index, 1)
@@ -75,9 +75,7 @@ export default {
             icon: 'report_problem'
           })
         }
-      } catch (n) {
-        // nothing to do here
-      }
+      })
     }
   }
 }

@@ -2,14 +2,15 @@
 <template>
   <!-- Create New Teams -->
   <q-card>
-    <q-card-title>
-      Create new team
-    </q-card-title>
-    <q-card-main>
-      <q-field label="Team name" :error="$v.teamName.$error" error-label="A name is required.">
-        <q-input type="text" v-model="teamName" @blur="$v.teamName.$touch"/>
-      </q-field>
-    </q-card-main>
+    <q-card-section> <div class="text-h6"> Create new team </div> </q-card-section>
+    <q-card-section>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold">Team name: </div>
+        <div class="col">
+          <q-input type="text" v-model="teamName" @blur="$v.teamName.$touch" :error="$v.teamName.$error" error-message="A name is required"/>
+        </div>
+      </div>
+    </q-card-section>
     <q-card-actions>
       <q-btn label="Create" color="primary" @click="createTeam"/>
     </q-card-actions>
@@ -34,17 +35,15 @@ export default {
     async createTeam () {
       this.$v.teamName.$touch()
       if (this.$v.teamName.$error) {
-        this.$q.notify('Please correct the indicated fields.')
+        this.$q.notify('Please correct the indicated fields')
       } else {
-        try {
-          await this.$q.dialog({
-            title: 'Create Team',
-            color: 'warning',
-            message: 'You are creating a new team named "' + this.teamName + '". Would you like to continue?',
-            ok: 'Yes, create new team',
-            cancel: 'Cancel'
-          })
-
+        this.$q.dialog({
+          title: 'Create Team',
+          color: 'warning',
+          message: 'You are creating a new team named "' + this.teamName + '". Would you like to continue?',
+          ok: 'Yes, create new team',
+          cancel: 'Cancel'
+        }).onOk(async () => {
           try {
             await API.createTeam(this.teamName)
             this.$q.notify({
@@ -69,9 +68,7 @@ export default {
               })
             }
           }
-        } catch (err) {
-          this.$q.notify('Cancelling Creation of New Team')
-        }
+        })
       }
     }
   }

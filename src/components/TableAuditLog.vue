@@ -2,10 +2,10 @@
   <div>
     <q-table title="Audit logs" ref="table" color="primary" :data="logs" selection="none" :columns="columns" :filter="filter" row-key="_key" :pagination.sync="pagination"  @request="loadLogs" :loading="loading">
       <template slot="top-right">
-        <q-select :options="eventTypesOpts" v-model="filter.eventType" float-label="Event type" @input="updateFilters()" class="q-mr-sm"/>
-        <q-datetime v-model="filter.after" type="date" float-label="From date" clearable @input="updateFilters()" class="q-mr-sm"/>
-        <q-datetime v-model="filter.before" type="date" float-label="To date" clearable @input="updateFilters()" class="q-mr-sm"/>
-        <q-input v-model="filter.userEmail" type="text" float-label="User email" clearable @input="updateFilters()"/>
+        <q-select emit-value map-options :options="eventTypesOpts" v-model="filter.eventType" hint="Event" @input="updateFilters()" class="q-mr-sm"/>
+        <q-input v-model="filter.after" type="date" hint="From date" clearable @input="updateFilters()" class="q-mr-sm"/>
+        <q-input v-model="filter.before" type="date" hint="To date" clearable @input="updateFilters()" class="q-mr-sm"/>
+        <q-input v-model="filter.userEmail" type="text" hint="User email" clearable @input="updateFilters()" debounce="500"/>
       </template>
       <q-td slot="body-cell-timestamp" slot-scope="props" :props="props">
         {{ niceTimestamp(props.value) }}
@@ -14,46 +14,55 @@
         <q-btn v-if="props.value" flat icon="info"  @click="showLogData(props)"/>
       </q-td>
     </q-table>
-    <q-modal v-model="logDataModal" :content-css="{minWidth: '50vw'}">
-      <div class="q-pa-md">
-        <div v-if="logDataType == 'raw'">
-          <p class="q-title">
-            Data:
-          </p>
-          <pre>
-            {{ logDataModalContent }}
-          </pre>
-        </div>
-        <div v-if="logDataType == 'healthStoreData'">
-          <p class="q-title">
-            Data from Google Fit / HealthKit: {{ logDataModalContent.dataType }}
-          </p>
-          <div v-for="(hd, index) in logDataModalContent.healthData" :key="index" class="q-ma-md">
-            Start: {{ niceTimestamp(hd.startDate )}}<br />
-            End: {{ niceTimestamp(hd.endDate) }}<br />
-            Value: {{ hd.value }} {{ hd.unit }}
+    <q-dialog v-model="logDataModal" :content-css="{minWidth: '50vw'}">
+      <q-card>
+        <q-card-section class="row items-center">
+          <div class="text-h6">
+            <span v-if="logDataType == 'raw'">Data:</span>
+            <span v-if="logDataType == 'healthStoreData'"><span class="text-capitalize">{{ logDataModalContent.dataType }}</span> from Google Fit / HealthKit:</span>
+            <span v-if="logDataType == 'answers'">Answers:</span>
           </div>
-        </div>
-        <div v-if="logDataType == 'answers'">
-          <div v-for="(answer, index) in logDataModalContent.responses" :key="index">
-            <p class="q-title">
-              {{ answer.questionText }}
-            </p>
-            <p v-if="answer.questionType == 'freetext'">
-              {{ answer.answer }}
-            </p>
-            <p v-if="answer.questionType == 'singleChoice'">
-              {{ answer.answer.answerText }}
-            </p>
-            <div v-if="answer.questionType == 'multiChoice'">
-              <p v-for="(subanswer, index1) in answer.answer" :key="index1">
-                {{ subanswer.answerText }}
-              </p>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <div v-if="logDataType == 'raw'">
+            <pre>
+              {{ logDataModalContent }}
+            </pre>
+          </div>
+          <div v-if="logDataType == 'healthStoreData'">
+            <div v-for="(hd, index) in logDataModalContent.healthData" :key="index" class="q-ma-md">
+              Start: {{ niceTimestamp(hd.startDate )}}<br />
+              End: {{ niceTimestamp(hd.endDate) }}<br />
+              Value: {{ hd.value }} {{ hd.unit }}
             </div>
           </div>
-        </div>
+          <div v-if="logDataType == 'answers'">
+            <div v-for="(answer, index) in logDataModalContent.responses" :key="index">
+              <p class="q-title">
+                {{ answer.questionText }}
+              </p>
+              <p v-if="answer.questionType == 'freetext'">
+                {{ answer.answer }}
+              </p>
+              <p v-if="answer.questionType == 'singleChoice'">
+                {{ answer.answer.answerText }}
+              </p>
+              <div v-if="answer.questionType == 'multiChoice'">
+                <p v-for="(subanswer, index1) in answer.answer" :key="index1">
+                  {{ subanswer.answerText }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+      <div class="q-pa-md">
+
       </div>
-    </q-modal>
+    </q-dialog>
   </div>
 </template>
 
@@ -122,13 +131,13 @@ export default {
       })
     },
     async loadLogs (params) {
-      console.log('Loading logs...', this.studyKey)
+      console.log('Loading logs for study ' + this.studyKey, params)
       this.loading = true
       this.pagination = params.pagination
       try {
         let queryParams = {
           after: params.filter.after,
-          before: params.filter.before,
+          before: params.filter.before ? new Date(new Date(params.filter.before).getTime() + 24 * 60 * 60 * 1000).toISOString().substr(0, 10) : undefined, // the before must add 24 hours to include the whole day
           eventType: params.filter.eventType === 'all' ? undefined : params.filter.eventType,
           studyKey: params.filter.studyKey,
           taskId: params.filter.taskId,
