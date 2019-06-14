@@ -1,57 +1,55 @@
 <template>
   <div>
-    <q-tab-pane name="tab-tasks">
-      <q-card class="form-card">
-        <q-card-title>Tasks</q-card-title>
-        <q-card-main>
-          <q-btn-dropdown split label="Add task">
-            <!-- dropdown content -->
-            <q-list link>
-              <q-item v-close-overlay @click.native="addDT()">
-                <q-item-main>
-                  <q-item-tile label>Data query Task</q-item-tile>
-                </q-item-main>
-              </q-item>
-              <q-item v-close-overlay @click.native="addFormT()">
-                <q-item-main>
-                  <q-item-tile label>Form</q-item-tile>
-                </q-item-main>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-        </q-card-main>
-      </q-card>
-      <!-- Tasks -->
-      <q-card  v-for="(task, index) in tasks" :key="index" class="form-card">
-        <q-card-title v-if="task.type === 'dataQuery'">
-          Data Query Task
-        </q-card-title>
-        <q-card-title v-if="task.type === 'form'">
-          Form Task
-        </q-card-title>
-        <q-card-main>
-          <q-field v-if="task.type === 'dataQuery'" label="Data type:" helper="Please select the data type to be collected.">
-            <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery"/>
-          </q-field>
-          <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Aggregated:" helper="If aggregated, the data will be summed.">
-            <q-checkbox color="secondary" v-model="task.aggregated" />
-          </q-field>
-          <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Bucket:" helper="You can sum the data into buckets.">
-            <q-select color="secondary" v-model="task.bucket" :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated"/>
-          </q-field>
-          <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
-          <q-field v-if="task.type === 'form'" label="Form:" helper="Please select the form to be shown.">
-            <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList" @input="changeFormName(task, $event)"/>
-          </q-field>
-          <q-field class="q-mt-lg" label="Scheduling:" helper="Use the triangle to show or hide the information.">
-            <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)">
-              <scheduler v-model="task.scheduling"></scheduler>
-            </q-collapsible>
-          </q-field>
-          <q-btn label="Remove this task" color="negative" icon="remove" @click="removeTask(index)"/>
-        </q-card-main>
-      </q-card>
-    </q-tab-pane>
+    <q-card class="form-card">
+      <q-card-section>
+        <div class="text-h6"> Tasks </div>
+      </q-card-section>
+      <q-card-section>
+        <q-btn-dropdown split label="Add task">
+          <!-- dropdown content -->
+          <q-list link>
+            <q-item clickable v-close-popup @click.native="addDT()">
+              <q-item-section>
+                <q-item-label>Data query Task</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click.native="addFormT()">
+              <q-item-section>
+                <q-item-label>Form</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
+      </q-card-section>
+    </q-card>
+    <!-- Tasks -->
+    <q-card  v-for="(task, index) in value" :key="index" class="form-card">
+      <q-card-section>
+        <div class="text-h6" v-if="task.type === 'dataQuery'"> Data Query Task </div>
+        <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
+      </q-card-section>
+      <q-card-section>
+        <q-field v-if="task.type === 'dataQuery'" label="Data type:" helper="Please select the data type to be collected.">
+          <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery"/>
+        </q-field>
+        <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Aggregated:" helper="If aggregated, the data will be summed.">
+          <q-checkbox color="secondary" v-model="task.aggregated" />
+        </q-field>
+        <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Bucket:" helper="You can sum the data into buckets.">
+          <q-select color="secondary" v-model="task.bucket" :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated"/>
+        </q-field>
+        <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
+        <q-field v-if="task.type === 'form'" label="Form:" helper="Please select the form to be shown.">
+          <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList" @input="changeFormName(task, $event)"/>
+        </q-field>
+        <q-field class="q-mt-lg" label="Scheduling:" helper="Use the triangle to show or hide the information.">
+          <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)">
+            <scheduler v-model="task.scheduling"></scheduler>
+          </q-collapsible>
+        </q-field>
+        <q-btn label="Remove this task" color="negative" icon="remove" @click="removeTask(index)"/>
+      </q-card-section>
+    </q-card>
 
     <formbuilder ref="formbuilder" v-model="newForm" @simulateForm="openFormSimulator()"></formbuilder>
     <formsimulator ref="formsimulator" :form='newForm' @closed="openFormBuilder()"></formsimulator>
@@ -72,8 +70,8 @@ export default {
     'formbuilder': FormBuilder,
     'formsimulator': FormSimulator
   },
-  name: 'TabPaneStudyTasks',
-  props: [ 'tasks' ],
+  name: 'StudyDesignTasks',
+  props: [ 'value' ],
   data () {
     return {
       selectOptionsFormsList: [],
@@ -155,8 +153,8 @@ export default {
       return state
     },
     addDT () {
-      this.tasks.push({
-        id: this.tasks.length + 1,
+      this.value.push({
+        id: this.value.length + 1,
         type: 'dataQuery',
         scheduling: {
           startEvent: 'consent',
@@ -175,16 +173,16 @@ export default {
       })
     },
     removeTask (index) {
-      this.tasks.splice(index, 1)
+      this.value.splice(index, 1)
       // update task id
-      for (let i = 0; i < this.tasks.length; i++) {
+      for (let i = 0; i < this.value.length; i++) {
         // update the task ids after the one that has been removed
-        if (i >= index) this.tasks[i].id = this.tasks[i].id - 1
+        if (i >= index) this.value[i].id = this.value[i].id - 1
       }
     },
     addFormT () {
-      this.tasks.push({
-        id: this.tasks.length + 1,
+      this.value.push({
+        id: this.value.length + 1,
         type: 'form',
         scheduling: {
           startEvent: 'consent',

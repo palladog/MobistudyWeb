@@ -1,5 +1,5 @@
 <template>
-  <q-modal v-model="opened">
+  <q-dialog v-model="opened">
     <div class="q-pa-lg form-card">
       <h4>Form Simulator</h4>
       <div v-show="!finished">
@@ -40,7 +40,7 @@
       <q-btn v-show="finished" color="primary" @click="restart()" label="Restart" />
       <q-btn color="secondary" @click="close()" label="Close" />
     </div>
-  </q-modal>
+  </q-dialog>
 </template>
 
 <script>

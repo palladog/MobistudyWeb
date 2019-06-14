@@ -1,6 +1,6 @@
 <template>
   <q-page>
-    <q-toolbar color="secondary">
+    <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>
         Study Designer
       </q-toolbar-title>
@@ -8,28 +8,35 @@
       <q-btn class="q-mr-md" v-show="!studyDesign.publishedTS" color="warning" label="Save Draft" @click="saveProgress()"/>
       <q-btn class="float-right q-mr-md" v-show="!studyDesign.publishedTS" color="positive" label="Publish" @click="publish()"/>
       <q-btn class="float-right q-mr-md" v-show="studyDesign.publishedTS" disabled color="blue" label="Published"/>
-      <q-btn  class="float-right q-mr-md" round color="black" icon="close" @click="exitDesigner"/>
+      <q-btn class="float-right q-mr-md" round color="black" icon="close" @click="exitDesigner"/>
     </q-toolbar>
 
-    <q-tabs color="secondary">
-      <q-tab default slot="title" name="tab-gen" icon="subject" label="Generalities" :color="$v.studyDesign.generalities.$error? 'negative': ''"/>
-      <q-tab slot="title" name="tab-crit" icon="fingerprint" label="Inclusion Criteria"/>
-      <q-tab slot="title" name="tab-tasks" icon="list" label="Tasks"/>
-      <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent" :color="$v.studyDesign.consent.$error? 'negative': ''"/>
-
-      <tab-pane-study-generalities name="tab-gen" v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></tab-pane-study-generalities>
-      <tab-pane-study-criteria name="tab-crit" :criteria="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria" ></tab-pane-study-criteria>
-      <tab-pane-study-tasks name="tab-tasks" :tasks="studyDesign.tasks" :v="$v.studyDesign.tasks" ></tab-pane-study-tasks>
-      <tab-pane-study-consent name="tab-consent" :consent="studyDesign.consent" :tasks="studyDesign.tasks" :generalities="studyDesign.generalities" :v="$v.studyDesign.consent" ></tab-pane-study-consent>
+    <q-tabs v-model="studyTab" class="bg-secondary text-white shadow-2" align="justify">
+      <q-tab name="tab-gen" icon="subject" label="Generalities" :class="$v.studyDesign.generalities.$error? 'text-red': ''"/>
+      <q-tab name="tab-crit" icon="fingerprint" label="Inclusion Criteria"/>
+      <q-tab name="tab-tasks" icon="list" label="Tasks"/>
+      <!-- <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent" :color="$v.studyDesign.consent.$error? 'negative': ''"/> -->
     </q-tabs>
+    <q-tab-panels v-model="studyTab">
+      <q-tab-panel name="tab-gen">
+        <study-design-generalities v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></study-design-generalities>
+      </q-tab-panel>
+      <q-tab-panel name="tab-crit">
+        <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria"></study-design-criteria>
+      </q-tab-panel>
+      <q-tab-panel name="tab-tasks">
+        <study-design-tasks v-model="studyDesign.tasks"></study-design-tasks>
+      </q-tab-panel>
+    </q-tab-panels>
+
   </q-page>
 </template>
 
 <script>
-import TabPaneStudyGeneralities from '../components/TabPaneStudyGeneralities'
-import TabPaneStudyCriteria from '../components/TabPaneStudyCriteria'
-import TabPaneStudyTasks from '../components/TabPaneStudyTasks'
-import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
+import StudyDesignGeneralities from '../components/StudyDesignGeneralities'
+import StudyDesignCriteria from '../components/StudyDesignCriteria'
+import StudyDesignTasks from '../components/StudyDesignTasks'
+// import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
 import API from '../modules/API.js'
 import { required, requiredIf } from 'vuelidate/lib/validators'
 
@@ -37,14 +44,15 @@ export default {
   name: 'StudyDesignLayout',
   props: ['propStudyKey', 'propTeamKey'],
   components: {
-    'tab-pane-study-generalities': TabPaneStudyGeneralities,
-    'tab-pane-study-criteria': TabPaneStudyCriteria,
-    'tab-pane-study-tasks': TabPaneStudyTasks,
-    'tab-pane-study-consent': TabPaneStudyConsent
+    StudyDesignGeneralities,
+    StudyDesignCriteria,
+    StudyDesignTasks
+    // 'tab-pane-study-consent': TabPaneStudyConsent
   },
   data () {
     return {
       keyOfStudy: undefined,
+      studyTab: 'tab-gen',
       studyDesign: {
         teamKey: '',
         publishedTS: undefined,
@@ -124,6 +132,11 @@ export default {
         },
         startDate: { required },
         endDate: { required }
+      },
+      inclusionCriteria: {
+        minAge: { required },
+        maxAge: { required },
+        gender: { required }
       },
       consent: {
         invitation: { required },

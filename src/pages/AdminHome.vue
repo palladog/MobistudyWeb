@@ -1,11 +1,11 @@
 <template>
   <q-page>
-    <q-tabs v-model="tab" class="bg-secondary text-white shadow-2">
+    <q-tabs v-model="tab" class="bg-secondary text-white shadow-2" align="justify">
       <q-tab name="tab-logs" icon="format_align_justify" label="Logs" />
-      <q-tab  name="tab-teams" icon="group" label="Teams" />
-      <q-tab  name="tab-studies" icon="local_library" label="Studies" />
-      <q-tab  name="tab-users" icon="person" label="Users" />
-      <q-tab  name="tab-tester" icon="verified_user" label="Tests"/>
+      <q-tab name="tab-teams" icon="group" label="Teams" />
+      <q-tab name="tab-studies" icon="local_library" label="Studies" />
+      <q-tab name="tab-users" icon="person" label="Users" />
+      <q-tab name="tab-tester" icon="verified_user" label="Tests"/>
     </q-tabs>
     <q-tab-panels v-model="tab">
       <q-tab-panel name="tab-logs">

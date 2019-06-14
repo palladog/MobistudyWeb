@@ -1,5 +1,5 @@
 <template>
-  <q-modal v-model="opened">
+  <q-dialog v-model="opened">
     <div class="q-pa-lg form-card">
       <h4>Form builder</h4>
       <q-field class="q-mb-sm" label="Name:" helper="Name of the form. This is displayed to the user.">
@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-  </q-modal>
+  </q-dialog>
 </template>
 
 <script>
