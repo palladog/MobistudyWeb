@@ -29,24 +29,47 @@
         <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
       </q-card-section>
       <q-card-section>
-        <q-field v-if="task.type === 'dataQuery'" label="Data type:" helper="Please select the data type to be collected.">
-          <q-select color="secondary"  v-model="task.dataType"  :options="selectOptionsDataTypeForQuery"/>
-        </q-field>
-        <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Aggregated:" helper="If aggregated, the data will be summed.">
-          <q-checkbox color="secondary" v-model="task.aggregated" />
-        </q-field>
-        <q-field v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" label="Bucket:" helper="You can sum the data into buckets.">
-          <q-select color="secondary" v-model="task.bucket" :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated"/>
-        </q-field>
+        <div v-if="task.type === 'dataQuery'" class="row q-ma-sm">
+          <div class="col-2 text-bold"> Data type: </div>
+          <div class="col">
+            <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" hint="Data type to be collected." @input="update()"/>
+          </div>
+        </div>
+        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-ma-sm">
+          <div class="col-2 text-bold"> Aggregated: </div>
+          <div class="col">
+            <q-field hint="If aggregated, the data will be summed.">
+              <q-checkbox v-model="task.aggregated" @input="update()"/>
+            </q-field>
+          </div>
+        </div>
+        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-ma-sm">
+          <div class="col-2 text-bold"> Bucket: </div>
+          <div class="col">
+            <q-select v-model="task.bucket" emit-value map-options :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated" hint="You can sum the data into buckets of given length." @input="update()"/>
+          </div>
+        </div>
+
         <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
-        <q-field v-if="task.type === 'form'" label="Form:" helper="Please select the form to be shown.">
-          <q-select color="secondary" v-model="task.formKey" :options="selectOptionsFormsList" @input="changeFormName(task, $event)"/>
-        </q-field>
-        <q-field class="q-mt-lg" label="Scheduling:" helper="Use the triangle to show or hide the information.">
-          <q-collapsible icon="calendar_today" :label="schedulingToString(task.scheduling)">
-            <scheduler v-model="task.scheduling"></scheduler>
-          </q-collapsible>
-        </q-field>
+
+        <div v-if="task.type === 'form'" class="row q-ma-sm">
+          <div class="col-2 text-bold"> Form: </div>
+          <div class="col">
+            <q-select v-model="task.formKey" emit-value map-options :options="selectOptionsFormsList" @input="changeFormName(task, $event)" hint="Select the form from the list."/>
+          </div>
+        </div>
+
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> Scheduling: </div>
+          <div class="col">
+            <q-field hint="Scheduling of the task. Click the down-arrow to expand.">
+              <q-expansion-item expand-separator  :label="schedulingToString(task.scheduling)">
+                <scheduler v-model="task.scheduling"></scheduler>
+              </q-expansion-item>
+            </q-field>
+          </div>
+        </div>
+
         <q-btn label="Remove this task" color="negative" icon="remove" @click="removeTask(index)"/>
       </q-card-section>
     </q-card>
@@ -127,6 +150,9 @@ export default {
     this.getForms()
   },
   methods: {
+    update () {
+      this.$emit('input', this.value)
+    },
     async getForms () {
       try {
         let forms = await API.getFormsList()

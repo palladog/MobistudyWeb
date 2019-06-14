@@ -1,50 +1,86 @@
 <template>
   <q-card>
-    <q-card-title>
-      Scheduler
-      <span slot="subtitle">Please select when the event will be scheduled</span>
-    </q-card-title>
-    <q-card-separator />
+    <q-card-section>
+      <div class="text-h6"> Scheduler </div>
+      <div class="text-subtitle1"> Configure when the event will be scheduled. </div>
+    </q-card-section>
+    <q-separator />
     <!-- Option Repeat Types -->
-    <q-card-main>
+    <q-card-section>
       <!-- Validity  -->
       <div class="q-mb-md">
         <p>
           Validity:
         </p>
-        <q-field label="From:" helper="Optional. Enter the number of days from the start">
-          <q-input type="number" v-model="start" @input="update()" />
-        </q-field>
-        <q-field label="To:" helper="Optional. The number of days from the start. If this and occurrences are not specified, this task will run until the end date of the study.">
-          <q-input type="number" v-model="until"  @input="update()" />
-        </q-field>
-        <q-field label="occurrences:" helper="Optional. The maximum number of occurrences. If this and To are not specified, this task will run until the end date of the study.">
-          <q-input type="number" v-model="occurrences"  @input="update()" />
-        </q-field>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> From: </div>
+          <div class="col">
+            <q-input type="number" v-model="start" clearable hint="Optional. Enter the number of days from the start." @input="update()" />
+          </div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> To: </div>
+          <div class="col">
+            <q-input type="number" v-model="until" clearable hint="Optional. In number of days from the start. If To and Occurrences are not specified, this task will run until the end date of the study." @input="update()" />
+          </div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> Occurrences: </div>
+          <div class="col">
+            <q-input type="number" v-model="occurrences" clearable hint="Optional. The maximum number of occurrences. If Occurrences and To are not specified, this task will run until the end date of the study." @input="update()" />
+          </div>
+        </div>
       </div>
-      <q-card-separator />
+      <q-separator />
       <p class="q-mt-lg">
         Recurrence:
       </p>
-      <q-field label="Frequency:" helper="Enter the desired frequency.">
-        <q-select  @input="update()" v-model="intervalType" :options="intervalTypeOptions"/>
-      </q-field>
-      <q-field label="Interval:" helper="Enter the desired interval.">
-        <q-select @input="update()" v-show="intervalType == 'd'"   v-model="dailyInterval" :options="dailyIntervalOptions" />
-        <q-select @input="update()" v-show="intervalType == 'w'"   v-model="weeklyInterval" :options="weeklyIntervalOptions" />
-        <q-select @input="update()" v-show="intervalType == 'm'"   v-model="monthlyInterval" :options="monthlyIntervalOptions" />
-        <q-select @input="update()" v-show="intervalType == 'y'"   v-model="yearlyInterval" :options="yearlyIntervalOptions" />
-      </q-field>
-      <q-field label="Week days:" helper="Optional. Specify the days in the week when this task is allowed. If not specified, all week days are eligible.">
-        <q-checkbox v-for="(opt, ind) in weekDaysOpts" :key="ind" @input="update()" v-model="weekDays" :val="opt.value" :label="opt.label" />
-      </q-field>
-      <q-field label="Months:" helper="Optional. Specify months.">
-        <q-checkbox v-for="(monOpt, ind2) in monthsOpts" :key="ind2" @input="update()" v-model="months" :val="monOpt.value" :label="monOpt.label" />
-      </q-field>
-      <q-field label="Days of the month:" helper="Optional. Specify the days of the month when this task is allowed. If not specified, all month days are eligible.">
-        <q-checkbox @input="update()" v-for="monthday in 31" v-model="monthDays" :key="monthday" :val="monthday" :label="monthday.toString()" />
-      </q-field>
-  </q-card-main>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Frequency: </div>
+        <div class="col">
+          <q-select type="number" v-model="intervalType" :options="intervalTypeOptions" emit-value map-options hint="Enter the desired frequency." @input="update()" />
+        </div>
+      </div>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Interval: </div>
+        <div class="col">
+          <q-select @input="update()" v-show="intervalType == 'd'" emit-value map-options  v-model="dailyInterval" :options="dailyIntervalOptions" />
+          <q-select @input="update()" v-show="intervalType == 'w'" emit-value map-options  v-model="weeklyInterval" :options="weeklyIntervalOptions" />
+          <q-select @input="update()" v-show="intervalType == 'm'" emit-value map-options  v-model="monthlyInterval" :options="monthlyIntervalOptions" />
+          <q-select @input="update()" v-show="intervalType == 'y'" emit-value map-options  v-model="yearlyInterval" :options="yearlyIntervalOptions" />
+        </div>
+      </div>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Week days: </div>
+        <div class="col">
+          <q-field hint="Optional. Specify the days in the week when this task is allowed. If not specified, all week days are eligible.">
+            <div class="row">
+              <q-checkbox v-for="(opt, ind) in weekDaysOpts" :key="ind" @input="update()" v-model="weekDays" :val="opt.value" :label="opt.label" />
+            </div>
+          </q-field>
+        </div>
+      </div>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Months: </div>
+        <div class="col">
+          <q-field hint="Optional. Specify months.">
+            <div class="row">
+              <q-checkbox v-for="(monOpt, ind2) in monthsOpts" :key="ind2" @input="update()" v-model="months" :val="monOpt.value" :label="monOpt.label" />
+            </div>
+          </q-field>
+        </div>
+      </div>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Days of the month:: </div>
+        <div class="col">
+          <q-field hint="Optional. Specify the days of the month when this task is allowed.">
+            <div class="row">
+              <q-checkbox v-for="monthday in 31" :key="monthday" @input="update()" v-model="monthDays" :val="monthday" :label="monthday.toString()" />
+            </div>
+          </q-field>
+        </div>
+      </div>
+  </q-card-section>
 </q-card>
 </template>
 
