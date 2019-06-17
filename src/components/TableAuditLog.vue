@@ -59,9 +59,6 @@
           </div>
         </q-card-section>
       </q-card>
-      <div class="q-pa-md">
-
-      </div>
     </q-dialog>
   </div>
 </template>

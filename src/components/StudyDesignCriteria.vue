@@ -9,8 +9,8 @@
 
       <q-card-section>
         <!-- Age Range & Sex -->
-        <div class="row q-ma-sm">
-          <div class="col-2 text-bold"> Age range: </div>
+        <div class="row q-mt-sm">
+          <div class="col-2 text-bold q-pt-md"> Age range: </div>
           <div class="col q-mr-sm">
             <q-input
             type="number"
@@ -32,8 +32,8 @@
             :error="v.maxAge.$error" error-message="A maximum age is required"/>
           </div>
         </div>
-        <div class="row q-ma-sm">
-          <div class="col-2 text-bold"> Gender: </div>
+        <div class="row q-mt-sm">
+          <div class="col-2 text-bold q-pt-md"> Gender: </div>
           <div class="col">
             <q-field hint="Desired gender. More than one option can be selected."
             :error="v.gender.$error" error-message="At least one gender must be specified">
@@ -47,8 +47,8 @@
 
     <q-card-section>
       <!-- Number of Participants -->
-      <div class="row q-ma-sm">
-        <div class="col-2 text-bold"> Maximum number of participants: </div>
+      <div class="row q-mt-sm">
+        <div class="col-2 text-bold q-pt-md"> Maximum number of participants: </div>
         <div class="col">
           <q-input
           type="number"
@@ -61,8 +61,8 @@
 
     <q-card-section>
       <!-- Diseases -->
-      <div class="row q-ma-sm">
-        <div class="col-2 text-bold"> List of diseases: </div>
+      <div class="row q-mt-sm">
+        <div class="col-2 text-bold q-pt-md"> List of diseases: </div>
         <div class="col">
           <q-select
           v-model="diseasesVue"
@@ -88,8 +88,8 @@
 
   <q-card-section>
     <!-- Medications -->
-    <div class="row q-ma-sm">
-      <div class="col-2 text-bold"> List of medications: </div>
+    <div class="row q-mt-sm">
+      <div class="col-2 text-bold q-pt-md"> List of medications: </div>
       <div class="col">
         <q-select
         v-model="medsVue"
@@ -115,8 +115,8 @@
 
 <!-- Lifestyle -->
 <q-card-section>
-  <div class="row q-ma-sm">
-    <div class="col-2 text-bold"> Lifestyle: </div>
+  <div class="row q-mt-sm">
+    <div class="col-2 text-bold q-pt-md"> Lifestyle: </div>
     <div class="col q-mr-sm">
       <q-field hint="Physically active">
         <q-radio v-model="value.lifestyle.active" val="yes" color="secondary" label="Active" @input="update()"/>
@@ -142,14 +142,14 @@
   </q-card-section>
   <q-card-section>
     <div v-for="(criteriaQuestion, index) in value.criteriaQuestions" :key="index">
-      <div class="row q-ma-sm">
-        <div class="col-2 text-bold"> Criteria Question: </div>
+      <div class="row q-mt-sm">
+        <div class="col-2 text-bold q-pt-md"> Criteria Question: </div>
         <div class="col">
           <q-input v-model="criteriaQuestion.title" type="text" hint="Additional question. Example: Are you pregnant?" @input="update()"/>
         </div>
       </div>
-      <div class="row q-ma-sm">
-        <div class="col-2 text-bold"> Answer for inclusion: </div>
+      <div class="row q-mt-sm">
+        <div class="col-2 text-bold q-pt-md"> Answer for inclusion: </div>
         <div class="col">
           <q-field hint="This is the answer that make the patient eligible.">
             <q-radio v-model="criteriaQuestion.answer" val="yes" label="Yes" @input="update()"/>

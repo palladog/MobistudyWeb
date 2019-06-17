@@ -29,22 +29,22 @@
         <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
       </q-card-section>
       <q-card-section>
-        <div v-if="task.type === 'dataQuery'" class="row q-ma-sm">
-          <div class="col-2 text-bold"> Data type: </div>
+        <div v-if="task.type === 'dataQuery'" class="row q-mt-sm">
+          <div class="col-2 text-bold q-pt-md"> Data type: </div>
           <div class="col">
             <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" hint="Data type to be collected." @input="update()"/>
           </div>
         </div>
-        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-ma-sm">
-          <div class="col-2 text-bold"> Aggregated: </div>
+        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-mt-sm">
+          <div class="col-2 text-bold q-pt-md"> Aggregated: </div>
           <div class="col">
             <q-field hint="If aggregated, the data will be summed.">
               <q-checkbox v-model="task.aggregated" @input="update()"/>
             </q-field>
           </div>
         </div>
-        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-ma-sm">
-          <div class="col-2 text-bold"> Bucket: </div>
+        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-mt-sm">
+          <div class="col-2 text-bold q-pt-md"> Bucket: </div>
           <div class="col">
             <q-select v-model="task.bucket" emit-value map-options :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated" hint="You can sum the data into buckets of given length." @input="update()"/>
           </div>
@@ -52,15 +52,15 @@
 
         <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
 
-        <div v-if="task.type === 'form'" class="row q-ma-sm">
-          <div class="col-2 text-bold"> Form: </div>
+        <div v-if="task.type === 'form'" class="row q-mt-sm">
+          <div class="col-2 text-bold q-pt-md"> Form: </div>
           <div class="col">
             <q-select v-model="task.formKey" emit-value map-options :options="selectOptionsFormsList" @input="changeFormName(task, $event)" hint="Select the form from the list."/>
           </div>
         </div>
 
         <div class="row q-ma-sm">
-          <div class="col-2 text-bold"> Scheduling: </div>
+          <div class="col-2 text-bold q-pt-md"> Scheduling: </div>
           <div class="col">
             <q-field hint="Scheduling of the task. Click the down-arrow to expand.">
               <q-expansion-item expand-separator  :label="schedulingToString(task.scheduling)">
@@ -74,7 +74,7 @@
       </q-card-section>
     </q-card>
 
-    <formbuilder ref="formbuilder" v-model="newForm" @simulateForm="openFormSimulator()"></formbuilder>
+    <formbuilder ref="formbuilder" v-model="newForm" @simulateForm="openFormSimulator()" @saved="getForms()"></formbuilder>
     <formsimulator ref="formsimulator" :form='newForm' @closed="openFormBuilder()"></formsimulator>
   </div>
 </template>
@@ -83,8 +83,8 @@
 import Scheduler from 'components/CardScheduler.vue'
 import { schedulingToString } from '../modules/Scheduling.js'
 import API from '../modules/API.js'
-import FormBuilder from 'components/ModalFormBuilder.vue'
-import FormSimulator from 'components/ModalFormSimulator.vue'
+import FormBuilder from 'components/DialogFormBuilder.vue'
+import FormSimulator from 'components/DialogFormSimulator.vue'
 import QueryDataTypeEnum from '../modules/QueryDataTypeEnum.js'
 
 export default {
@@ -94,25 +94,18 @@ export default {
     'formsimulator': FormSimulator
   },
   name: 'StudyDesignTasks',
-  props: [ 'value' ],
+  props: [ 'value', 'teamKey' ],
   data () {
     return {
       selectOptionsFormsList: [],
       newForm: {
+        teamKey: this.teamKey,
         name: undefined,
         description: undefined,
-        questions: [{
-          id: 'Q1',
-          text: undefined,
-          helper: undefined,
-          type: 'freetext',
-          nextDefaultId: undefined,
-          answerChoices: [{
-            id: 'Q1A1',
-            text: undefined,
-            nextQuestionId: undefined
-          }]
-        }]
+        references: undefined,
+        public: false,
+        copyright: undefined,
+        questions: []
       },
       selectOptionsDataTypeForQuery: QueryDataTypeEnum.values.map((v) => {
         return {
@@ -234,8 +227,12 @@ export default {
     },
     createForm () {
       this.newForm = {
+        teamKey: this.teamKey,
         name: undefined,
         description: undefined,
+        references: undefined,
+        public: false,
+        copyright: undefined,
         questions: [{
           id: 'Q1',
           text: undefined,

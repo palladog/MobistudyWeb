@@ -25,7 +25,7 @@
         <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria"></study-design-criteria>
       </q-tab-panel>
       <q-tab-panel name="tab-tasks">
-        <study-design-tasks v-model="studyDesign.tasks"></study-design-tasks>
+        <study-design-tasks v-model="studyDesign.tasks" :teamKey="studyDesign.teamKey"></study-design-tasks>
       </q-tab-panel>
     </q-tab-panels>
 
