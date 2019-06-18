@@ -13,9 +13,9 @@
 
     <q-tabs v-model="studyTab" class="bg-secondary text-white shadow-2" align="justify">
       <q-tab name="tab-gen" icon="subject" label="Generalities" :class="$v.studyDesign.generalities.$error? 'text-red': ''"/>
-      <q-tab name="tab-crit" icon="fingerprint" label="Inclusion Criteria"/>
-      <q-tab name="tab-tasks" icon="list" label="Tasks"/>
-      <!-- <q-tab slot="title" name="tab-consent" icon="verified_user" label="Consent" :color="$v.studyDesign.consent.$error? 'negative': ''"/> -->
+      <q-tab name="tab-crit" icon="fingerprint" label="Inclusion Criteria" :class="$v.studyDesign.inclusionCriteria.$error? 'text-red': ''"/>
+      <q-tab name="tab-tasks" icon="list" label="Tasks" :class="$v.studyDesign.tasks.$error? 'text-red': ''"/>
+      <q-tab name="tab-consent" icon="verified_user" label="Consent" :class="$v.studyDesign.consent.$error? 'text-red': ''"/>
     </q-tabs>
     <q-tab-panels v-model="studyTab">
       <q-tab-panel name="tab-gen">
@@ -25,7 +25,10 @@
         <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria"></study-design-criteria>
       </q-tab-panel>
       <q-tab-panel name="tab-tasks">
-        <study-design-tasks v-model="studyDesign.tasks" :teamKey="studyDesign.teamKey"></study-design-tasks>
+        <study-design-tasks v-model="studyDesign.tasks" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks"></study-design-tasks>
+      </q-tab-panel>
+      <q-tab-panel name="tab-consent">
+        <study-design-consent v-model="studyDesign" :v="$v.studyDesign"></study-design-consent>
       </q-tab-panel>
     </q-tab-panels>
 
@@ -36,9 +39,9 @@
 import StudyDesignGeneralities from '../components/StudyDesignGeneralities'
 import StudyDesignCriteria from '../components/StudyDesignCriteria'
 import StudyDesignTasks from '../components/StudyDesignTasks'
-// import TabPaneStudyConsent from '../components/TabPaneStudyConsent'
+import StudyDesignConsent from '../components/StudyDesignConsent'
 import API from '../modules/API.js'
-import { required, requiredIf } from 'vuelidate/lib/validators'
+import { required, requiredIf, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
@@ -46,8 +49,8 @@ export default {
   components: {
     StudyDesignGeneralities,
     StudyDesignCriteria,
-    StudyDesignTasks
-    // 'tab-pane-study-consent': TabPaneStudyConsent
+    StudyDesignTasks,
+    StudyDesignConsent
   },
   data () {
     return {
@@ -84,19 +87,14 @@ export default {
           gender: [],
           numberOfParticipants: undefined,
           lifestyle: { active: 'notrequired', smoker: 'notrequired' },
-          criteriaQuestions: [
-            {
-              title: '',
-              answer: ''
-            }
-          ],
+          criteriaQuestions: [],
           diseases: [],
           medications: []
         },
         tasks: [],
         consent: {
-          invitation: '',
-          privacyPolicy: '',
+          invitation: undefined,
+          privacyPolicy: undefined,
           taskItems: [],
           extraItems: []
         }
@@ -137,6 +135,10 @@ export default {
         minAge: { required },
         maxAge: { required },
         gender: { required }
+      },
+      tasks: {
+        required,
+        minLength: minLength(1)
       },
       consent: {
         invitation: { required },
@@ -179,21 +181,30 @@ export default {
   methods: {
     checkValidation: function () {
       // Checking for Errors only in tabs generalities and Error
-      var errorGen = false
-      var errorCon = false
+      let errors = false
       this.$v.studyDesign.generalities.$touch()
+      this.$v.studyDesign.inclusionCriteria.$touch()
+      this.$v.studyDesign.tasks.$touch()
       this.$v.studyDesign.consent.$touch()
       // Check for errors from validation
       if (this.$v.studyDesign.generalities.$error) {
         this.$q.notify('Please correct the fields in the Generalities tab.')
-        errorGen = true
+        errors = true
+      }
+      if (this.$v.studyDesign.inclusionCriteria.$error) {
+        this.$q.notify('Please correct the fields in the Inclusion criteria tab.')
+        errors = true
+      }
+      if (this.$v.studyDesign.tasks.$error) {
+        this.$q.notify('Please correct the fields in the Tasks tab.')
+        errors = true
       }
       if (this.$v.studyDesign.consent.$error) {
         this.$q.notify('Please correct the fields in the Consent tab.')
-        errorCon = true
+        errors = true
       }
       // If there are any validation errors, the validation check has failed
-      if (errorGen === true || errorCon === true) return false
+      return !errors
     },
     async publish () {
       // If published not empty, study has already been published
@@ -217,6 +228,7 @@ export default {
                 message: 'Study has been published.',
                 icon: 'done'
               })
+              this.$router.push('/researcher')
             } catch (err) {
               this.$q.notify({
                 color: 'negative',
@@ -236,6 +248,7 @@ export default {
                 message: 'Study has been published.',
                 icon: 'done'
               })
+              this.$router.push('/researcher')
             } catch (err) {
               this.$q.notify({
                 color: 'negative',

@@ -3,25 +3,25 @@
     <q-card class="form-card">
       <q-card-section>
         <div class="text-h6"> Generalities </div>
-        <div class="text-subtitle1"> General information about the study </div>
+        <div class="text-subtitle1"> General information about the study. </div>
       </q-card-section>
       <q-card-section>
-        <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Title </div>
+        <div class="row">
+          <div class="col-2 text-bold q-pt-lg"> Title: </div>
           <div class="col">
             <q-input v-model.trim="v.title.$model" @blur="v.title.$touch" @input="update()" hint="Short name of the study" :error="v.title.$error" error-message="A title is required"/>
           </div>
         </div>
-        <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Short description </div>
+        <div class="row">
+          <div class="col-2 text-bold q-pt-lg"> Short description: </div>
           <div class="col">
             <q-input v-model.trim="v.shortDescription.$model" @blur="v.shortDescription.$touch" @input="update()"
             hint="Describe the study in one brief sentence. This appears with the notification inviting the participant to check the study. Make it appealing!"
             :error="v.shortDescription.$error" error-message="A description is required"/>
           </div>
         </div>
-        <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Long description </div>
+        <div class="row">
+          <div class="col-2 text-bold q-pt-lg"> Long description: </div>
           <div class="col">
             <q-input type="textarea" rows="3"
             hint="A longer description (few sentences) of the study, in layman terms. This is shown when the participant wants to know more about the study."
@@ -35,12 +35,12 @@
     <q-card class="form-card">
       <q-card-section>
         <div class="text-h6"> Principal Investigator(s) </div>
-        <div class="text-subtitle1"> Principal investigators of this study: </div>
+        <div class="text-subtitle1"> Principal investigators of this study. </div>
       </q-card-section>
       <q-card-section>
         <div v-for="(pi, index) in v.principalInvestigators.$each.$iter" :key="index">
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Name &amp; Title: </div>
+          <div class="row">
+            <div class="col-2 text-bold q-pt-lg"> Name &amp; Title: </div>
             <div class="col">
               <q-input type="text"
               hint="Principal Investigator name &amp; title."
@@ -48,8 +48,8 @@
               :error="pi.name.$error" error-message="Name and title are required"/>
             </div>
           </div>
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Contact: </div>
+          <div class="row">
+            <div class="col-2 text-bold q-pt-lg"> Contact: </div>
             <div class="col">
               <q-input type="textarea" rows="4"
               hint="Contact details, like email, telephone and address."
@@ -57,8 +57,8 @@
               :error="pi.contact.$error" error-message="A contact is required"/>
             </div>
           </div>
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Institution: </div>
+          <div class="row">
+            <div class="col-2 text-bold q-pt-lg"> Institution: </div>
             <div class="col">
               <q-input type="text"
               hint="Name of institution the PI belongs to. The institution must be also present in the list of Institutions below."
@@ -82,12 +82,12 @@
     <q-card class="form-card">
       <q-card-section>
         <div class="text-h6"> Institution(s) </div>
-        <div class="text-subtitle1"> Involved institutions and data access rules: </div>
+        <div class="text-subtitle1"> Involved institutions and data access rules. </div>
       </q-card-section>
       <q-card-section>
         <div v-for="(inst, index) in v.institutions.$each.$iter" :key="index">
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Name of the Institution: </div>
+          <div class="row">
+            <div class="col-2 text-bold q-pt-lg"> Name of the Institution: </div>
             <div class="col">
               <q-input type="text"
               hint="Full name of the involved instituion."
@@ -95,8 +95,8 @@
               :error="inst.name.$error" error-message="A name is required."/>
             </div>
           </div>
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Contact: </div>
+          <div class="row">
+            <div class="col-2 text-bold q-pt-lg"> Contact: </div>
             <div class="col">
               <q-input type="textarea" rows="4"
               hint="Official contact details of the institution, like an email or and address."
@@ -104,10 +104,10 @@
               :error="inst.contact.$error" error-message="Contact details are required"/>
             </div>
           </div>
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Data Access: </div>
+          <div class="row">
+            <div class="col-2 text-bold q-pt-lg"> Data Access: </div>
             <div class="col">
-              <q-field class="q-mt-md" label="Data Access:" hint="Level of data access granted to this instituion."
+              <q-field class="q-mt-md" hint="Level of data access granted to this instituion."
               :error="inst.dataAccess.$error" error-message="The level of data access is required">
                 <q-radio v-model.trim="inst.dataAccess.$model" val="no" color="secondary" label="No" @input="update()"/>
                 <q-radio v-model.trim="inst.dataAccess.$model" val="anonymised" color="secondary" label="Anonymised" @input="update()" style="margin-left: 10px"/>
@@ -115,8 +115,8 @@
               </q-field>
             </div>
           </div>
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Reason for Data Access: </div>
+          <div class="row">
+            <div class="col-2 text-bold q-pt-lg"> Reason for Data Access: </div>
             <div class="col">
               <q-input type="textarea" rows="2"
               hint="Provide a brief justification of why this level of data access has to be granted."
@@ -140,12 +140,12 @@
 <!-- Gen Info Tab: Date Card -->
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Dates: </div>
-        <div class="text-subtitle1"> The start and end dates of the study: </div>
+        <div class="text-h6"> Dates </div>
+        <div class="text-subtitle1"> The start and end dates of the study. </div>
       </q-card-section>
       <q-card-section>
-        <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Start date: </div>
+        <div class="row">
+          <div class="col-2 text-bold q-pt-lg"> Start date: </div>
           <div class="col">
             <q-input type="date" format="D-MMM-YYYY"
             hint="Date the study officially starts."
@@ -153,8 +153,8 @@
             :error="v.startDate.$error" error-message="A date is required"/>
           </div>
         </div>
-        <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> End date: </div>
+        <div class="row">
+          <div class="col-2 text-bold q-pt-lg"> End date: </div>
           <div class="col">
             <q-input type="date" format="D-MMM-YYYY"
             hint="Date the study officially ends. No data collection is possible after this date."

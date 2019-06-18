@@ -3,6 +3,7 @@
     <q-card class="form-card">
       <q-card-section>
         <div class="text-h6"> Tasks </div>
+        <div class="text-subtitle1"> At least one task has to be specified. </div>
       </q-card-section>
       <q-card-section>
         <q-btn-dropdown split label="Add task">
@@ -29,22 +30,22 @@
         <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
       </q-card-section>
       <q-card-section>
-        <div v-if="task.type === 'dataQuery'" class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Data type: </div>
+        <div v-if="task.type === 'dataQuery'" class="row">
+          <div class="col-2 text-bold q-pt-lg"> Data type: </div>
           <div class="col">
             <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" hint="Data type to be collected." @input="update()"/>
           </div>
         </div>
-        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Aggregated: </div>
+        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row">
+          <div class="col-2 text-bold q-pt-lg"> Aggregated: </div>
           <div class="col">
             <q-field hint="If aggregated, the data will be summed.">
               <q-checkbox v-model="task.aggregated" @input="update()"/>
             </q-field>
           </div>
         </div>
-        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Bucket: </div>
+        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row">
+          <div class="col-2 text-bold q-pt-lg"> Bucket: </div>
           <div class="col">
             <q-select v-model="task.bucket" emit-value map-options :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated" hint="You can sum the data into buckets of given length." @input="update()"/>
           </div>
@@ -52,15 +53,15 @@
 
         <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
 
-        <div v-if="task.type === 'form'" class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Form: </div>
+        <div v-if="task.type === 'form'" class="row">
+          <div class="col-2 text-bold q-pt-lg"> Form: </div>
           <div class="col">
             <q-select v-model="task.formKey" emit-value map-options :options="selectOptionsFormsList" @input="changeFormName(task, $event)" hint="Select the form from the list."/>
           </div>
         </div>
 
-        <div class="row q-ma-sm">
-          <div class="col-2 text-bold q-pt-md"> Scheduling: </div>
+        <div class="row">
+          <div class="col-2 text-bold q-pt-lg"> Scheduling: </div>
           <div class="col">
             <q-field hint="Scheduling of the task. Click the down-arrow to expand.">
               <q-expansion-item expand-separator  :label="schedulingToString(task.scheduling)">
@@ -190,6 +191,7 @@ export default {
         aggregated: false,
         bucket: 'none'
       })
+      this.update()
     },
     removeTask (index) {
       this.value.splice(index, 1)
@@ -198,6 +200,7 @@ export default {
         // update the task ids after the one that has been removed
         if (i >= index) this.value[i].id = this.value[i].id - 1
       }
+      this.update()
     },
     addFormT () {
       this.value.push({
@@ -218,12 +221,14 @@ export default {
         // this is mainly used for the consent tab, so it can be discarded when the object is sent to the server
         formName: undefined
       })
+      this.update()
     },
     changeFormName (task, formKey) {
       let option = this.selectOptionsFormsList.find((opt) => {
         return opt.value === formKey
       })
       task.formName = option.label
+      this.update()
     },
     createForm () {
       this.newForm = {

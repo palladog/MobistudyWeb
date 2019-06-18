@@ -4,7 +4,7 @@
     <q-card class="form-card">
       <q-card-section>
         <div class="text-h6"> Inclusion Criteria </div>
-        <div class="text-subtitle1"> These criteria are automatically matched against participants' profiles </div>
+        <div class="text-subtitle1"> These criteria are automatically matched against participants' profiles. </div>
       </q-card-section>
 
       <q-card-section>
@@ -138,7 +138,7 @@
 <q-card class="form-card">
   <q-card-section>
     <div class="text-h6"> Custom Criteria Questions </div>
-    <div class="text-subtitle1"> Additional criteria questions </div>
+    <div class="text-subtitle1"> Questions for additional custom inclusion criteria. </div>
   </q-card-section>
   <q-card-section>
     <div v-for="(criteriaQuestion, index) in value.criteriaQuestions" :key="index">
