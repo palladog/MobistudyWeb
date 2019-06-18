@@ -183,14 +183,14 @@ export default {
           icon: 'report_problem'
         })
       } else {
-        this.$router.push('studyDesign/' + this.selectedTeamValue)
+        this.$router.push('/studyDesign/' + this.selectedTeamValue)
       }
     },
     goToStudyDesigner (index) {
-      this.$router.push('studyDesign/' + this.selectedTeamValue + '/' + this.unpublishedStudies[index].study_key)
+      this.$router.push('/studyDesign/' + this.selectedTeamValue + '/' + this.unpublishedStudies[index].study_key)
     },
     goToStudyStats (studyKey) {
-      this.$router.push('studyStats/' + studyKey)
+      this.$router.push('/studyMonitor/' + studyKey)
     }
   }
 }

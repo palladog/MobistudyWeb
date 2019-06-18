@@ -2,7 +2,7 @@
   <div>
     <q-table title="Audit logs" ref="table" color="primary" :data="logs" selection="none" :columns="columns" :filter="filter" row-key="_key" :pagination.sync="pagination"  @request="loadLogs" :loading="loading">
       <template slot="top-right">
-        <q-select emit-value map-options :options="eventTypesOpts" v-model="filter.eventType" hint="Event" @input="updateFilters()" class="q-mr-sm"/>
+        <q-select emit-value map-options :options="eventTypesOpts" v-model="filter.eventType" hint="Event" @input="updateFilters()" class="q-mr-sm" style="width: 150px"/>
         <q-input v-model="filter.after" type="date" hint="From date" clearable @input="updateFilters()" class="q-mr-sm"/>
         <q-input v-model="filter.before" type="date" hint="To date" clearable @input="updateFilters()" class="q-mr-sm"/>
         <q-input v-model="filter.userEmail" type="text" hint="User email" clearable @input="updateFilters()" debounce="500"/>
