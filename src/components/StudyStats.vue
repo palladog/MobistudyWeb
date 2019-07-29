@@ -3,7 +3,7 @@
     <q-card-section>
       <div class="text-h6"> Participants </div>
     </q-card-section>
-    <q-card-main>
+    <q-card-section>
       <div class="row justify-around">
         <div >
           <div class="text-h5">
@@ -46,7 +46,7 @@
       </div>
 
       <table-audit-log :studyKey="studyDesign._key"/>
-    </q-card-main>
+    </q-card-section>
   </q-card>
 </template>
 
