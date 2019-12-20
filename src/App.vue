@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import user from './data/userinfo.js'
-import API from './data/API.js'
+import user from './modules/userinfo.js'
+import API from './modules/API.js'
 
 export default {
   name: 'Mobistudy',

@@ -8,13 +8,13 @@ The frontend is developed as a single-page app using the [quasar framework](http
 You need to install the following on your system:
 
 - nodejs
-- the [quasar command line tool](https://quasar-framework.org/guide/quasar-cli.html)
+- (optional) the [quasar command line tool](https://quasar.dev/quasar-cli/installation)
 
 Install all other dependencies with `npm install`.
 
 ## Run it
 
-To start the interface, run `quasar dev`.
+To start the interface, run `npm run dev` or, if you have installed the quasar cli, `quasar dev`.
 You will need the MobistudyAPI running in parallel (see MobistudyAPI docs).
 
 ## Develop it

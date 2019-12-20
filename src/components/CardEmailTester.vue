@@ -1,18 +1,27 @@
 <template>
   <!-- <q-page class="q-pa-lg"> -->
   <q-card>
-    <q-card-title>Send email from server</q-card-title>
-    <q-card-main>
-      <q-field label="Email address" :error="$v.emailAddress.$error" error-label="An email address is required.">
-        <q-input type="email" v-model="emailAddress" @blur="$v.emailAddress.$touch"/>
-      </q-field>
-      <q-field label="Subject" :error="$v.emailSubject.$error" error-label="A subject is required.">
-        <q-input type="text" v-model="emailSubject" @blur="$v.emailSubject.$touch"/>
-      </q-field>
-      <q-field label="Content" :error="$v.emailContent.$error" error-label="Some content is required">
-        <q-input type="textarea" rows="3" v-model="emailContent" @blur="$v.emailContent.$touch"/>
-      </q-field>
-    </q-card-main>
+    <q-card-section> <div class="text-h6"> Send email from server </div> </q-card-section>
+    <q-card-section>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Email address: </div>
+        <div class="col">
+          <q-input type="email" v-model="emailAddress" :error="$v.emailAddress.$error" error-message="An valid email address is required" @blur="$v.emailAddress.$touch"/>
+        </div>
+      </div>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Subject: </div>
+        <div class="col">
+          <q-input type="text" v-model="emailSubject" :error="$v.emailSubject.$error" error-message="An subject is required" @blur="$v.emailSubject.$touch"/>
+        </div>
+      </div>
+      <div class="row q-ma-sm">
+        <div class="col-2 text-bold"> Content: </div>
+        <div class="col">
+          <q-input type="textarea" rows="3" v-model="emailContent" :error="$v.emailContent.$error" error-message="Some content is required" @blur="$v.emailContent.$touch"/>
+        </div>
+      </div>
+    </q-card-section>
     <q-card-actions>
       <q-btn label="Send" color="primary" @click="sendEmail"/>
     </q-card-actions>
@@ -20,7 +29,7 @@
 </template>
 
 <script>
-import API from '../data/API'
+import API from '../modules/API'
 import { required, email } from 'vuelidate/lib/validators'
 
 export default {

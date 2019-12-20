@@ -1,59 +1,57 @@
 <template>
-  <q-tab-pane name="tab-study-stats">
-    <q-card>
-      <q-card-title>Participants
-      </q-card-title>
-      <q-card-main>
-        <div class="row justify-around">
-          <div >
-            <div class="q-title">
-              Joined
-            </div>
-            <div class="q-display-3">
-              {{ participants.joined }}
-            </div>
+  <q-card>
+    <q-card-section>
+      <div class="text-h6"> Participants </div>
+    </q-card-section>
+    <q-card-section>
+      <div class="row justify-around">
+        <div >
+          <div class="text-h5">
+            Joined
           </div>
-          <div >
-            <div class="q-title">
-              Active
-            </div>
-            <div class="q-display-3">
-              {{ participants.active }}
-            </div>
-          </div>
-          <div >
-            <div class="q-title">
-              Completed
-            </div>
-            <div class="q-display-3">
-              {{ participants.completed }}
-            </div>
-          </div>
-          <div >
-            <div class="q-title">
-              Withdrawn
-            </div>
-            <div class="q-display-3">
-              {{ participants.withdrawn }}
-            </div>
+          <div class="text-h3">
+            {{ participants.joined }}
           </div>
         </div>
-
-        <div class="row q-ma-lg justify-around">
-          <q-btn label="Download participants" @click="downloadParticipants()"></q-btn>
-          <q-btn label="Download answers" @click="downloadAnswers()"></q-btn>
-          <q-btn label="Download health data" @click="downloadHealthStoreData()"></q-btn>
+        <div >
+          <div class="text-h5">
+            Active
+          </div>
+          <div class="text-h3">
+            {{ participants.active }}
+          </div>
         </div>
+        <div >
+          <div class="text-h5">
+            Completed
+          </div>
+          <div class="text-h3">
+            {{ participants.completed }}
+          </div>
+        </div>
+        <div >
+          <div class="text-h5">
+            Withdrawn
+          </div>
+          <div class="text-h3">
+            {{ participants.withdrawn }}
+          </div>
+        </div>
+      </div>
 
-        <table-audit-log :studyKey="studyDesign._key"/>
-      </q-card-main>
-    </q-card>
+      <div class="row q-ma-lg justify-around">
+        <q-btn label="Download participants" @click="downloadParticipants()"></q-btn>
+        <q-btn label="Download answers" @click="downloadAnswers()"></q-btn>
+        <q-btn label="Download health data" @click="downloadHealthStoreData()"></q-btn>
+      </div>
 
-  </q-tab-pane>
+      <table-audit-log :studyKey="studyDesign._key"/>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>
-import API from '../data/API'
+import API from '../modules/API'
 import TableAuditLog from '../components/TableAuditLog'
 
 const downloadFile = function (filename, json) {
@@ -67,7 +65,7 @@ const downloadFile = function (filename, json) {
 }
 
 export default {
-  name: 'TabPaneStudyStats',
+  name: 'StudyStats',
   props: ['studyDesign'],
   components: {
     TableAuditLog

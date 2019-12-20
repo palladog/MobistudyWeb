@@ -3,20 +3,15 @@
     <q-page-container>
       <q-page class="flex flex-center">
         <q-card class="q-pa-lg newUserBox">
-          <q-card-title>User Registration
-            <span slot="subtitle">Only available to researchers</span>
-          </q-card-title>
-          <q-card-separator />
-          <q-card-main>
-            <q-field label="Email" helper="Enter your email." :error="$v.email.$error" error-label="An email address is required.">
-              <q-input v-model.trim="$v.email.$model" type="email" placeholder=" e.g. email@email.com" @blur="$v.email.$touch"/>
-            </q-field>
-            <q-field class="q-mt-md" label="Password" helper="Enter your password." :error="$v.password.$error" :error-label="getFirstPwdCheckError(password)">
-              <q-input v-model.trim="$v.password.$model" type="password" @blur="$v.password.$touch"/>
-            </q-field>
-            <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.password2.$error" error-label="Passwords must match">
-              <q-input v-model.trim="$v.password2.$model" type="password" @blur="$v.password2.$touch"/>
-            </q-field>
+          <q-card-section>
+            <div class="text-h6">User Registration</div>
+            <div class="text-subtitle">Only available to researchers</div>
+          </q-card-section>
+          <q-separator />
+          <q-card-section>
+            <q-input v-model.trim="$v.email.$model" label="Email" type="email" placeholder=" e.g. email@email.com" @blur="$v.email.$touch" :error="$v.email.$error" error-message="A valid email address is required"/>
+            <q-input v-model.trim="$v.password.$model" label="Password" type="password" @blur="$v.password.$touch" :error="$v.password.$error" :error-message="getFirstPwdCheckError(password)"/>
+            <q-input v-model.trim="$v.password2.$model" label="Repeat Password" type="password" @blur="$v.password2.$touch" :error="$v.password2.$error" error-message="Passwords must match"/>
             <div class ="row q-mt-md">
               <div class = "col-5">
                 <q-btn label="Cancel" color="warning" @click="cancelRegistration"/>
@@ -27,7 +22,7 @@
                 <q-btn label="Register" color="primary" @click="registerUser"/>
               </div>
             </div>
-          </q-card-main>
+          </q-card-section>
         </q-card>
       </q-page>
     </q-page-container>
@@ -42,8 +37,8 @@
 
 <script>
 import owasp from 'owasp-password-strength-test'
-import PWDchecker from 'zxcvbn'
-import API from '../data/API.js'
+import zxcvbn from 'zxcvbn'
+import API from '../modules/API.js'
 import { required, email, sameAs } from 'vuelidate/lib/validators'
 
 owasp.config({
@@ -65,10 +60,12 @@ function checkPwdStrength (pwd) {
       }
     }
   }
-  if (owasp.test(pwd).strong) {
-    let strength = PWDchecker(pwd)
-    return strength.score >= 2
-  } else return false
+  if (!owasp.test(pwd).strong) return false
+
+  let strengthCheck = zxcvbn(pwd)
+  if (strengthCheck.score < 2) return false
+
+  return true
 }
 
 export default {
@@ -100,10 +97,11 @@ export default {
       if (!result.strong) {
         return result.errors[0]
       } else {
-        result = PWDchecker(pwd)
+        result = zxcvbn(pwd)
         if (result.feedback) {
           let mesg = 'The password is too simple'
           if (result.feedback.warning) mesg = result.feedback.warning
+          // uncomment this code to show also suggestions
           // if (result.feedback.suggestions && result.feedback.suggestions.length) {
           //   mesg += '.\nSuggestion: ' + result.feedback.suggestions[0]
           // }
@@ -120,7 +118,7 @@ export default {
         this.$v.password.$touch()
         this.$v.password2.$touch()
         if (this.$v.email.$error || this.$v.password.$error || this.$v.password2.$error) {
-          this.$q.notify('Please correct the indicated fields.')
+          this.$q.notify('Please correct the indicated fields')
         } else {
           await API.createUser({
             email: this.email.toLowerCase(),
@@ -133,7 +131,7 @@ export default {
             ok: true,
             cancel: false,
             preventClose: true
-          }).then(() => {
+          }).onOk(() => {
             this.$router.push('/login')
           })
         }
@@ -145,9 +143,10 @@ export default {
             icon: 'report_problem'
           })
         } else {
+          console.error('Failed', error)
           this.$q.notify({
             color: 'negative',
-            message: 'Registration failed: ' + error.message,
+            message: 'Registration failed: ' + error.response.data ? error.response.data : error.message,
             icon: 'report_problem'
           })
         }

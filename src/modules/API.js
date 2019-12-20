@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = process.env.API_ENDPOINT
+const BASE_URL = 'api'
 var axiosConfig = {}
 
 export default {

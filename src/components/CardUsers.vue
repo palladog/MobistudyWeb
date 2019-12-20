@@ -1,39 +1,34 @@
 <template>
   <q-card>
-    <q-card-title>
-      Users
-    </q-card-title>
-    <q-card-main>
+    <q-card-section> <div class="text-h6"> Users </div> </q-card-section>
+    <q-card-section>
       <div v-for="(user, index) in users" :key="index">
         <div class="row">
           <div class="col-7"></div>
           <div class="col-5">
-            <q-btn class="float-right" label="Delete User from Db" color="negative" icon="remove" @click="deleteUser(index)"/>
+            <q-btn class="float-right" label="Delete" color="negative" icon="remove" @click="deleteUser(index)"/>
           </div>
         </div>
-        <q-field class="text-weight-bolder" label="User Key: ">
-          <div class="col-9 exactFit">
-            {{user._key}}
-          </div>
-        </q-field>
-        <q-field class="text-weight-bolder" label="Role: ">
-          <div class="col-9 exactFit">
-            {{user.role}}
-          </div>
-        </q-field>
-        <q-field class="text-weight-bolder" label="Name: ">
-          <div class="col-9 exactFit">
-            {{user.email}}
-          </div>
-        </q-field>
-        <q-card-separator v-if="index != users.length-1" class="q-mt-sm q-mb-sm"/>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> User Key: </div>
+          <div class="col"> {{user._key}} </div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> Role: </div>
+          <div class="col"> {{user.role}} </div>
+        </div>
+        <div class="row q-ma-sm">
+          <div class="col-2 text-bold"> Name: </div>
+          <div class="col"> {{user.email}} </div>
+        </div>
+        <q-separator v-if="index != users.length-1" class="q-mt-sm q-mb-sm"/>
       </div>
-    </q-card-main>
+    </q-card-section>
   </q-card>
 </template>
 
 <script>
-import API from '../data/API'
+import API from '../modules/API'
 
 export default {
   name: 'CardUsers',
@@ -60,14 +55,13 @@ export default {
     // Delete Users from Db
     async deleteUser (index) {
       let user = this.users[index]
-      try {
-        await this.$q.dialog({
-          title: 'Delete User',
-          color: 'warning',
-          message: 'You are deleting ' + user.role + ' ' + user.email + ' from the DB. This cannot be undone. Would you like to continue?',
-          ok: 'Yes, delete User: ' + user.email,
-          cancel: 'Cancel'
-        })
+      this.$q.dialog({
+        title: 'Delete User',
+        color: 'warning',
+        message: 'You are deleting ' + user.role + ' ' + user.email + ' from the DB. This cannot be undone. Would you like to continue?',
+        ok: 'Yes, delete User: ' + user.email,
+        cancel: 'Cancel'
+      }).onOk(async () => {
         try {
           if (user.role === 'participant') {
             // Get participant Key
@@ -86,9 +80,7 @@ export default {
             icon: 'report_problem'
           })
         }
-      } catch (error) {
-        this.$q.notify('Cancelling Deletion of User ' + user.email)
-      }
+      })
     },
     // Remove researcher from a team
     // TODO: when the user is a researcher list the studies he's in and add a button to remove him from study

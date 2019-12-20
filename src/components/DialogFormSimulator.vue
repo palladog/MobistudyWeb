@@ -1,46 +1,50 @@
 <template>
-  <q-modal v-model="opened">
-    <div class="q-pa-lg form-card">
-      <h4>Form Simulator</h4>
-      <div v-show="!finished">
-        <q-field class="q-ml-md q-mt-md q-mb-md" label="Question ID: " >
-          {{currentQuestion.id}}
-        </q-field>
-        <q-field class="q-ml-md q-mt-md q-mb-md" label="Question: " :helper="currentQuestion.helper" >
-          {{currentQuestion.text}}
-        </q-field>
-        <!-- Answers -->
-        <q-card class="bg-green-2 q-ml-md q-mt-lg q-mb-md q-mr-md">
-          <div v-if="currentQuestion.type === 'singleChoice'">
-            <q-field class="q-ml-md q-mt-md q-mb-md" label="Please choose one of the following: ">
-              <div v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index">
-                <q-radio class="q-ml-md q-mb-md" v-model="currentAnswerSingleChoice"
+  <q-dialog v-model="opened">
+    <q-card style="width: 500px;">
+      <q-card-section>
+        <div class="text-h5 q-mb-md">Form Simulator</div>
+        <div v-show="!finished">
+          <div class="row">
+            <div class="col-2 text-bold"> Question ID: </div>
+            <div class="col"> {{currentQuestion.id}} </div>
+          </div>
+          <div align="center" class="text-h6">
+            {{currentQuestion.text}}
+          </div>
+          <div align="center" class="text-weight-light">
+            {{currentQuestion.helper}}
+          </div>
+          <!-- Answers -->
+          <q-card class="bg-green-2 q-ma-md">
+            <div>
+              Answer
+            </div>
+            <q-input v-if="currentQuestion.type === 'freetext'" class="q-ma-sm" v-model="currentAnswerFreeText"
+            align="center" type="textarea" rows="3" clearable hint="Write your answer here."/>
+            <div class="q-ma-sm" v-if="currentQuestion.type === 'singleChoice'">
+              <q-field hint="Please choose one.">
+                <q-radio v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index" v-model="currentAnswerSingleChoice"
                 :val="answerChoice.id" :label="answerChoice.text"/>
-              </div>
-            </q-field>
-          </div>
-          <div v-if="currentQuestion.type === 'multiChoice'">
-            <q-field class="q-ml-md q-mt-md q-mb-md" label="Please choose one of the following: " />
-            <q-checkbox v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index"
-            class="q-ml-md q-mb-md" v-model="currentAnswerMultiChoice"
-            :val="answerChoice.id" :label="answerChoice.text"/>
-          </div>
-          <div v-if="currentQuestion.type === 'freetext'">
-            <q-field class="q-ml-md q-mt-md q-mb-md" label="Answer: " helper="Please write an answer." >
-              <q-input class="q-mb-md" v-model="currentAnswerFreeText" align="center" type="textarea" rows="3" clearable/>
-            </q-field>
-          </div>
-        </q-card>
-      </div>
+              </q-field>
+            </div>
+            <div class="q-ma-sm" v-if="currentQuestion.type === 'multiChoice'">
+              <q-field hint="Please choose one or more.">
+                <q-checkbox v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index"
+                v-model="currentAnswerMultiChoice" :val="answerChoice.id" :label="answerChoice.text"/>
+              </q-field>
+            </div>
+          </q-card>
+        </div>
 
-      <div v-show="finished">
-        COMPLETED
-      </div>
-      <q-btn v-show="!finished" color="primary" @click="next()" label="Next" />
-      <q-btn v-show="finished" color="primary" @click="restart()" label="Restart" />
-      <q-btn color="secondary" @click="close()" label="Close" />
-    </div>
-  </q-modal>
+        <div class="q-ma-md" v-show="finished">
+          COMPLETED
+        </div>
+        <q-btn v-show="!finished" color="primary" @click="next()" label="Next" />
+        <q-btn v-show="finished" color="primary" @click="restart()" label="Restart" />
+        <q-btn color="secondary" @click="close()" label="Close" />
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>

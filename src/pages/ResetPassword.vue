@@ -29,7 +29,7 @@
 <script>
 import PWDchecker from 'zxcvbn'
 import owasp from 'owasp-password-strength-test'
-import API from '../data/API.js'
+import API from '../modules/API.js'
 import { required, sameAs } from 'vuelidate/lib/validators'
 
 owasp.config({

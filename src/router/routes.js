@@ -2,19 +2,19 @@
 const routes = [
   {
     path: '/',
-    component: () => import('pages/login.vue')
+    component: () => import('pages/Login.vue')
   },
   {
     path: '/login',
-    component: () => import('pages/login.vue')
+    component: () => import('pages/Login.vue')
   },
   {
     path: '/resetPassword',
-    component: () => import('pages/resetPassword.vue')
+    component: () => import('pages/ResetPassword.vue')
   },
   {
     path: '/newuser',
-    component: () => import('pages/newuser.vue')
+    component: () => import('pages/Newuser.vue')
   },
   {
     path: '/admin',
@@ -22,7 +22,7 @@ const routes = [
     children: [
       {
         path: '/',
-        component: () => import('pages/adminHome.vue')
+        component: () => import('pages/AdminHome.vue')
       }
     ]
   },
@@ -32,7 +32,7 @@ const routes = [
     children: [
       {
         path: '/',
-        component: () => import('pages/researcherHome.vue')
+        component: () => import('pages/ResearcherHome.vue')
       },
       {
         path: '/studyDesign/:propTeamKey',
@@ -45,8 +45,8 @@ const routes = [
         props: true
       },
       {
-        path: '/studyStats/:studyKey',
-        component: () => import('pages/studyStats.vue'),
+        path: '/studyMonitor/:studyKey',
+        component: () => import('pages/studyMonitor.vue'),
         props: true
       }
     ]
