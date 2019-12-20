@@ -33,13 +33,13 @@
           </div>
         </div>
         <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Gender: </div>
+          <div class="col-2 text-bold q-pt-md"> Sex: </div>
           <div class="col">
-            <q-field hint="Desired gender. More than one option can be selected."
-            :error="v.gender.$error" error-message="At least one gender must be specified">
-            <q-checkbox v-model="v.gender.$model" label="Male" val="male" @input="update()"/>
-            <q-checkbox v-model="v.gender.$model" label="Female" val="female" @input="update()"/>
-            <q-checkbox v-model="v.gender.$model" label="Other" val="other" @input="update()"/>
+            <q-field hint="Desired sex. More than one option can be selected."
+            :error="v.sex.$error" error-message="At least one sex must be specified">
+            <q-checkbox v-model="v.sex.$model" label="Male" val="male" @input="update()"/>
+            <q-checkbox v-model="v.sex.$model" label="Female" val="female" @input="update()"/>
+            <q-checkbox v-model="v.sex.$model" label="Other" val="other" @input="update()"/>
           </q-field>
         </div>
       </div>
