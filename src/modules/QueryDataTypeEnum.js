@@ -1,5 +1,5 @@
 export default {
-  values: [ 'steps', 'weight', 'height', 'activity', 'heart_rate', 'heart_rate.variability', 'calories', 'distance' ],
+  values: [ 'steps', 'weight', 'height', 'activity', 'heart_rate', 'heart_rate_variability', 'calories', 'distance' ],
   valueToString (v) {
     if (v === 'steps') return 'Steps'
     if (v === 'weight') return 'Weight'
@@ -32,6 +32,13 @@ export default {
     if (v === 'nutrition') return true
     if (v === 'nutrition.x') return true
 
+    return false
+  },
+  isIOSOnly (v) {
+    if (v === 'heart_rate_variability') return true
+    return false
+  },
+  isAndroidOnly (v) {
     return false
   }
 }

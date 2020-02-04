@@ -39,12 +39,12 @@ div .exactFit {
 </style>
 
 <script>
-import TableAuditLog from '../components/TableAuditLog';
-import CardNewTeam from '../components/CardNewTeam';
-import CardTeamsInvitations from '../components/CardTeamsInvitations';
-import CardUsers from '../components/CardUsers';
-import CardStudies from '../components/CardStudies';
-import CardEmailTester from '../components/CardEmailTester';
+import TableAuditLog from '../components/TableAuditLog'
+import CardNewTeam from '../components/CardNewTeam'
+import CardTeamsInvitations from '../components/CardTeamsInvitations'
+import CardUsers from '../components/CardUsers'
+import CardStudies from '../components/CardStudies'
+import CardEmailTester from '../components/CardEmailTester'
 
 export default {
   name: 'AdminHomePage',
