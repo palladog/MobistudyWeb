@@ -60,9 +60,22 @@ export default {
         teamKey: '',
         publishedTS: undefined,
         generalities: {
-          title: '',
-          shortDescription: '',
-          longDescription: '',
+          languages: {
+            en: true,
+            sv: false
+          },
+          title: {
+            en: '',
+            sv: ''
+          },
+          shortDescription: {
+            en: '',
+            sv: ''
+          },
+          longDescription: {
+            en: '',
+            sv: ''
+          },
           startDate: undefined,
           endDate: undefined,
           principalInvestigators: [
@@ -77,14 +90,25 @@ export default {
               name: '',
               contact: '',
               dataAccess: '',
-              reasonForDataAccess: ''
+              reasonForDataAccess: {
+                en: '',
+                sv: ''
+              }
             }
           ]
         },
         inclusionCriteria: {
+          countries: {
+            se: true,
+            gb: false
+          },
           minAge: undefined,
           maxAge: undefined,
-          gender: [],
+          sex: [
+            'male',
+            'female',
+            'other'
+          ],
           numberOfParticipants: undefined,
           lifestyle: { active: 'notrequired', smoker: 'notrequired' },
           criteriaQuestions: [],
@@ -104,6 +128,10 @@ export default {
   validations: {
     studyDesign: {
       generalities: {
+        languages: {
+          en: { required },
+          sv: { required }
+        },
         title: { required },
         shortDescription: { required },
         longDescription: { required },
@@ -134,7 +162,7 @@ export default {
       inclusionCriteria: {
         minAge: { required },
         maxAge: { required },
-        gender: { required }
+        sex: { required }
       },
       tasks: {
         required,
