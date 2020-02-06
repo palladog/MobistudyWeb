@@ -5,7 +5,7 @@ module.exports = function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     boot: [
-      'axios', 'vuelidate'
+      'axios', 'vuelidate', 'i18n'
     ],
 
     css: [

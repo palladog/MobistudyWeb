@@ -28,7 +28,7 @@
         <study-design-tasks v-model="studyDesign.tasks" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks" :languages="studyDesign.generalities.languages"></study-design-tasks>
       </q-tab-panel>
       <q-tab-panel name="tab-consent">
-        <study-design-consent v-model="studyDesign" :v="$v.studyDesign" :languages="studyDesign.generalities.languages"></study-design-consent>
+        <study-design-consent v-model="studyDesign" :v="$v.studyDesign"></study-design-consent>
       </q-tab-panel>
     </q-tab-panels>
 
@@ -111,8 +111,14 @@ export default {
         },
         tasks: [],
         consent: {
-          invitation: undefined,
-          privacyPolicy: undefined,
+          invitation: {
+            en: '',
+            sv: ''
+          },
+          privacyPolicy: {
+            en: '',
+            sv: ''
+          },
           taskItems: [],
           extraItems: []
         }

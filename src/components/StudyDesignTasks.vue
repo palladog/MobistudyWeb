@@ -86,7 +86,19 @@ import { schedulingToString } from '../modules/Scheduling.js'
 import API from '../modules/API.js'
 import FormBuilder from 'components/DialogFormBuilder.vue'
 import FormSimulator from 'components/DialogFormSimulator.vue'
-import QueryDataTypeEnum from '../modules/QueryDataTypeEnum.js'
+import HealthDataTypesEnum from '../modules/healthDataTypesEnum.js'
+
+let healthDataTypesEnum2String = function (type) {
+  if (type === 'steps') return 'Steps'
+  if (type === 'weight') return 'Weight'
+  if (type === 'height') return 'Height'
+  if (type === 'activity') return 'Activity (incl. walking, running, biking, sleeping, sport, ...)'
+  if (type === 'heart_rate') return 'Heart rate (cannot aggregate)'
+  if (type === 'heart_rate_variability') return 'Heart Rate Variability (iPhones only, cannot aggregate)'
+  if (type === 'calories') return 'Calories'
+  if (type === 'distance') return 'Distance'
+  return '???'
+}
 
 export default {
   components: {
@@ -108,36 +120,38 @@ export default {
         copyright: undefined,
         questions: []
       },
-      selectOptionsDataTypeForQuery: QueryDataTypeEnum.values.map((v) => {
+      selectOptionsDataTypeForQuery: HealthDataTypesEnum.values.map((v) => {
         return {
-          label: QueryDataTypeEnum.valueToString(v),
+          label: healthDataTypesEnum2String(v),
           value: v
         }
       }),
-      selectOptionsBucketForQuery: [{
-        value: 'none',
-        label: 'None'
-      },
-      {
-        value: 'hour',
-        label: 'Hour'
-      },
-      {
-        value: 'day',
-        label: 'Day'
-      },
-      {
-        value: 'week',
-        label: 'Week'
-      },
-      {
-        value: 'month',
-        label: 'Month'
-      },
-      {
-        value: 'year',
-        label: 'Year'
-      }]
+      selectOptionsBucketForQuery: [
+        {
+          value: 'none',
+          label: 'None'
+        },
+        {
+          value: 'hour',
+          label: 'Hour'
+        },
+        {
+          value: 'day',
+          label: 'Day'
+        },
+        {
+          value: 'week',
+          label: 'Week'
+        },
+        {
+          value: 'month',
+          label: 'Month'
+        },
+        {
+          value: 'year',
+          label: 'Year'
+        }
+      ]
     }
   },
   async created () {
@@ -169,7 +183,7 @@ export default {
       return schedulingToString(sc)
     },
     allowAggregated (v) {
-      let state = QueryDataTypeEnum.allowsAggregated(v)
+      let state = HealthDataTypesEnum.allowsAggregated(v)
       return state
     },
     addDT () {

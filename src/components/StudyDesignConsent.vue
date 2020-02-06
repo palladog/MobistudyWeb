@@ -7,30 +7,30 @@
       </q-card-section>
       <!-- Consent Tab: Invitation Message Card -->
       <q-card-section>
-        <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Invitation Message: </div>
-          <div class="col">
-            <q-input
-            v-model.trim="value.consent.invitation"
-            @blur="v.consent.invitation.$touch"
-            type="textarea" rows="7"
-            hint="An invitation message recevied by the participant."
-            :error="v.consent.invitation.$error"
-            error-message="An invitation message is required."
-            @input="update()"/>
+        <div class="row">
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Invitation Message:
+            </div>
+            <div class="text-caption">
+              An invitation message recevied by the participant.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-input-multilang type="textarea" v-model.trim="value.consent.invitation" @blur="v.consent.invitation.$touch" @input="update()" :languages="value.generalities.languages" required/>
           </div>
         </div>
         <div class="row q-mt-sm">
-          <div class="col-2 text-bold q-pt-md"> Privacy Policy: </div>
-          <div class="col">
-            <q-input
-            v-model.trim="value.consent.privacyPolicy"
-            @blur="v.consent.privacyPolicy.$touch"
-            :error="v.consent.privacyPolicy.$error" error-message="A Privacy message is required."
-            type="textarea" rows="7"
-            hint="Edit the policy according to the study's characteristics. You can use the automatic example as a baseline."
-            @input="update()"
-            />
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Privacy Policy:
+            </div>
+            <div class="text-caption">
+              Edit the policy according to the study's characteristics. You can use the automatic example as a baseline.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-input-multilang type="textarea" v-model.trim="value.consent.privacyPolicy" @blur="v.consent.privacyPolicy.$touch" @input="update()" :languages="value.generalities.languages" required/>
             <q-btn label="Generate example policy" color="primary" @click="generatePrivacy()"/>
           </div>
         </div>
@@ -80,14 +80,28 @@
 </template>
 
 <script>
+import QInputMultilang from './QInputMultilang'
 import { schedulingToString } from '../modules/Scheduling.js'
-import QueryDataTypeEnum from '../modules/QueryDataTypeEnum.js'
-import privacyPolicy from '../modules/privacyPolicy.js'
+
+let healthDataTypesEnum2String = function (type) {
+  if (type === 'steps') return 'Steps'
+  if (type === 'weight') return 'Weight'
+  if (type === 'height') return 'Height'
+  if (type === 'activity') return 'Activity'
+  if (type === 'heart_rate') return 'Heart rate'
+  if (type === 'heart_rate_variability') return 'Heart rate variability'
+  if (type === 'calories') return 'Calories'
+  if (type === 'distance') return 'Distance walked or run'
+  return '???'
+}
 
 export default {
   name: 'StudyDesignConsent',
   // value is the whole study design
   props: ['value', 'v'],
+  components: {
+    QInputMultilang
+  },
   data () {
     return {
       alwaysTrue: true
@@ -103,7 +117,7 @@ export default {
       }
       if (task.type === 'dataQuery') {
         newTaskItem.description = 'You agree to send your data about ' +
-        QueryDataTypeEnum.valueToString(task.dataType) + '. ' + schedulingToString(task.scheduling)
+        healthDataTypesEnum2String(task.dataType) + '. ' + schedulingToString(task.scheduling)
       } else if (task.type === 'form') {
         newTaskItem.description = `You agree to answer the "${task.formName}" form. ` +
         schedulingToString(task.scheduling)
@@ -125,11 +139,27 @@ export default {
       this.value.consent.extraItems.splice(index, 1)
     },
     generatePrivacy () {
-      let principalInvestigators = this.value.generalities.principalInvestigators
-      let institutions = this.value.generalities.institutions
-      let tasks = this.value.tasks
-      let string = privacyPolicy.createPrivacyPolicy(principalInvestigators, institutions, tasks)
-      this.value.consent.privacyPolicy = string
+      for (let lang of this.value.generalities.languages) {
+        let string = this.$i18n.t('privacyPolicy.collectedData', lang)
+        for (let task of this.value.tasks) {
+          if (task.type === 'form') string += '\n' + this.$i18n.t('privacyPolicy.collectedDataForm', lang, { formName: task.formName })
+          else if (task.type === 'dataQuery') string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQuery', lang, { dataType: healthDataTypesEnum2String(task.dataType) })
+        }
+        string += '\n\n' + this.$i18n.t('privacyPolicy.storage', lang)
+        string += '\n\n' + this.$i18n.t('privacyPolicy.access', lang)
+        for (let institution of this.value.generalities.institutions) {
+          string += '\n' + this.$i18n.t('privacyPolicy.accessInstitution', lang, { institution: institution.name })
+          if (institution.dataAccess !== 'no') {
+            string += ', ' + this.$i18n.t('privacyPolicy.accessReason', lang, { reason: institution.reasonForDataAccess[lang] })
+          }
+        }
+        string += '\n\n' + this.$i18n.t('privacyPolicy.rights', lang)
+        string += '\n\n' + this.$i18n.t('privacyPolicy.contacts', lang)
+        for (let pi of this.value.generalities.principalInvestigators) {
+          string += '\n' + this.$i18n.t('privacyPolicy.piContact', lang, { name: pi.name, contact: pi.contact })
+        }
+        this.value.consent.privacyPolicy[lang] = string
+      }
     }
   }
 }
