@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div v-for="(supported, lang) in languages" :key="lang">
+    <div v-for="lang in languages" :key="lang">
       <q-input :type="inputtype" autogrow :readonly="readonly"
-      v-if="supported" v-model="value[lang]" @blur="blur()" @input="update()"
+      v-model="value[lang]" @blur="blur()" @input="update()"
       :hint="'Text in '+extendedLang(lang)"
       :rules="[val => (!required || !!val) || 'Field is required.']"
       />
@@ -15,7 +15,7 @@ export default {
   name: 'QInputMultilang',
   props: {
     value: Object,
-    languages: Object,
+    languages: Array,
     required: Boolean,
     readonly: Boolean,
     type: String

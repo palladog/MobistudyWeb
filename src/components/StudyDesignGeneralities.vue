@@ -16,8 +16,10 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-checkbox v-model.trim="v.languages.en.$model" @blur="v.languages.$touch" @input="update()" label="English" />
-            <q-checkbox v-model.trim="v.languages.sv.$model" @blur="v.languages.$touch" @input="update()" label="Swedish" />
+            <q-field :error="v.languages.$error" error-message="At least one language must be specified">
+            <q-checkbox v-model.trim="v.languages.$model" @blur="v.languages.$touch" @input="update()" val="en" label="English" />
+            <q-checkbox v-model.trim="v.languages.$model" @blur="v.languages.$touch" @input="update()" val="sv" label="Swedish" />
+            </q-field>
           </div>
         </div>
         <div class="row">

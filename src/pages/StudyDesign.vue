@@ -22,13 +22,13 @@
         <study-design-generalities v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></study-design-generalities>
       </q-tab-panel>
       <q-tab-panel name="tab-crit">
-        <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria"></study-design-criteria>
+        <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria" :languages="studyDesign.generalities.languages"></study-design-criteria>
       </q-tab-panel>
       <q-tab-panel name="tab-tasks">
-        <study-design-tasks v-model="studyDesign.tasks" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks"></study-design-tasks>
+        <study-design-tasks v-model="studyDesign.tasks" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks" :languages="studyDesign.generalities.languages"></study-design-tasks>
       </q-tab-panel>
       <q-tab-panel name="tab-consent">
-        <study-design-consent v-model="studyDesign" :v="$v.studyDesign"></study-design-consent>
+        <study-design-consent v-model="studyDesign" :v="$v.studyDesign" :languages="studyDesign.generalities.languages"></study-design-consent>
       </q-tab-panel>
     </q-tab-panels>
 
@@ -60,10 +60,7 @@ export default {
         teamKey: '',
         publishedTS: undefined,
         generalities: {
-          languages: {
-            en: true,
-            sv: false
-          },
+          languages: ['en'],
           title: {
             en: '',
             sv: ''
@@ -98,10 +95,7 @@ export default {
           ]
         },
         inclusionCriteria: {
-          countries: {
-            se: true,
-            gb: false
-          },
+          countries: ['sv'],
           minAge: undefined,
           maxAge: undefined,
           sex: [
@@ -128,10 +122,7 @@ export default {
   validations: {
     studyDesign: {
       generalities: {
-        languages: {
-          en: { required },
-          sv: { required }
-        },
+        languages: { required },
         title: { required },
         shortDescription: { required },
         longDescription: { required },
@@ -160,6 +151,7 @@ export default {
         endDate: { required }
       },
       inclusionCriteria: {
+        countries: { required },
         minAge: { required },
         maxAge: { required },
         sex: { required }
@@ -210,6 +202,7 @@ export default {
     checkValidation: function () {
       // Checking for Errors only in tabs generalities and Error
       let errors = false
+      this.$v.studyDesign.$touch()
       this.$v.studyDesign.generalities.$touch()
       this.$v.studyDesign.inclusionCriteria.$touch()
       this.$v.studyDesign.tasks.$touch()
@@ -218,16 +211,13 @@ export default {
       if (this.$v.studyDesign.generalities.$error) {
         this.$q.notify('Please correct the fields in the Generalities tab.')
         errors = true
-      }
-      if (this.$v.studyDesign.inclusionCriteria.$error) {
+      } else if (this.$v.studyDesign.inclusionCriteria.$error) {
         this.$q.notify('Please correct the fields in the Inclusion criteria tab.')
         errors = true
-      }
-      if (this.$v.studyDesign.tasks.$error) {
+      } else if (this.$v.studyDesign.tasks.$error) {
         this.$q.notify('Please correct the fields in the Tasks tab.')
         errors = true
-      }
-      if (this.$v.studyDesign.consent.$error) {
+      } else if (this.$v.studyDesign.consent.$error) {
         this.$q.notify('Please correct the fields in the Consent tab.')
         errors = true
       }
