@@ -15,12 +15,24 @@ Install all other dependencies with `npm install`.
 ## Run it
 
 To start the interface, run `npm run dev` or, if you have installed the quasar cli, `quasar dev`.
-You will need the MobistudyAPI running in parallel (see MobistudyAPI docs).
+You will need the MobistudyAPI running in parallel (see MobistudyAPI README).
 
 ## Develop it
 
 The code is written mostly in ES6 and uses ES6 modules, please be consistent.
+If you use VS Code, follow the [recommended settings from Quasar](https://quasar.dev/start/vs-code-configuration#Introduction).
 
+## Test it
+
+```bash
+npm run test:unit
+```
+
+If you want to have quasar and the tests running in parallel and watching for code changes:
+
+```bash
+npm run concurrently:dev:jest
+```
 
 ## Deploy it
 

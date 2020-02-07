@@ -31,43 +31,74 @@
       </q-card-section>
       <q-card-section>
         <div v-if="task.type === 'dataQuery'" class="row">
-          <div class="col-2 text-bold q-pt-lg"> Data type: </div>
-          <div class="col">
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Data type:
+            </div>
+            <div class="text-caption">
+              Data type to be collected.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
             <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" hint="Data type to be collected." @input="update()"/>
           </div>
         </div>
         <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row">
-          <div class="col-2 text-bold q-pt-lg"> Aggregated: </div>
-          <div class="col">
-            <q-field hint="If aggregated, the data will be summed.">
-              <q-checkbox v-model="task.aggregated" @input="update()"/>
-            </q-field>
+          <div class="col-4">
+            <div class="text-bold">
+              Aggregation:
+            </div>
+            <div class="text-caption">
+              Optional. If aggregated, the data will be summed over the entire period or per bucket.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-checkbox v-model="task.aggregated" @input="update()"/>
           </div>
         </div>
         <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row">
-          <div class="col-2 text-bold q-pt-lg"> Bucket: </div>
-          <div class="col">
-            <q-select v-model="task.bucket" emit-value map-options :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated" hint="You can sum the data into buckets of given length." @input="update()"/>
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Bucket:
+            </div>
+            <div class="text-caption">
+              You can sum the data into buckets of given length.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-select v-model="task.bucket" emit-value map-options :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated" @input="update()"/>
           </div>
         </div>
 
         <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
 
         <div v-if="task.type === 'form'" class="row">
-          <div class="col-2 text-bold q-pt-lg"> Form: </div>
-          <div class="col">
-            <q-select v-model="task.formKey" emit-value map-options :options="selectOptionsFormsList" @input="changeFormName(task, $event)" hint="Select the form from the list."/>
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Form:
+            </div>
+            <div class="text-caption">
+              Select the form from the list or create a new one.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-select v-model="task.formKey" emit-value map-options :options="selectOptionsFormsList" @input="changeFormName(task, $event)"/>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-2 text-bold q-pt-lg"> Scheduling: </div>
-          <div class="col">
-            <q-field hint="Scheduling of the task. Click the down-arrow to expand.">
-              <q-expansion-item expand-separator  :label="schedulingToString(task.scheduling)">
-                <scheduler v-model="task.scheduling"></scheduler>
-              </q-expansion-item>
-            </q-field>
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Scheduling:
+            </div>
+            <div class="text-caption">
+              Scheduling of the task. Click the down-arrow to expand.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-expansion-item expand-separator  :label="schedulingToString(task.scheduling)">
+              <scheduler v-model="task.scheduling"></scheduler>
+            </q-expansion-item>
           </div>
         </div>
 
@@ -180,7 +211,7 @@ export default {
       }
     },
     schedulingToString (sc) {
-      return schedulingToString(sc)
+      return schedulingToString(sc, 'en')
     },
     allowAggregated (v) {
       let state = HealthDataTypesEnum.allowsAggregated(v)
