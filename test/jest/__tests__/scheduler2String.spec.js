@@ -11,7 +11,7 @@ const components = Object.keys(All).reduce((object, key) => {
   return object
 }, {})
 
-describe('Mount Quasar', () => {
+describe('Scheduler to String', () => {
   const localVue = createLocalVue()
   localVue.use(Quasar, { components })
 

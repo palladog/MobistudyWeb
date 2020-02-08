@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="lang in languages" :key="lang">
-      <q-input :type="inputtype" autogrow :readonly="readonly"
+      <q-input :type="inputtype" :autogrow="inputtype == 'textarea'" :readonly="readonly"
       v-model="value[lang]" @blur="blur()" @input="update()"
       :hint="'Text in '+extendedLang(lang)"
       :rules="[val => (!required || !!val) || 'Field is required.']"
