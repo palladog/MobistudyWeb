@@ -11,7 +11,7 @@ export function schedulingToString (sc, lang) {
     }
     if (sc.untilSecs) {
       let untilFromConsent = Math.floor(sc.untilSecs / (24 * 60 * 60))
-      s += i18n.t('scheduling.untilDaysConsented', lang, { days: untilFromConsent}) + '. '
+      s += i18n.t('scheduling.untilDaysConsented', lang, { days: untilFromConsent }) + '. '
     }
   }
   if (sc.occurrences) {

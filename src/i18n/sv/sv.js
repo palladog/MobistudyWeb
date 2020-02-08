@@ -25,7 +25,7 @@ Sui server Mobistudy:
     piContact: `{name} presso: {contact}`
   },
   consent: {
-    taskItemDataQuery: `Consento di inviare i miei dati relativi a {dataType} {scheduling}.`,
+    taskItemDataQuery: `Consento di inviare i miei dati relativi a {dataType}, {scheduling}`,
     taskItemForm: `Consento di rispondere al questionario {formName} {scheduling}.`
   },
   scheduling: {
