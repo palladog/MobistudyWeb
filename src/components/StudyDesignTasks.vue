@@ -24,7 +24,7 @@
       </q-card-section>
     </q-card>
     <!-- Tasks -->
-    <q-card  v-for="(task, index) in value" :key="index" class="form-card">
+    <q-card  v-for="(task, index) in value.tasks" :key="index" class="form-card">
       <q-card-section>
         <div class="text-h6" v-if="task.type === 'dataQuery'"> Data Query Task </div>
         <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
@@ -106,8 +106,8 @@
       </q-card-section>
     </q-card>
 
-    <formbuilder ref="formbuilder" v-model="newForm" @simulateForm="openFormSimulator()" @saved="getForms()"></formbuilder>
-    <formsimulator ref="formsimulator" :form='newForm' @closed="openFormBuilder()"></formsimulator>
+    <formbuilder ref="formbuilder" v-model="newForm" @simulateForm="openFormSimulator()" @saved="getForms()" :languages="value.generalities.languages"></formbuilder>
+    <formsimulator ref="formsimulator" :form='newForm' @closed="openFormBuilder()" :languages="value.generalities.languages"></formsimulator>
   </div>
 </template>
 
@@ -138,18 +138,27 @@ export default {
     'formsimulator': FormSimulator
   },
   name: 'StudyDesignTasks',
+  // value here is the whole study design
   props: [ 'value', 'teamKey' ],
   data () {
-    return {
+    let data = {
       selectOptionsFormsList: [],
       newForm: {
         teamKey: this.teamKey,
-        name: undefined,
-        description: undefined,
-        references: undefined,
-        public: false,
-        copyright: undefined,
-        questions: []
+        name: {},
+        description: {},
+        questions: [{
+          id: 'Q1',
+          text: {},
+          helper: {},
+          type: 'freetext',
+          nextDefaultId: undefined,
+          answerChoices: [{
+            id: 'Q1A1',
+            text: {},
+            nextQuestionId: undefined
+          }]
+        }]
       },
       selectOptionsDataTypeForQuery: HealthDataTypesEnum.values.map((v) => {
         return {
@@ -184,6 +193,16 @@ export default {
         }
       ]
     }
+    // add language-dependent stuff for the form
+    for (let lang of this.value.generalities.languages) {
+      data.newForm.name[lang] = ''
+      data.newForm.description[lang] = ''
+      data.newForm.questions[0].text[lang] = ''
+      data.newForm.questions[0].helper[lang] = ''
+      data.newForm.questions[0].answerChoices[0].text[lang] = ''
+    }
+
+    return data
   },
   async created () {
     this.getForms()
@@ -218,8 +237,8 @@ export default {
       return state
     },
     addDT () {
-      this.value.push({
-        id: this.value.length + 1,
+      this.value.tasks.push({
+        id: this.value.tasks.length + 1,
         type: 'dataQuery',
         scheduling: {
           startEvent: 'consent',
@@ -239,17 +258,17 @@ export default {
       this.update()
     },
     removeTask (index) {
-      this.value.splice(index, 1)
+      this.value.tasks.splice(index, 1)
       // update task id
-      for (let i = 0; i < this.value.length; i++) {
+      for (let i = 0; i < this.value.tasks.length; i++) {
         // update the task ids after the one that has been removed
-        if (i >= index) this.value[i].id = this.value[i].id - 1
+        if (i >= index) this.value.tasks[i].id = this.value.tasks[i].id - 1
       }
       this.update()
     },
     addFormT () {
-      this.value.push({
-        id: this.value.length + 1,
+      this.value.tasks.push({
+        id: this.value.tasks.length + 1,
         type: 'form',
         scheduling: {
           startEvent: 'consent',
@@ -263,7 +282,7 @@ export default {
           weekDays: []
         },
         formKey: undefined,
-        // this is mainly used for the consent tab, so it can be discarded when the object is sent to the server
+        // this is mainly used for the consent tab, it can be discarded when the object is sent to the server
         formName: undefined
       })
       this.update()
@@ -276,26 +295,6 @@ export default {
       this.update()
     },
     createForm () {
-      this.newForm = {
-        teamKey: this.teamKey,
-        name: undefined,
-        description: undefined,
-        references: undefined,
-        public: false,
-        copyright: undefined,
-        questions: [{
-          id: 'Q1',
-          text: undefined,
-          helper: undefined,
-          type: 'freetext',
-          nextDefaultId: undefined,
-          answerChoices: [{
-            id: 'Q1A1',
-            text: undefined,
-            nextQuestionId: undefined
-          }]
-        }]
-      }
       this.$refs.formbuilder.show()
     },
     openFormBuilder () {

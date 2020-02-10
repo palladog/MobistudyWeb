@@ -25,7 +25,7 @@
         <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria" :languages="studyDesign.generalities.languages"></study-design-criteria>
       </q-tab-panel>
       <q-tab-panel name="tab-tasks">
-        <study-design-tasks v-model="studyDesign.tasks" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks" :languages="studyDesign.generalities.languages"></study-design-tasks>
+        <study-design-tasks v-model="studyDesign" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks"></study-design-tasks>
       </q-tab-panel>
       <q-tab-panel name="tab-consent">
         <study-design-consent v-model="studyDesign" :v="$v.studyDesign"></study-design-consent>

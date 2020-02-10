@@ -9,37 +9,31 @@
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
       <q-card-section>
-        <div class="q-pa-lg">
-          <div class="row q-mt-md">
-            <div class="col-2 text-bold q-pt-md"> Form name: </div>
-            <div class="col">
-              <q-input v-model="value.name" type="text" hint="Name of the form. This is displayed to the user." @input="update()"/>
+        <div class="q-pa-md">
+          <div class="row">
+            <div class="col-3 q-pt-sm">
+              <div class="text-bold">
+                Form name:
+              </div>
+              <div class="text-caption">
+                Short name of the form.  This is used in several places of the user interface.
+              </div>
+            </div>
+            <div class="col q-pl-sm">
+              <q-input-multilang v-model="value.name" type="text" @input="update()" :languages="languages" required/>
             </div>
           </div>
-          <div class="row q-mt-md">
-            <div class="col-2 text-bold q-pt-md"> Description: </div>
-            <div class="col">
-              <q-input v-model="value.description" type="textarea" rows="3" hint="Short description for the form. This is displayed to the user." @input="update()"/>
+          <div class="row">
+            <div class="col-3 q-pt-sm">
+              <div class="text-bold">
+                Description:
+              </div>
+              <div class="text-caption">
+                Short description for the form. This is displayed to the user.
+              </div>
             </div>
-          </div>
-          <div class="row q-mt-md">
-            <div class="col-2 text-bold q-pt-md"> References: </div>
-            <div class="col">
-              <q-input v-model="value.references" type="textarea" rows="3" clearable hint="If applicable, bibliographic references. This is not displayed to the user." @input="update()"/>
-            </div>
-          </div>
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Copyright: </div>
-            <div class="col">
-              <q-input v-model="value.copyright" type="textarea" rows="3" clearable hint="If applicable, indicate of the questionnaire is copyrighted, by whom, and if it is necessary to acquire a license in order to use it. This is not displayed to the user." @input="update()"/>
-            </div>
-          </div>
-          <div class="row q-mt-sm">
-            <div class="col-2 text-bold q-pt-md"> Public: </div>
-            <div class="col">
-              <q-field hint="If public, this form can be used by all teams, otherwise it will only visible to this team. Tick this only if it is a well-known questionnaire of general interest (e.g. EQ-5D). This is not displayed to the user.">
-                <q-checkbox v-model="value.public" @input="update()"/>
-              </q-field>
+            <div class="col q-pl-sm">
+              <q-input-multilang v-model="value.description" type="textarea" @input="update()" :languages="languages" required/>
             </div>
           </div>
 
@@ -48,46 +42,98 @@
           </div>
           <!-- Question -->
           <div class="shadow-1 q-pa-md q-mt-lg" v-for="(question, qIndex) in value.questions" :key="qIndex">
+            <div class="q-pa-sm text-bold"> Question </div>
             <div class="row">
-              <div class="col-2"> Question </div>
-              <div class="col"> <q-input label="ID" v-model="question.id" type="text" readonly hint="Identifier of this question. This is set automatically."/> </div>
+              <div class="col-2">
+                ID.
+                <div class="text-caption">
+                  Identifier of this question.
+                </div>
+              </div>
+              <div class="col q-pl-sm">
+                <q-input label="ID" v-model="question.id" hint="This is set automatically." type="text" readonly/>
+              </div>
             </div>
             <div class="row q-mt-sm">
-              <div class="col-2"> </div>
-              <div class="col"> <q-select label="Question Type" v-model="question.type" emit-value map-options :options="questionTypeOptions" hint="Type of question."  @input="update()"/> </div>
+              <div class="col-2">
+                Question Type.
+                <div class="text-caption">
+                  Type of question.
+                </div>
+              </div>
+              <div class="col q-pl-sm">
+                <q-select v-model="question.type" emit-value map-options :options="questionTypeOptions"  @input="update()"/>
+              </div>
             </div>
             <div class="row q-mt-sm">
-              <div class="col-2"> </div>
-              <div class="col"> <q-input label="Question text" v-model="question.text" type="text" @input="update()" hint="Text of the question. This is displayed to the user."/> </div>
+              <div class="col-2">
+                Question text.
+                <div class="text-caption">
+                  Text of the question.
+                </div>
+              </div>
+              <div class="col q-pl-sm">
+                <q-input-multilang v-model="question.text" type="text" @input="update()" :languages="languages" required/>
+              </div>
             </div>
             <div class="row q-mt-sm">
-              <div class="col-2"> </div>
-              <div class="col"> <q-input label="Helper" v-model="question.helper" type="text" @input="update()" hint="Short subcaption or helper. This is displayed to the user."/> </div>
+              <div class="col-2">
+                Helper.
+                <div class="text-caption">
+                  Short subcaption or helper.
+                </div>
+              </div>
+              <div class="col q-pl-sm">
+                <q-input-multilang label="Helper" v-model="question.helper" type="text" @input="update()" :languages="languages"/>
+              </div>
             </div>
             <div class="row q-mt-sm">
-              <div class="col-2"> </div>
-              <div class="col"> <q-select label="Next question ID" clearable color="secondary" v-model="question.nextDefaultId" :options="defaultIdSelection" hint="If not specified, the next available question will be used. Terminate the form with 'ENDFORM'." @input="update()"/> </div>
+              <div class="col-2">
+                Next question ID.
+                <div class="text-caption">
+                  If not specified, the next available question will be used.
+                </div>
+              </div>
+              <div class="col q-pl-sm">
+                <q-select clearable color="secondary" v-model="question.nextDefaultId" :options="defaultIdSelection" hint="ENDFORM terminates the form." @input="update()"/>
+              </div>
             </div>
 
             <!-- Answers -->
             <div class="q-pa-lg q-mt-sm shadow-1 bg-green-1" style="max-width: 800px" v-show="question.type !== 'freetext'" v-for="(answerChoice, aIndex) in question.answerChoices" :key="aIndex">
+              <div class="q-pa-sm text-bold"> Answer </div>
               <div class="row q-mt-sm">
-                <div class="col-2"> Answer </div>
-                <div class="col">
+                <div class="col-2">
+                  Answer ID.
+                  <div class="text-caption">
+                    Identifier of this answer.
+                  </div>
+                </div>
+                <div class="col q-pl-sm">
                   <q-input label="Answer ID" v-model="answerChoice.id" type="text" readonly hint="This is auto generated."/>
                 </div>
               </div>
               <div class="row q-mt-sm">
-                <div class="col-2"> </div>
-                <div class="col">
-                  <q-input label="Answer Text" v-model="answerChoice.text" type="text" hint="Answer text (e.g. 'Yes'). This is displayed to the user." />
+                <div class="col-2">
+                  Answer Text.
+                  <div class="text-caption">
+                    Text of this answer (e.g. 'Yes').
+                  </div>
+                </div>
+                <div class="col q-pl-sm">
+                  <q-input-multilang label="Answer Text" v-model="answerChoice.text" type="text" :languages="languages"/>
                 </div>
               </div>
-              <div class="row q-mt-sm">
-                <div class="col-2"> </div>
-                <div class="col">
-                  <p v-show="question.type !== 'multiChoice' && answerChoice.nextQuestionId == 'REMOVED'" class="text-negative">THIS QUESTION HAS BEEN REMOVED!</p>
-                  <q-select v-show="question.type !== 'multiChoice'" label="Next Question ID" v-model="answerChoice.nextQuestionId" :options="defaultIdSelection" hint="Optional. If specified, when this answer is selected, the next question will be the one with this ID. Terminate the form with the 'ENDFORM'." @input="update()" />
+              <div class="row q-mt-sm" v-show="question.type !== 'multiChoice'">
+                <div class="col-2">
+                  Next Question ID.
+                  <div class="text-caption">
+                    Optional. This answer will be followed by the question with this ID.
+                  </div>
+                </div>
+                <div class="col q-pl-sm">
+                  <p v-show="answerChoice.nextQuestionId == 'REMOVED'" class="text-negative">THIS QUESTION HAS BEEN REMOVED!</p>
+                  <q-select v-model="answerChoice.nextQuestionId" :options="defaultIdSelection" hint="ENDFORM will terminate the form." @input="update()" />
                 </div>
               </div>
               <div class="row q-mt-md">
@@ -130,10 +176,14 @@
 
 <script>
 import API from '../modules/API.js'
+import QInputMultilang from './QInputMultilang'
 
 export default {
   name: 'FormBuilder',
-  props: ['value'],
+  props: ['value', 'languages'],
+  components: {
+    QInputMultilang
+  },
   data () {
     return {
       questionsCounter: this.value.questions.length,
@@ -165,7 +215,6 @@ export default {
       this.$emit('input', this.value)
     },
     show () {
-      console.log('questionnaire', this.value)
       this.opened = true
     },
     openFormSimulator () {
@@ -174,17 +223,24 @@ export default {
     },
     addQuestion () {
       let qid = 'Q' + (this.value.questions.length + 1)
-      this.value.questions.push({
+      let newQuestion = {
         id: qid,
-        text: undefined,
+        text: {},
+        helper: {},
         type: 'singleChoice',
         nextDefaultId: undefined,
         answerChoices: [{
           id: qid + 'A1',
-          text: undefined,
+          text: {},
           nextQuestionId: undefined
         }]
-      })
+      }
+      for (let lang of this.languages) {
+        newQuestion.text[lang] = ''
+        newQuestion.helper[lang] = ''
+        newQuestion.answerChoices[0].text[lang] = ''
+      }
+      this.value.questions.push(newQuestion)
     },
     // removes a question and updates all question IDs, answerChoiceIDs and nextQuestionIDs
     removeQuestion (qIndex) {
@@ -223,11 +279,15 @@ export default {
     // add an answer choice
     addAnswerChoice (qIndex) {
       if (!this.value.questions[qIndex].answerChoices) this.value.questions[qIndex].answerChoices = []
-      this.value.questions[qIndex].answerChoices.push({
+      let newAnswer = {
         id: this.value.questions[qIndex].id + 'A' + (this.value.questions[qIndex].answerChoices.length + 1),
-        text: undefined,
+        text: {},
         nextQuestionId: undefined
-      })
+      }
+      for (let lang of this.languages) {
+        newAnswer.text[lang] = ''
+      }
+      this.value.questions[qIndex].answerChoices.push(newAnswer)
     },
     // removes an answer choice
     removeAnswerChoice (qIndex, aIndex) {
