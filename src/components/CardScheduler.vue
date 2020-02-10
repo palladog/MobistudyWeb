@@ -85,8 +85,6 @@
 </template>
 
 <script>
-import { DayOfWeekEnum, MonthOfYearEnum } from '../modules/Scheduling.js'
-
 export default {
   name: 'Scheduler',
   props: ['value'],
@@ -460,20 +458,88 @@ export default {
       ],
 
       weekDays: this.value.weekDays,
-      weekDaysOpts: DayOfWeekEnum.values.map((v) => {
-        return {
-          value: v,
-          label: DayOfWeekEnum.valueToString(v)
+      weekDaysOpts: [
+        {
+          label: 'Monday',
+          value: 'mo'
+        },
+        {
+          label: 'Tuesday',
+          value: 'tu'
+        },
+        {
+          label: 'Wednesday',
+          value: 'we'
+        },
+        {
+          label: 'Thursday',
+          value: 'th'
+        },
+        {
+          label: 'Friday',
+          value: 'fr'
+        },
+        {
+          label: 'Saturday',
+          value: 'sa'
+        },
+        {
+          label: 'Sunday',
+          value: 'su'
         }
-      }),
+      ],
 
       months: this.value.months,
-      monthsOpts: MonthOfYearEnum.values.map((v) => {
-        return {
-          value: v,
-          label: MonthOfYearEnum.valueToString(v)
+      monthsOpts: [
+        {
+          label: 'January',
+          value: '1'
+        },
+        {
+          label: 'February',
+          value: '2'
+        },
+        {
+          label: 'March',
+          value: '3'
+        },
+        {
+          label: 'April',
+          value: '4'
+        },
+        {
+          label: 'May',
+          value: '5'
+        },
+        {
+          label: 'June',
+          value: '6'
+        },
+        {
+          label: 'July',
+          value: '7'
+        },
+        {
+          label: 'August',
+          value: '8'
+        },
+        {
+          label: 'September',
+          value: '9'
+        },
+        {
+          label: 'October',
+          value: '10'
+        },
+        {
+          label: 'November',
+          value: '11'
+        },
+        {
+          label: 'December',
+          value: '12'
         }
-      }),
+      ],
 
       monthDays: this.value.monthDays
     }

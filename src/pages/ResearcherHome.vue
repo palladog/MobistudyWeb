@@ -34,14 +34,14 @@
           <p>
             Draft studies (not published):
           </p>
-          <q-btn v-for="(pstudy, index) in unpublishedStudies" :key="index" class="q-ma-md" :label="pstudy.title" color="primary" @click="goToStudyDesigner(index)"/>
+          <q-btn v-for="(pstudy, index) in unpublishedStudies" :key="'d' + index" class="q-ma-md" :label="getStudyName(pstudy.title)" color="primary" @click="goToStudyDesigner(index)"/>
         </div>
 
         <div v-show="publishedStudies.length > 0">
           <p>
             Published studies:
           </p>
-          <q-btn v-for="(pstudy, index1) in publishedStudies" :key="index1" class="q-ma-md" :label="pstudy.title" color="secondary" @click="goToStudyStats(pstudy.study_key)"/>
+          <q-btn v-for="(pstudy, index) in publishedStudies" :key="'p' + index" class="q-ma-md" :label="getStudyName(pstudy.title)" color="secondary" @click="goToStudyStats(pstudy.study_key)"/>
         </div>
 
         <div class ="row q-mt-lg">
@@ -78,6 +78,17 @@ export default {
     }
   },
   methods: {
+    getStudyName (title) {
+      if (title.en) return title.en
+      else {
+        // get the first available
+        for (let lang in title) {
+          if (title[lang]) return title[lang]
+        }
+      }
+      // default
+      return 'Unknown'
+    },
     async promptAddTeam () {
       try {
         let code = await this.$q.dialog({

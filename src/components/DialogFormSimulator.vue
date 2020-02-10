@@ -1,18 +1,24 @@
 <template>
   <q-dialog v-model="opened">
-    <q-card style="width: 500px;">
+    <q-card style="width: 800px; max-width: 90vw;">
       <q-card-section>
-        <div class="text-h5 q-mb-md">Form Simulator</div>
-        <div v-show="!finished">
+        <div class="text-h6 q-mb-md">
+          Form builder
+        </div>
+        <div class="q-ma-md" v-show="langselect">
+          Select the language:
+          <q-select v-model="language" :options="languages" label="Standard" />
+        </div>
+        <div v-show="!finished && !langselect">
           <div class="row">
             <div class="col-2 text-bold"> Question ID: </div>
             <div class="col"> {{currentQuestion.id}} </div>
           </div>
           <div align="center" class="text-h6">
-            {{currentQuestion.text}}
+            {{currentQuestion.text[language]}}
           </div>
           <div align="center" class="text-weight-light">
-            {{currentQuestion.helper}}
+            {{currentQuestion.helper[language]}}
           </div>
           <!-- Answers -->
           <q-card class="bg-green-2 q-ma-md">
@@ -24,13 +30,13 @@
             <div class="q-ma-sm" v-if="currentQuestion.type === 'singleChoice'">
               <q-field hint="Please choose one.">
                 <q-radio v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index" v-model="currentAnswerSingleChoice"
-                :val="answerChoice.id" :label="answerChoice.text"/>
+                :val="answerChoice.id" :label="answerChoice.text[language]"/>
               </q-field>
             </div>
             <div class="q-ma-sm" v-if="currentQuestion.type === 'multiChoice'">
               <q-field hint="Please choose one or more.">
                 <q-checkbox v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index"
-                v-model="currentAnswerMultiChoice" :val="answerChoice.id" :label="answerChoice.text"/>
+                v-model="currentAnswerMultiChoice" :val="answerChoice.id" :label="answerChoice.text[language]"/>
               </q-field>
             </div>
           </q-card>
@@ -39,7 +45,8 @@
         <div class="q-ma-md" v-show="finished">
           COMPLETED
         </div>
-        <q-btn v-show="!finished" color="primary" @click="next()" label="Next" />
+        <q-btn v-show="langselect" color="primary" @click="start()" label="Next" />
+        <q-btn v-show="!finished && !langselect" color="primary" @click="next()" label="Next" />
         <q-btn v-show="finished" color="primary" @click="restart()" label="Restart" />
         <q-btn color="secondary" @click="close()" label="Close" />
       </q-card-section>
@@ -50,7 +57,7 @@
 <script>
 export default {
   name: 'FormViewer',
-  props: ['form'],
+  props: ['form', 'languages'],
   data () {
     return {
       tempViewerHolder: '',
@@ -58,24 +65,30 @@ export default {
       currentIndex: 0,
       currentQuestion: {
         id: undefined,
-        text: undefined,
-        helper: undefined,
+        text: {
+          en: '',
+          sv: ''
+        },
+        helper: {
+          en: '',
+          sv: ''
+        },
         type: 'freetext',
         nextDefaultId: undefined,
-        answerChoices: [{
-          id: undefined,
-          text: undefined
-        }]
+        answerChoices: []
       },
       currentAnswerSingleChoice: undefined,
       currentAnswerMultiChoice: [],
       currentAnswerFreeText: undefined,
+      langselect: true,
+      language: this.languages[0],
       finished: false
     }
   },
   methods: {
     show () {
       this.finished = false
+      this.langselect = true
       this.currentIndex = 0
       this.currentQuestion = this.form.questions[0]
       this.currentAnswerSingleChoice = undefined
@@ -83,8 +96,12 @@ export default {
       this.currentAnswerFreeText = undefined
       this.opened = true
     },
+    start () {
+      this.langselect = false
+    },
     restart () {
       this.finished = false
+      this.langselect = true
       this.currentIndex = 0
       this.currentQuestion = this.form.questions[0]
       this.currentAnswerSingleChoice = undefined
