@@ -96,18 +96,6 @@
 import QInputMultilang from './QInputMultilang'
 import { schedulingToString } from '../modules/Scheduling.js'
 
-let healthDataTypesEnum2String = function (type) {
-  if (type === 'steps') return 'Steps'
-  if (type === 'weight') return 'Weight'
-  if (type === 'height') return 'Height'
-  if (type === 'activity') return 'Activity'
-  if (type === 'heart_rate') return 'Heart rate'
-  if (type === 'heart_rate_variability') return 'Heart rate variability'
-  if (type === 'calories') return 'Calories'
-  if (type === 'distance') return 'Distance walked or run'
-  return '???'
-}
-
 export default {
   name: 'StudyDesignConsent',
   // value is the whole study design
@@ -131,12 +119,13 @@ export default {
       newTaskItem.description = {}
       for (let lang of this.value.generalities.languages) {
         if (task.type === 'dataQuery') {
+          let localDatatype = this.$i18n.t('healthDataTypes.' + task.dataType, lang)
           newTaskItem.description[lang] = this.$i18n.t('consent.taskItemDataQuery', lang, {
-            dataType: healthDataTypesEnum2String(task.dataType), scheduling: schedulingToString(task.scheduling, lang)
+            dataType: localDatatype, scheduling: schedulingToString(task.scheduling, lang)
           })
         } else if (task.type === 'form') {
           newTaskItem.description[lang] = this.$i18n.t('consent.taskItemForm', lang, {
-            formName: task.formName, scheduling: schedulingToString(task.scheduling, lang)
+            formName: task.formName[lang], scheduling: schedulingToString(task.scheduling, lang)
           })
         }
       }
@@ -163,8 +152,12 @@ export default {
       for (let lang of this.value.generalities.languages) {
         let string = this.$i18n.t('privacyPolicy.collectedData', lang)
         for (let task of this.value.tasks) {
-          if (task.type === 'form') string += '\n' + this.$i18n.t('privacyPolicy.collectedDataForm', lang, { formName: task.formName })
-          else if (task.type === 'dataQuery') string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQuery', lang, { dataType: healthDataTypesEnum2String(task.dataType) })
+          if (task.type === 'form') {
+            string += '\n' + this.$i18n.t('privacyPolicy.collectedDataForm', lang, { formName: task.formName[lang] })
+          } else if (task.type === 'dataQuery') {
+            let localDatatype = this.$i18n.t('healthDataTypes.' + task.dataType, lang)
+            string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQuery', lang, { dataType: localDatatype })
+          }
         }
         string += '\n\n' + this.$i18n.t('privacyPolicy.storage', lang)
         string += '\n\n' + this.$i18n.t('privacyPolicy.access', lang)

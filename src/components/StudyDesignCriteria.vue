@@ -226,6 +226,7 @@
 </template>
 
 <script>
+import API from '../modules/API'
 import QInputMultilang from './QInputMultilang'
 
 export default {
@@ -292,30 +293,34 @@ export default {
         abort()
         return
       }
-      const resultD = [
-        {
-          label: 'heart failure',
-          value: '1234567'
-        }
-      ]
-      update(() => {
-        this.diseaseOptions = resultD
-      })
+      let concepts = await API.searchDiseaseConcept(diseaseDescription, 'en')
+      if (concepts.length) {
+        update(() => {
+          this.diseaseOptions = concepts.map((c) => {
+            return {
+              label: c.name,
+              value: c.conceptId
+            }
+          })
+        })
+      } else abort()
     },
-    searchMeds (medDescription, update, abort) {
+    async searchMeds (medDescription, update, abort) {
       if (medDescription.length < 2) {
         abort()
         return
       }
-      const resultD = [
-        {
-          label: 'aspirin',
-          value: '22233222'
-        }
-      ]
-      update(() => {
-        this.medsOptions = resultD
-      })
+      let concepts = await API.searchMedicationConcept(medDescription, 'en')
+      if (concepts.length) {
+        update(() => {
+          this.diseaseOptions = concepts.map((c) => {
+            return {
+              label: c.name,
+              value: c.conceptId
+            }
+          })
+        })
+      } else abort()
     },
     addRowCriteriaQuestion () {
       this.value.criteriaQuestions.push({

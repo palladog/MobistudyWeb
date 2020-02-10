@@ -40,7 +40,7 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" hint="Data type to be collected." @input="update()"/>
+            <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" @input="update()"/>
           </div>
         </div>
         <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row">
@@ -145,17 +145,32 @@ export default {
       selectOptionsFormsList: [],
       newForm: {
         teamKey: this.teamKey,
-        name: {},
-        description: {},
+        name: {
+          en: '',
+          sv: ''
+        },
+        description: {
+          en: '',
+          sv: ''
+        },
         questions: [{
           id: 'Q1',
-          text: {},
-          helper: {},
+          text: {
+            en: '',
+            sv: ''
+          },
+          helper: {
+            en: '',
+            sv: ''
+          },
           type: 'freetext',
           nextDefaultId: undefined,
           answerChoices: [{
             id: 'Q1A1',
-            text: {},
+            text: {
+              en: '',
+              sv: ''
+            },
             nextQuestionId: undefined
           }]
         }]
@@ -193,14 +208,6 @@ export default {
         }
       ]
     }
-    // add language-dependent stuff for the form
-    for (let lang of this.value.generalities.languages) {
-      data.newForm.name[lang] = ''
-      data.newForm.description[lang] = ''
-      data.newForm.questions[0].text[lang] = ''
-      data.newForm.questions[0].helper[lang] = ''
-      data.newForm.questions[0].answerChoices[0].text[lang] = ''
-    }
 
     return data
   },
@@ -216,7 +223,8 @@ export default {
         let forms = await API.getFormsList()
         this.selectOptionsFormsList = forms.map((f) => {
           return {
-            label: f.name,
+            name: f.name,
+            label: f.name[this.value.generalities.languages[0]], // use the name with the first language
             value: f._key
           }
         })
@@ -291,7 +299,7 @@ export default {
       let option = this.selectOptionsFormsList.find((opt) => {
         return opt.value === formKey
       })
-      task.formName = option.label
+      task.formName = option.name
       this.update()
     },
     createForm () {

@@ -4,7 +4,7 @@ export default {
 \u2022 Le informazioni sul tuo profilo generale com indirizzo email, nome, cognome, data di nascita, paese, lingua, condizioni di salute principali, medicamenti a lungo termine e stile di vita.
 \u2022 La tua partecipazione agli studi and le volte che completi un attivitá di monitoraggio.
 \u2022 Informazioni tecniche riguardo l'accesso al server (p.e. login) per motivi di sicurezza e verifica.`,
-    collectedDataForm: `\u2022 le risposte fornite al questionario {formName}.`,
+    collectedDataForm: `\u2022 Le risposte fornite al questionario {formName}.`,
     collectedDataQuery: `\u2022 {dataType} forniti da Google Fit (Android) o HealthKit (iPhone).`,
     storage: `Dove saranno conservati questi dati?
 Sul telefono:
@@ -57,11 +57,21 @@ Sui server Mobistudy:
   },
   weekDays: {
     'mo': 'lunedi',
-    'tu': 'marted',
+    'tu': 'martedi',
     'we': 'mercoledi',
     'th': 'giovedi',
     'fr': 'venerdi',
     'sa': 'sabato',
     'su': 'domenica'
+  },
+  healthDataTypes: {
+    'steps': 'Passi',
+    'weight': 'Peso',
+    'height': 'Altezza',
+    'activity': 'Attivita\'',
+    'heart_rate': 'Frequenza cardiaca',
+    'heart_rate_variability': 'Varaibilita\' della frequenza cardiaca',
+    'calories': 'Calorie',
+    'distance': 'Distanza percorsa'
   }
 }

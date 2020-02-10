@@ -4,7 +4,7 @@ export default {
 \u2022 Your general profile information like email address, name, surname, date of birth, country, language, main health conditions, long-term treatments and lifestyle.
 \u2022 Your participation into the studies and the times you complete a task.
 \u2022 Technical information about access to the server (like logins) for security and auditing.`,
-    collectedDataForm: `\u2022 answers given to {formName} form.`,
+    collectedDataForm: `\u2022 Answers given to {formName} form.`,
     collectedDataQuery: `\u2022 {dataType} from GoogleFit (Android phones) or HealthKit (iPhones).`,
     storage: `Where will this data be stored?
 On your phone:
@@ -57,12 +57,22 @@ Mobistudy servers are managed by the University of Malmö and located in Sweden.
     '12': 'December'
   },
   weekDays: {
-    'mo': 'Monday',
-    'tu': 'Tuesday',
-    'we': 'Wednesday',
-    'th': 'Thursday',
-    'fr': 'Friday',
-    'sa': 'Saturday',
-    'su': 'Sunday'
+    mo: 'Monday',
+    tu: 'Tuesday',
+    we: 'Wednesday',
+    th: 'Thursday',
+    fr: 'Friday',
+    sa: 'Saturday',
+    su: 'Sunday'
+  },
+  healthDataTypes: {
+    steps: 'Steps',
+    weight: 'Weight',
+    height: 'Height',
+    activity: 'Activity',
+    heart_rate: 'Heart rate',
+    heart_rate_variability: 'Heart rate variability',
+    calories: 'Calories',
+    distance: 'Distance walked or run'
   }
 }

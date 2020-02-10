@@ -25,6 +25,26 @@ export default {
   async createUser (newuser) {
     return axios.post(BASE_URL + '/users', newuser)
   },
+  async searchDiseaseConcept (disease, lang) {
+    // TODO: MOCKED! NEEDS TO ACTUALLY CALL SERVER!!!
+    return [
+      {
+        name: 'heart failure',
+        conceptId: '1234567',
+        vocabulary: 'SNOMED'
+      }
+    ]
+  },
+  async searchMedicationConcept (disease, lang) {
+    // TODO: MOCKED! NEEDS TO ACTUALLY CALL SERVER!!!
+    return [
+      {
+        name: 'aspirin',
+        conceptId: '212123123',
+        vocabulary: 'SNOMED'
+      }
+    ]
+  },
   /// ////////////////////////////////////
   // from here on, we need to use tokens
   /// ////////////////////////////////////

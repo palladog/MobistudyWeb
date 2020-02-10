@@ -65,14 +65,17 @@ export default {
       currentIndex: 0,
       currentQuestion: {
         id: undefined,
-        text: undefined,
-        helper: undefined,
+        text: {
+          en: '',
+          sv: ''
+        },
+        helper: {
+          en: '',
+          sv: ''
+        },
         type: 'freetext',
         nextDefaultId: undefined,
-        answerChoices: [{
-          id: undefined,
-          text: undefined
-        }]
+        answerChoices: []
       },
       currentAnswerSingleChoice: undefined,
       currentAnswerMultiChoice: [],
