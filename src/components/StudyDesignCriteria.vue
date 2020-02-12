@@ -242,14 +242,15 @@ export default {
     }
   },
   computed: {
-    // these are used to map label and value to name and conceptId
+    // these are used to map label and value to term and conceptId
     diseasesVue: {
       get: function () {
         if (this.value.diseases && this.value.diseases.length) {
           return this.value.diseases.map(x => {
             return {
-              label: x.name,
-              value: x.conceptId
+              label: x.term,
+              value: x.conceptId,
+              vocabulary: x.vocabulary
             }
           })
         } else return []
@@ -257,8 +258,9 @@ export default {
       set: function (diseasesOpts) {
         this.value.diseases = diseasesOpts.map(x => {
           return {
-            name: x.label,
-            conceptId: x.value
+            term: x.label,
+            conceptId: x.value,
+            vocabulary: x.vocabulary
           }
         })
       }
@@ -268,8 +270,9 @@ export default {
         if (this.value.medications && this.value.medications.length) {
           return this.value.medications.map(x => {
             return {
-              label: x.name,
-              value: x.conceptId
+              label: x.term,
+              value: x.conceptId,
+              vocabulary: x.vocabulary
             }
           })
         } else return []
@@ -277,8 +280,9 @@ export default {
       set: function (diseasesOpts) {
         this.value.medications = diseasesOpts.map(x => {
           return {
-            name: x.label,
-            conceptId: x.value
+            term: x.label,
+            conceptId: x.value,
+            vocabulary: x.vocabulary
           }
         })
       }
@@ -299,7 +303,8 @@ export default {
           this.diseaseOptions = concepts.map((c) => {
             return {
               label: c.name,
-              value: c.conceptId
+              value: c.conceptId,
+              vocabulary: c.vocabulary
             }
           })
         })
@@ -316,7 +321,8 @@ export default {
           this.diseaseOptions = concepts.map((c) => {
             return {
               label: c.name,
-              value: c.conceptId
+              value: c.conceptId,
+              vocabulary: c.vocabulary
             }
           })
         })
