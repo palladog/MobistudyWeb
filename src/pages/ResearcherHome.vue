@@ -91,7 +91,7 @@ export default {
     },
     async promptAddTeam () {
       try {
-        let code = await this.$q.dialog({
+        this.$q.dialog({
           title: 'New team',
           message: 'Paste your invitation code here',
           color: 'primary',
@@ -101,8 +101,9 @@ export default {
             model: '',
             type: 'text'
           }
+        }).onOk((code) => {
+          this.addToTeam(code)
         })
-        this.addToTeam(code)
       } catch (e) {
         // nothing to do
       }
