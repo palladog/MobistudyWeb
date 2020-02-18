@@ -19,6 +19,11 @@
                 <q-item-label>Form</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item clickable v-close-popup @click.native="add6MWT()">
+              <q-item-section>
+                <q-item-label>6MWT</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-btn-dropdown>
       </q-card-section>
@@ -28,6 +33,8 @@
       <q-card-section>
         <div class="text-h6" v-if="task.type === 'dataQuery'"> Data Query Task </div>
         <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
+        <div class="text-h6" v-if="task.type === '6MWT'"> 6MWT</div>
+
       </q-card-section>
       <q-card-section>
         <div v-if="task.type === 'dataQuery'" class="row">
@@ -99,6 +106,20 @@
             <q-expansion-item expand-separator  :label="schedulingToString(task.scheduling)">
               <scheduler v-model="task.scheduling"></scheduler>
             </q-expansion-item>
+          </div>
+        </div>
+
+        <div v-if="task.type === '6MWT'" class="row">
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Data type:
+            </div>
+            <div class="text-caption">
+              Data type to be collected.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" @input="update()"/>
           </div>
         </div>
 
@@ -292,6 +313,27 @@ export default {
         formKey: undefined,
         // this is mainly used for the consent tab, it can be discarded when the object is sent to the server
         formName: undefined
+      })
+      this.update()
+    },
+    add6MWT () {
+      this.value.tasks.push({
+        id: this.value.tasks.length + 1,
+        type: '6MWT',
+        scheduling: {
+          startEvent: 'consent',
+          startDelaySecs: undefined,
+          untilSecs: undefined,
+          occurrences: undefined,
+          intervalType: 'd',
+          interval: 1,
+          months: [],
+          monthDays: [],
+          weekDays: []
+        },
+        dataType: undefined,
+        aggregated: false,
+        bucket: 'none'
       })
       this.update()
     },
