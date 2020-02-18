@@ -33,8 +33,7 @@
       <q-card-section>
         <div class="text-h6" v-if="task.type === 'dataQuery'"> Data Query Task </div>
         <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
-        <div class="text-h6" v-if="task.type === '6MWT'"> 6MWT</div>
-
+        <div class="text-h6" v-if="task.type === '6MWT'"> Six Minute Walk Test </div>
       </q-card-section>
       <q-card-section>
         <div v-if="task.type === 'dataQuery'" class="row">
