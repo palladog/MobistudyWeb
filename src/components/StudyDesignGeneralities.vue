@@ -266,14 +266,6 @@ export default {
   components: {
     QInputMultilang
   },
-  data: function () {
-    return {
-      test: {
-        en: '',
-        sv: ''
-      }
-    }
-  },
   methods: {
     update () {
       this.$emit('input', this.value)
