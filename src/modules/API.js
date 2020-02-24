@@ -25,25 +25,11 @@ export default {
   async createUser (newuser) {
     return axios.post(BASE_URL + '/users', newuser)
   },
-  async searchDiseaseConcept (disease, lang) {
-    // TODO: MOCKED! NEEDS TO ACTUALLY CALL SERVER!!!
-    return [
-      {
-        name: 'heart failure',
-        conceptId: '1234567',
-        vocabulary: 'SNOMED'
-      }
-    ]
+  async searchDiseaseConcept (disease, lang) => {
+    return axios.get(BASE_URL + '/vocabulary/' + lang + '/disorder/search?term=' + disease + '&limit=10')
   },
-  async searchMedicationConcept (disease, lang) {
-    // TODO: MOCKED! NEEDS TO ACTUALLY CALL SERVER!!!
-    return [
-      {
-        name: 'aspirin',
-        conceptId: '212123123',
-        vocabulary: 'SNOMED'
-      }
-    ]
+  async searchMedicationConcept (med, lang) => {
+    return axios.get(BASE_URL + '/vocabulary/' + lang + '/substance/search?term=' + med + '&limit=10')
   },
   /// ////////////////////////////////////
   // from here on, we need to use tokens
