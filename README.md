@@ -46,12 +46,14 @@ For the full setup including database and web interface, see the
 [Wiki](https://github.com/Mobistudy/MobistudyAPI/wiki/Docker-setup).
 
 Build the docker instance:
-
-    docker build -t mobistudyweb .
+```bash
+docker build -t mobistudyweb .
+```
 
 Then run it with:
-
-    docker run -d -p 80:80 --name mobistudyweb mobistudyweb
+```bash
+docker run -d -p 80:80 --name mobistudyweb mobistudyweb
+```
 
 This will launch an ngnix instance that serves the static content, but not the API.
 You will need the API running as well!
