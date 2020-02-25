@@ -12,17 +12,12 @@ You need to install the following on your system:
 
 Install all other dependencies with `npm install`.
 
-## Run it
+## Run
 
 To start the interface, run `npm run dev` or, if you have installed the quasar cli, `quasar dev`.
 You will need the MobistudyAPI running in parallel (see MobistudyAPI README).
 
-## Develop it
-
-The code is written mostly in ES6 and uses ES6 modules, please be consistent.
-If you use VS Code, follow the [recommended settings from Quasar](https://quasar.dev/start/vs-code-configuration#Introduction).
-
-## Test it
+## Test
 
 ```bash
 npm run test:unit
@@ -34,12 +29,21 @@ If you want to have quasar and the tests running in parallel and watching for co
 npm run concurrently:dev:jest
 ```
 
-## Deploy it
+## Develop
+
+The code is written mostly in ES6 and uses ES6 modules, please be consistent.
+If you use VS Code, follow the [recommended settings from Quasar](https://quasar.dev/start/vs-code-configuration#Introduction).
+
+## Deploy
 
 Run `quasar build`. This will generate the material UI interfaces and make it available under `./dist/`
 
 
 ## Docker
+
+This only explains how to build and run the Docker instance of this project.
+For the full setup including database and web interface, see the
+[Wiki](https://github.com/Mobistudy/MobistudyAPI/wiki/Docker-setup).
 
 Build the docker instance:
 
@@ -51,3 +55,19 @@ Then run it with:
 
 This will launch an ngnix instance that serves the static content, but not the API.
 You will need the API running as well!
+
+## Credits
+
+Original idea: [Dario Salvi](https://github.com/dariosalvi78) and [Carmelo Velardo](https://github.com/2dvisio).
+
+Coordination: [Dario Salvi](https://github.com/dariosalvi78) and [Carl Magnus Olsson](https://github.com/Trasselkalle).
+
+Development:
+- [Dario Salvi](https://github.com/dariosalvi78)
+- [Arvind Goburdhun](https://github.com/arvgo)
+- [Elin Forsnor](https://github.com/elinforsnor)
+- [Felix Morau](https://github.com/femosc2)
+
+## License
+
+See [license file](LICENSE)
