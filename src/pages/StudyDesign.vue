@@ -4,7 +4,7 @@
       <q-toolbar-title>
         Study Designer
       </q-toolbar-title>
-      <q-toggle class="q-mr-md" false-value="Public" :label="`${studyDesign.invitationStatus} Study`" true-value="Invitation" v-model="studyDesign.invitationStatus" icon="mail"/>
+      <q-toggle class="q-mr-md" false-value="Public" :label="`${studyDesign.invitationStatus} Study`" left-label true-value="Invitation" v-model="studyDesign.invitationStatus" icon="mail"/>
       <q-btn class="q-mr-md" v-show="studyKey && !studyDesign.publishedTS" color="negative" label="Delete Draft" @click="removeDraftStudy()"/>
       <q-btn class="q-mr-md" v-show="!studyDesign.publishedTS" color="warning" label="Save Draft" @click="saveProgress()"/>
       <q-btn class="float-right q-mr-md" v-show="!studyDesign.publishedTS" color="positive" label="Publish" @click="publish()"/>
@@ -59,6 +59,7 @@ export default {
       studyTab: 'tab-gen',
       studyDesign: {
         invitationStatus: 'Public',
+        invitationCode: '',
         teamKey: '',
         publishedTS: undefined,
         generalities: {
@@ -267,13 +268,25 @@ export default {
             // If no studyKey, publish directly
             try {
               this.studyDesign.publishedTS = new Date()
+              if (this.studyDesign.invitationStatus === 'Invitation') {
+                this.studyDesign.invitationCode = Math.floor(Math.random() * 90000 + 10000)
+              }
               await API.publishStudy(this.studyDesign)
-              this.$q.notify({
-                color: 'primary',
-                position: 'bottom',
-                message: 'Study has been published.',
-                icon: 'done'
-              })
+              if (this.studyDesign.invitationCode !== '') {
+                this.$q.notify({
+                  color: 'primary',
+                  position: 'bottom',
+                  message: 'Study has been published. This is your invitation code: ' + this.studyDesign.invitationCode,
+                  icon: 'done'
+                })
+              } else {
+                this.$q.notify({
+                  color: 'primary',
+                  position: 'bottom',
+                  message: 'Study has been published.',
+                  icon: 'done'
+                })
+              }
               this.$router.push('/researcher')
             } catch (err) {
               this.$q.notify({
