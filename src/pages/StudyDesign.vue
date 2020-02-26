@@ -273,11 +273,11 @@ export default {
               }
               await API.publishStudy(this.studyDesign)
               if (this.studyDesign.invitationCode !== '') {
-                this.$q.notify({
-                  color: 'primary',
-                  position: 'bottom',
-                  message: 'Study has been published. This is your invitation code: ' + this.studyDesign.invitationCode,
-                  icon: 'done'
+                this.$q.dialog({
+                  title: 'Study published.',
+                  message: 'Invitation code: ' + this.studyDesign.invitationCode.toString()
+                }).onOk(() => {
+                  this.$router.push('/researcher')
                 })
               } else {
                 this.$q.notify({
@@ -286,8 +286,8 @@ export default {
                   message: 'Study has been published.',
                   icon: 'done'
                 })
+                this.$router.push('/researcher')
               }
-              this.$router.push('/researcher')
             } catch (err) {
               this.$q.notify({
                 color: 'negative',
@@ -366,8 +366,6 @@ export default {
           // nothing to do
         }
       }
-    },
-    async generateInvitationKey () {
     },
     exitDesigner () {
       if (this.keyOfStudy === '') {
