@@ -4,6 +4,7 @@
       <q-toolbar-title>
         Study Designer
       </q-toolbar-title>
+      <q-toggle class="q-mr-md" false-value="Public" :label="`${studyDesign.invitationStatus} Study`" true-value="Invitation" v-model="studyDesign.invitationStatus" icon="mail"/>
       <q-btn class="q-mr-md" v-show="studyKey && !studyDesign.publishedTS" color="negative" label="Delete Draft" @click="removeDraftStudy()"/>
       <q-btn class="q-mr-md" v-show="!studyDesign.publishedTS" color="warning" label="Save Draft" @click="saveProgress()"/>
       <q-btn class="float-right q-mr-md" v-show="!studyDesign.publishedTS" color="positive" label="Publish" @click="publish()"/>
@@ -57,6 +58,7 @@ export default {
       keyOfStudy: undefined,
       studyTab: 'tab-gen',
       studyDesign: {
+        invitationStatus: 'Public',
         teamKey: '',
         publishedTS: undefined,
         generalities: {
@@ -351,6 +353,8 @@ export default {
           // nothing to do
         }
       }
+    },
+    async generateInvitationKey () {
     },
     exitDesigner () {
       if (this.keyOfStudy === '') {

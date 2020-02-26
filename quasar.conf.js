@@ -59,6 +59,7 @@ module.exports = function (ctx) {
         'QTabPanels',
         'QTable',
         'QTd',
+        'QToggle',
         'QToolbar',
         'QToolbarTitle',
         'QRouteTab'
