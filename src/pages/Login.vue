@@ -6,13 +6,12 @@
           <q-card-section><div class="text-h6">Sign In</div></q-card-section>
           <q-card-section>
             <form autocomplete="on">
-              <q-field :error="$v.email.$error" error-label="An email address is required.">
-                <q-input v-model.trim="$v.email.$model" type="email" label="Email" placeholder="e.g. email@email.com"
-                 autocomplete="on" @blur="$v.email.$touch"/>
-              </q-field>
-              <q-field :error="$v.password.$error" error-label="A password is required.">
-                <q-input v-model.trim="$v.password.$model" type="password" label="Password" autocomplete="on" @blur="$v.password.$touch" @keyup.enter="login()"/>
-              </q-field>
+              <q-input v-model.trim="$v.email.$model" type="email" label="Email" placeholder="e.g. email@email.com"
+               autocomplete="on" @blur="$v.email.$touch"
+               :error="$v.email.$error" error-label="An email address is required."/>
+               <q-input v-model.trim="$v.password.$model" type="password" label="Password"
+               autocomplete="on" @blur="$v.password.$touch" @keyup.enter="login()"
+               :error="$v.password.$error" error-label="A password is required."/>
             </form>
           </q-card-section>
           <q-card-actions>
