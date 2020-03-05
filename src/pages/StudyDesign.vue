@@ -4,7 +4,6 @@
       <q-toolbar-title>
         Study Designer
       </q-toolbar-title>
-      <q-toggle class="q-mr-md" false-value="Public" :label="`${studyDesign.invitationStatus} Study`" left-label true-value="Invitation" v-model="studyDesign.invitationStatus" icon="mail"/>
       <q-btn class="q-mr-md" v-show="studyKey && !studyDesign.publishedTS" color="negative" label="Delete Draft" @click="removeDraftStudy()"/>
       <q-btn class="q-mr-md" v-show="!studyDesign.publishedTS" color="warning" label="Save Draft" @click="saveProgress()"/>
       <q-btn class="float-right q-mr-md" v-show="!studyDesign.publishedTS" color="positive" label="Publish" @click="publish()"/>
@@ -58,11 +57,11 @@ export default {
       keyOfStudy: undefined,
       studyTab: 'tab-gen',
       studyDesign: {
-        invitationStatus: 'Public',
-        invitationCode: '',
         teamKey: '',
         publishedTS: undefined,
         generalities: {
+          inviteOnly: 'false',
+          invitationCode: '',
           languages: ['en'],
           title: {
             en: '',
@@ -268,14 +267,14 @@ export default {
             // If no studyKey, publish directly
             try {
               this.studyDesign.publishedTS = new Date()
-              if (this.studyDesign.invitationStatus === 'Invitation') {
-                this.studyDesign.invitationCode = Math.floor(Math.random() * 90000 + 10000)
+              if (this.studyDesign.generalities.inviteOnly === 'true') {
+                this.studyDesign.generalities.invitationCode = await API.getInvitationCode()
               }
               await API.publishStudy(this.studyDesign)
-              if (this.studyDesign.invitationCode !== '') {
+              if (this.studyDesign.generalities.invitationCode !== '') {
                 this.$q.dialog({
                   title: 'Study published.',
-                  message: 'Invitation code: ' + this.studyDesign.invitationCode.toString()
+                  message: 'Invitation code: ' + this.studyDesign.generalities.invitationCode.toString()
                 }).onOk(() => {
                   this.$router.push('/researcher')
                 })

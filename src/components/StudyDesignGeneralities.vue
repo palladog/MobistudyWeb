@@ -9,6 +9,22 @@
         <div class="row">
           <div class="col-4 q-pt-lg">
             <div class="text-bold">
+              Study type:
+            </div>
+            <div class="text-caption">
+              Select if the study should be open or through invitation. A study through invitation generates an invitation code when published.
+            </div>
+          </div>
+            <div class="col q-pl-sm">
+              <q-field class="q-mt-md">
+              <q-radio v-model.trim="value.inviteOnly" val="false" color="secondary" label="Open" @input="update()"/>
+              <q-radio v-model.trim="value.inviteOnly" val="true" color="secondary" label="Invitation" @input="update()" style="margin-left: 10px"/>
+              </q-field>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
               Supported languages:
             </div>
             <div class="text-caption">

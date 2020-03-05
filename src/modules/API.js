@@ -47,6 +47,10 @@ export default {
     let resp = await axios.get(BASE_URL + '/teams/invitationCode/' + teamKey, axiosConfig)
     return resp.data
   },
+  async getInvitationCode () {
+    let resp = await axios.get(BASE_URL + '/newInvitationCode', axiosConfig)
+    return resp.data
+  },
   async addUserToTeam (invitationCode) {
     return axios.post(BASE_URL + '/teams/researcher/add', { invitationCode: invitationCode }, axiosConfig)
   },
