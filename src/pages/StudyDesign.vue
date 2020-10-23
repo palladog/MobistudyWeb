@@ -104,7 +104,6 @@ export default {
             'other'
           ],
           numberOfParticipants: undefined,
-          lifestyle: { active: 'notrequired', smoker: 'notrequired' },
           criteriaQuestions: [],
           diseases: [],
           medications: []

@@ -141,34 +141,6 @@
           </div>
         </div>
       </q-card-section>
-
-      <!-- Lifestyle -->
-      <q-card-section>
-        <div class="row">
-          <div class="col-4 q-pt-lg">
-            <div class="text-bold">
-              Lifestyle:
-            </div>
-            <div class="text-caption">
-              Aspects of lifestyle like physical activity, smoking or drinking.
-            </div>
-          </div>
-          <div class="col q-pl-sm">
-            <q-field hint="Physically active">
-              <q-radio v-model="value.lifestyle.active" val="yes" color="secondary" label="Active" @input="update()"/>
-              <q-radio v-model="value.lifestyle.active" val="no" color="secondary" label="Not active" @input="update()"/>
-              <q-radio v-model="value.lifestyle.active" val="notrequired" color="secondary" label="Not required" @input="update()"/>
-            </q-field>
-          </div>
-          <div class="col q-pl-sm">
-            <q-field hint="Smoker">
-              <q-radio v-model="value.lifestyle.smoker" val="yes" color="secondary" label="Smoker" @input="update()"/>
-              <q-radio v-model="value.lifestyle.smoker" val="no" color="secondary" label="Not smoker" @input="update()"/>
-              <q-radio v-model="value.lifestyle.smoker" val="notrequired" color="secondary" label="Not required" @input="update()"/>
-            </q-field>
-          </div>
-        </div>
-      </q-card-section>
     </q-card>
 
     <!-- Custom Criteria Questions -->
