@@ -6,15 +6,26 @@
         <div class="text-subtitle1"> At least one task has to be specified. </div>
       </q-card-section>
       <q-card-section>
-        <q-btn-dropdown split label="Add task">
+        <q-btn-dropdown
+          split
+          label="Add task"
+        >
           <!-- dropdown content -->
           <q-list link>
-            <q-item clickable v-close-popup @click.native="addDT()">
+            <q-item
+              clickable
+              v-close-popup
+              @click.native="addDT()"
+            >
               <q-item-section>
                 <q-item-label>Data query Task</q-item-label>
               </q-item-section>
             </q-item>
-            <q-item clickable v-close-popup @click.native="addFormT()">
+            <q-item
+              clickable
+              v-close-popup
+              @click.native="addFormT()"
+            >
               <q-item-section>
                 <q-item-label>Form</q-item-label>
               </q-item-section>
@@ -24,13 +35,26 @@
       </q-card-section>
     </q-card>
     <!-- Tasks -->
-    <q-card  v-for="(task, index) in value.tasks" :key="index" class="form-card">
+    <q-card
+      v-for="(task, index) in value.tasks"
+      :key="index"
+      class="form-card"
+    >
       <q-card-section>
-        <div class="text-h6" v-if="task.type === 'dataQuery'"> Data Query Task </div>
-        <div class="text-h6" v-if="task.type === 'form'"> Form Task </div>
+        <div
+          class="text-h6"
+          v-if="task.type === 'dataQuery'"
+        > Data Query Task </div>
+        <div
+          class="text-h6"
+          v-if="task.type === 'form'"
+        > Form Task </div>
       </q-card-section>
       <q-card-section>
-        <div v-if="task.type === 'dataQuery'" class="row">
+        <div
+          v-if="task.type === 'dataQuery'"
+          class="row"
+        >
           <div class="col-4 q-pt-lg">
             <div class="text-bold">
               Data type:
@@ -40,10 +64,19 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-select v-model="task.dataType" emit-value map-options :options="selectOptionsDataTypeForQuery" @input="update()"/>
+            <q-select
+              v-model="task.dataType"
+              emit-value
+              map-options
+              :options="selectOptionsDataTypeForQuery"
+              @input="update()"
+            />
           </div>
         </div>
-        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row">
+        <div
+          v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)"
+          class="row"
+        >
           <div class="col-4">
             <div class="text-bold">
               Aggregation:
@@ -53,10 +86,16 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-checkbox v-model="task.aggregated" @input="update()"/>
+            <q-checkbox
+              v-model="task.aggregated"
+              @input="update()"
+            />
           </div>
         </div>
-        <div v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)" class="row">
+        <div
+          v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)"
+          class="row"
+        >
           <div class="col-4 q-pt-lg">
             <div class="text-bold">
               Bucket:
@@ -66,13 +105,28 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-select v-model="task.bucket" emit-value map-options :options="selectOptionsBucketForQuery" :readonly="!task.aggregated" :disable="!task.aggregated" @input="update()"/>
+            <q-select
+              v-model="task.bucket"
+              emit-value
+              map-options
+              :options="selectOptionsBucketForQuery"
+              :readonly="!task.aggregated"
+              :disable="!task.aggregated"
+              @input="update()"
+            />
           </div>
         </div>
 
-        <q-btn v-if="task.type === 'form'" label="Create new Form" @click="createForm()"/>
+        <q-btn
+          v-if="task.type === 'form'"
+          label="Create new Form"
+          @click="createForm()"
+        />
 
-        <div v-if="task.type === 'form'" class="row">
+        <div
+          v-if="task.type === 'form'"
+          class="row"
+        >
           <div class="col-4 q-pt-lg">
             <div class="text-bold">
               Form:
@@ -82,7 +136,13 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-select v-model="task.formKey" emit-value map-options :options="selectOptionsFormsList" @input="changeFormName(task, $event)"/>
+            <q-select
+              v-model="task.formKey"
+              emit-value
+              map-options
+              :options="selectOptionsFormsList"
+              @input="changeFormName(task, $event)"
+            />
           </div>
         </div>
 
@@ -96,18 +156,37 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-expansion-item expand-separator  :label="schedulingToString(task.scheduling)">
+            <q-expansion-item
+              expand-separator
+              :label="schedulingToString(task.scheduling)"
+            >
               <scheduler v-model="task.scheduling"></scheduler>
             </q-expansion-item>
           </div>
         </div>
 
-        <q-btn label="Remove this task" color="negative" icon="remove" @click="removeTask(index)"/>
+        <q-btn
+          label="Remove this task"
+          color="negative"
+          icon="remove"
+          @click="removeTask(index)"
+        />
       </q-card-section>
     </q-card>
 
-    <formbuilder ref="formbuilder" v-model="newForm" @simulateForm="openFormSimulator()" @saved="getForms()" :languages="value.generalities.languages"></formbuilder>
-    <formsimulator ref="formsimulator" :form='newForm' @closed="openFormBuilder()" :languages="value.generalities.languages"></formsimulator>
+    <formbuilder
+      ref="formbuilder"
+      v-model="newForm"
+      @simulateForm="openFormSimulator()"
+      @saved="getForms()"
+      :languages="value.generalities.languages"
+    ></formbuilder>
+    <formsimulator
+      ref="formsimulator"
+      :form='newForm'
+      @closed="openFormBuilder()"
+      :languages="value.generalities.languages"
+    ></formsimulator>
   </div>
 </template>
 
@@ -139,7 +218,7 @@ export default {
   },
   name: 'StudyDesignTasks',
   // value here is the whole study design
-  props: [ 'value', 'teamKey' ],
+  props: ['value', 'teamKey'],
   data () {
     let data = {
       selectOptionsFormsList: [],
@@ -160,6 +239,10 @@ export default {
             sv: ''
           },
           helper: {
+            en: '',
+            sv: ''
+          },
+          footer: {
             en: '',
             sv: ''
           },

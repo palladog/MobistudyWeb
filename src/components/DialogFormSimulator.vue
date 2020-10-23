@@ -5,19 +5,32 @@
         <div class="text-h6 q-mb-md">
           Form builder
         </div>
-        <div class="q-ma-md" v-show="langselect">
+        <div
+          class="q-ma-md"
+          v-show="langselect"
+        >
           Select the language:
-          <q-select v-model="language" :options="languages" label="Standard" />
+          <q-select
+            v-model="language"
+            :options="languages"
+            label="Standard"
+          />
         </div>
         <div v-show="!finished && !langselect">
           <div class="row">
             <div class="col-2 text-bold"> Question ID: </div>
             <div class="col"> {{currentQuestion.id}} </div>
           </div>
-          <div align="center" class="text-h6">
+          <div
+            align="center"
+            class="text-h6"
+          >
             {{currentQuestion.text[language]}}
           </div>
-          <div align="center" class="text-weight-light">
+          <div
+            align="center"
+            class="text-weight-light"
+          >
             {{currentQuestion.helper[language]}}
           </div>
           <!-- Answers -->
@@ -25,30 +38,80 @@
             <div>
               Answer
             </div>
-            <q-input v-if="currentQuestion.type === 'freetext'" class="q-ma-sm" v-model="currentAnswerFreeText"
-            align="center" type="textarea" rows="3" clearable hint="Write your answer here."/>
-            <div class="q-ma-sm" v-if="currentQuestion.type === 'singleChoice'">
+            <q-input
+              v-if="currentQuestion.type === 'freetext'"
+              class="q-ma-sm"
+              v-model="currentAnswerFreeText"
+              align="center"
+              type="textarea"
+              rows="3"
+              clearable
+              hint="Write your answer here."
+            />
+            <div
+              class="q-ma-sm"
+              v-if="currentQuestion.type === 'singleChoice'"
+            >
               <q-field hint="Please choose one.">
-                <q-radio v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index" v-model="currentAnswerSingleChoice"
-                :val="answerChoice.id" :label="answerChoice.text[language]"/>
+                <q-radio
+                  v-for="(answerChoice, index) in currentQuestion.answerChoices"
+                  :key="index"
+                  v-model="currentAnswerSingleChoice"
+                  :val="answerChoice.id"
+                  :label="answerChoice.text[language]"
+                />
               </q-field>
             </div>
-            <div class="q-ma-sm" v-if="currentQuestion.type === 'multiChoice'">
+            <div
+              class="q-ma-sm"
+              v-if="currentQuestion.type === 'multiChoice'"
+            >
               <q-field hint="Please choose one or more.">
-                <q-checkbox v-for="(answerChoice, index) in currentQuestion.answerChoices" :key="index"
-                v-model="currentAnswerMultiChoice" :val="answerChoice.id" :label="answerChoice.text[language]"/>
+                <q-checkbox
+                  v-for="(answerChoice, index) in currentQuestion.answerChoices"
+                  :key="index"
+                  v-model="currentAnswerMultiChoice"
+                  :val="answerChoice.id"
+                  :label="answerChoice.text[language]"
+                />
               </q-field>
             </div>
           </q-card>
         </div>
 
-        <div class="q-ma-md" v-show="finished">
+        <div
+          class="q-ma-md"
+          v-show="finished"
+        >
           COMPLETED
         </div>
-        <q-btn v-show="langselect" color="primary" @click="start()" label="Next" />
-        <q-btn v-show="!finished && !langselect" color="primary" @click="next()" label="Next" />
-        <q-btn v-show="finished" color="primary" @click="restart()" label="Restart" />
-        <q-btn color="secondary" @click="close()" label="Close" />
+        <q-btn
+          v-show="langselect"
+          color="primary"
+          @click="start()"
+          label="Next"
+        />
+        <q-btn
+          v-show="!finished && !langselect"
+          color="primary"
+          @click="next()"
+          label="Next"
+        />
+        <q-btn
+          v-show="finished"
+          color="primary"
+          @click="restart()"
+          label="Restart"
+        />
+        <q-btn
+          color="secondary"
+          @click="close()"
+          label="Close"
+        />
+
+        <div align="center">
+          {{currentQuestion.footer[language]}}
+        </div>
       </q-card-section>
     </q-card>
   </q-dialog>

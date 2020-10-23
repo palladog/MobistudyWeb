@@ -6,7 +6,13 @@
           Form builder
         </div>
         <q-space />
-        <q-btn icon="close" flat round dense v-close-popup />
+        <q-btn
+          icon="close"
+          flat
+          round
+          dense
+          v-close-popup
+        />
       </q-card-section>
       <q-card-section>
         <div class="q-pa-md">
@@ -16,11 +22,17 @@
                 Form name:
               </div>
               <div class="text-caption">
-                Short name of the form.  This is used in several places of the user interface.
+                Short name of the form. This is used in several places of the user interface.
               </div>
             </div>
             <div class="col q-pl-sm">
-              <q-input-multilang v-model="value.name" type="text" @input="update()" :languages="languages" required/>
+              <q-input-multilang
+                v-model="value.name"
+                type="text"
+                @input="update()"
+                :languages="languages"
+                required
+              />
             </div>
           </div>
           <div class="row">
@@ -33,7 +45,13 @@
               </div>
             </div>
             <div class="col q-pl-sm">
-              <q-input-multilang v-model="value.description" type="textarea" @input="update()" :languages="languages" required/>
+              <q-input-multilang
+                v-model="value.description"
+                type="textarea"
+                @input="update()"
+                :languages="languages"
+                required
+              />
             </div>
           </div>
 
@@ -41,7 +59,11 @@
             <div class="col-2 text-bold"> Questions: </div>
           </div>
           <!-- Question -->
-          <div class="shadow-1 q-pa-md q-mt-lg" v-for="(question, qIndex) in value.questions" :key="qIndex">
+          <div
+            class="shadow-1 q-pa-md q-mt-lg"
+            v-for="(question, qIndex) in value.questions"
+            :key="qIndex"
+          >
             <div class="q-pa-sm text-bold"> Question </div>
             <div class="row">
               <div class="col-2">
@@ -51,7 +73,13 @@
                 </div>
               </div>
               <div class="col q-pl-sm">
-                <q-input label="ID" v-model="question.id" hint="This is set automatically." type="text" readonly/>
+                <q-input
+                  label="ID"
+                  v-model="question.id"
+                  hint="This is set automatically."
+                  type="text"
+                  readonly
+                />
               </div>
             </div>
             <div class="row q-mt-sm">
@@ -62,7 +90,13 @@
                 </div>
               </div>
               <div class="col q-pl-sm">
-                <q-select v-model="question.type" emit-value map-options :options="questionTypeOptions"  @input="update()"/>
+                <q-select
+                  v-model="question.type"
+                  emit-value
+                  map-options
+                  :options="questionTypeOptions"
+                  @input="update()"
+                />
               </div>
             </div>
             <div class="row q-mt-sm">
@@ -73,7 +107,13 @@
                 </div>
               </div>
               <div class="col q-pl-sm">
-                <q-input-multilang v-model="question.text" type="text" @input="update()" :languages="languages" required/>
+                <q-input-multilang
+                  v-model="question.text"
+                  type="text"
+                  @input="update()"
+                  :languages="languages"
+                  required
+                />
               </div>
             </div>
             <div class="row q-mt-sm">
@@ -84,7 +124,30 @@
                 </div>
               </div>
               <div class="col q-pl-sm">
-                <q-input-multilang label="Helper" v-model="question.helper" type="text" @input="update()" :languages="languages"/>
+                <q-input-multilang
+                  label="Helper"
+                  v-model="question.helper"
+                  type="text"
+                  @input="update()"
+                  :languages="languages"
+                />
+              </div>
+            </div>
+            <div class="row q-mt-sm">
+              <div class="col-2">
+                Footer.
+                <div class="text-caption">
+                  Short subcaption or helper.
+                </div>
+              </div>
+              <div class="col q-pl-sm">
+                <q-input-multilang
+                  label="Footer"
+                  v-model="question.footer"
+                  type="text"
+                  @input="update()"
+                  :languages="languages"
+                />
               </div>
             </div>
             <div class="row q-mt-sm">
@@ -95,12 +158,25 @@
                 </div>
               </div>
               <div class="col q-pl-sm">
-                <q-select clearable color="secondary" v-model="question.nextDefaultId" :options="defaultIdSelection" hint="ENDFORM terminates the form." @input="update()"/>
+                <q-select
+                  clearable
+                  color="secondary"
+                  v-model="question.nextDefaultId"
+                  :options="defaultIdSelection"
+                  hint="ENDFORM terminates the form."
+                  @input="update()"
+                />
               </div>
             </div>
 
             <!-- Answers -->
-            <div class="q-pa-lg q-mt-sm shadow-1 bg-green-1" style="max-width: 800px" v-show="question.type !== 'freetext'" v-for="(answerChoice, aIndex) in question.answerChoices" :key="aIndex">
+            <div
+              class="q-pa-lg q-mt-sm shadow-1 bg-green-1"
+              style="max-width: 800px"
+              v-show="question.type !== 'freetext'"
+              v-for="(answerChoice, aIndex) in question.answerChoices"
+              :key="aIndex"
+            >
               <div class="q-pa-sm text-bold"> Answer </div>
               <div class="row q-mt-sm">
                 <div class="col-2">
@@ -110,7 +186,13 @@
                   </div>
                 </div>
                 <div class="col q-pl-sm">
-                  <q-input label="Answer ID" v-model="answerChoice.id" type="text" readonly hint="This is auto generated."/>
+                  <q-input
+                    label="Answer ID"
+                    v-model="answerChoice.id"
+                    type="text"
+                    readonly
+                    hint="This is auto generated."
+                  />
                 </div>
               </div>
               <div class="row q-mt-sm">
@@ -121,10 +203,18 @@
                   </div>
                 </div>
                 <div class="col q-pl-sm">
-                  <q-input-multilang label="Answer Text" v-model="answerChoice.text" type="text" :languages="languages"/>
+                  <q-input-multilang
+                    label="Answer Text"
+                    v-model="answerChoice.text"
+                    type="text"
+                    :languages="languages"
+                  />
                 </div>
               </div>
-              <div class="row q-mt-sm" v-show="question.type !== 'multiChoice'">
+              <div
+                class="row q-mt-sm"
+                v-show="question.type !== 'multiChoice'"
+              >
                 <div class="col-2">
                   Next Question ID.
                   <div class="text-caption">
@@ -132,41 +222,85 @@
                   </div>
                 </div>
                 <div class="col q-pl-sm">
-                  <p v-show="answerChoice.nextQuestionId == 'REMOVED'" class="text-negative">THIS QUESTION HAS BEEN REMOVED!</p>
-                  <q-select v-model="answerChoice.nextQuestionId" :options="defaultIdSelection" hint="ENDFORM will terminate the form." @input="update()" />
+                  <p
+                    v-show="answerChoice.nextQuestionId == 'REMOVED'"
+                    class="text-negative"
+                  >THIS QUESTION HAS BEEN REMOVED!</p>
+                  <q-select
+                    v-model="answerChoice.nextQuestionId"
+                    :options="defaultIdSelection"
+                    hint="ENDFORM will terminate the form."
+                    @input="update()"
+                  />
                 </div>
               </div>
               <div class="row q-mt-md">
                 <div class="col-6">
-                  <q-btn v-if="aIndex !==0" color="negative" icon="remove" label="Remove this answer" @click="removeAnswerChoice(qIndex, aIndex)" />
+                  <q-btn
+                    v-if="aIndex !==0"
+                    color="negative"
+                    icon="remove"
+                    label="Remove this answer"
+                    @click="removeAnswerChoice(qIndex, aIndex)"
+                  />
                 </div>
                 <div class="col-6">
-                  <q-btn v-if="aIndex === question.answerChoices.length-1" color="primary" label="Add an answer choice" icon="add" @click="addAnswerChoice(qIndex)" />
+                  <q-btn
+                    v-if="aIndex === question.answerChoices.length-1"
+                    color="primary"
+                    label="Add an answer choice"
+                    icon="add"
+                    @click="addAnswerChoice(qIndex)"
+                  />
                 </div>
               </div>
             </div>
             <div class="row q-mt-sm">
               <div class="col-6">
-                <q-btn v-if="qIndex !==0" color="negative" icon="remove" label="Remove this question" @click="removeQuestion(qIndex)" />
+                <q-btn
+                  v-if="qIndex !==0"
+                  color="negative"
+                  icon="remove"
+                  label="Remove this question"
+                  @click="removeQuestion(qIndex)"
+                />
               </div>
               <div class="col-6">
-                <q-btn v-if="qIndex === value.questions.length-1" label="Add a question" color="primary" icon="add" @click="addQuestion()" />
+                <q-btn
+                  v-if="qIndex === value.questions.length-1"
+                  label="Add a question"
+                  color="primary"
+                  icon="add"
+                  @click="addQuestion()"
+                />
               </div>
             </div>
-            <q-separator v-if="qIndex !== value.questions.length-1"/>
+            <q-separator v-if="qIndex !== value.questions.length-1" />
           </div>
         </div>
       </q-card-section>
       <q-card-section>
         <div class="row">
           <div class="col">
-            <q-btn color="secondary" @click="openFormSimulator()" label="Simulate" />
+            <q-btn
+              color="secondary"
+              @click="openFormSimulator()"
+              label="Simulate"
+            />
           </div>
           <div class="col">
-            <q-btn color="primary" @click="publish()" label="Publish" />
+            <q-btn
+              color="primary"
+              @click="publish()"
+              label="Publish"
+            />
           </div>
           <div class="col">
-            <q-btn color="primary" @click="cancelForm()" label="Cancel" />
+            <q-btn
+              color="primary"
+              @click="cancelForm()"
+              label="Cancel"
+            />
           </div>
         </div>
       </q-card-section>
@@ -227,6 +361,7 @@ export default {
         id: qid,
         text: {},
         helper: {},
+        footer: {},
         type: 'singleChoice',
         nextDefaultId: undefined,
         answerChoices: [{
