@@ -16,6 +16,7 @@
       </q-card-section>
       <q-card-section>
         <div class="q-pa-md">
+          <!-- start of form editor -->
           <div class="row">
             <div class="col-3 q-pt-sm">
               <div class="text-bold">
@@ -107,6 +108,7 @@
                 </div>
               </div>
               <div class="col q-pl-sm">
+                <!-- TODO: use a rich text editor instead -->
                 <q-input-multilang
                   v-model="question.text"
                   type="text"
@@ -137,7 +139,7 @@
               <div class="col-2">
                 Footer.
                 <div class="text-caption">
-                  Short subcaption or helper.
+                  Footer text, for example for copyright notes or references.
                 </div>
               </div>
               <div class="col q-pl-sm">
@@ -169,11 +171,11 @@
               </div>
             </div>
 
-            <!-- Answers -->
+            <!-- single choice or multiple choice answers -->
             <div
               class="q-pa-lg q-mt-sm shadow-1 bg-green-1"
               style="max-width: 800px"
-              v-show="question.type !== 'freetext'"
+              v-show="question.type == 'multiChoice' || question.type == 'singleChoice'"
               v-for="(answerChoice, aIndex) in question.answerChoices"
               :key="aIndex"
             >
@@ -331,6 +333,9 @@ export default {
       }, {
         label: 'Multiple choice',
         value: 'multiChoice'
+      }, {
+        label: 'Only text (no question)',
+        value: 'textOnly'
       }],
       opened: false
     }
