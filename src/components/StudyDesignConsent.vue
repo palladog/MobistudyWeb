@@ -157,6 +157,8 @@ export default {
           } else if (task.type === 'dataQuery') {
             let localDatatype = this.$i18n.t('healthDataTypes.' + task.dataType, lang)
             string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQuery', lang, { dataType: localDatatype })
+          } else if (task.type === 'miband3') {
+            string += '\n' + this.$i18n.t('privacyPolicy.taskItemMiBand3', lang)
           }
         }
         string += '\n\n' + this.$i18n.t('privacyPolicy.storage', lang)

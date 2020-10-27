@@ -30,6 +30,15 @@
                 <q-item-label>Form</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              @click.native="addMiband3T()()"
+            >
+              <q-item-section>
+                <q-item-label>MiBand3 data collection</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-btn-dropdown>
       </q-card-section>
@@ -92,6 +101,7 @@
             />
           </div>
         </div>
+
         <div
           v-if="task.type === 'dataQuery' && allowAggregated(task.dataType)"
           class="row"
@@ -142,6 +152,32 @@
               map-options
               :options="selectOptionsFormsList"
               @input="changeFormName(task, $event)"
+            />
+          </div>
+        </div>
+
+        <!-- Miband3 task -->
+        <div
+          v-if="task.type === 'miband3'"
+          class="row"
+        >
+          <div class="col-4 q-pt-lg">
+            <div class="text-bold">
+              Heart rate interval:
+            </div>
+            <div class="text-caption">
+              How often the heart rate must be measured in minutes.
+              The lower the more battery is used.
+            </div>
+          </div>
+          <div class="col q-pl-sm">
+            <q-input
+              v-model="task.hrInterval"
+              emit-value
+              type="number"
+              min= "0"
+              max= "255"
+              @input="update()"
             />
           </div>
         </div>
@@ -345,6 +381,25 @@ export default {
         dataType: undefined,
         aggregated: false,
         bucket: 'none'
+      })
+      this.update()
+    },
+    addMiband3T () {
+      this.value.tasks.push({
+        id: this.value.tasks.length + 1,
+        type: 'miband3',
+        scheduling: {
+          startEvent: 'consent',
+          startDelaySecs: undefined,
+          untilSecs: undefined,
+          occurrences: undefined,
+          intervalType: 'd',
+          interval: 1,
+          months: [],
+          monthDays: [],
+          weekDays: []
+        },
+        hrInterval: 3
       })
       this.update()
     },
