@@ -25,12 +25,6 @@ export default {
   async createUser (newuser) {
     return axios.post(BASE_URL + '/users', newuser)
   },
-  async searchDiseaseConcept (disease, lang) {
-    return axios.get(BASE_URL + '/vocabulary/' + lang + '/disorder/search?term=' + disease + '&limit=10')
-  },
-  async searchMedicationConcept (med, lang) {
-    return axios.get(BASE_URL + '/vocabulary/' + lang + '/substance/search?term=' + med + '&limit=10')
-  },
   /// ////////////////////////////////////
   // from here on, we need to use tokens
   /// ////////////////////////////////////

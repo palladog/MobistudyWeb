@@ -2,6 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header>
       <q-toolbar color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'" >
+      <img src="statics/icons/favicon-32x32.png" alt="MobiStudy-logo">
         <q-toolbar-title>
           MobiStudy
           <span slot="subtitle">{{ welcomeLabel }}</span>
