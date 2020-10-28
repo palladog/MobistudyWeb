@@ -112,7 +112,7 @@ export default {
     async deleteTeam (index) {
       this.$q.dialog({
         title: 'Delete Team',
-        color: 'warning',
+        color: 'negative',
         message: 'You are deleting team ' + this.teams[index].name + ' from the system. This will also delete all associated studies and corresponding data. This cannot be undone. Would you like to continue?',
         ok: 'Yes, delete Team: ' + this.teams[index].name,
         cancel: 'Cancel'
