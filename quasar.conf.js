@@ -22,47 +22,19 @@ module.exports = function (ctx) {
     ],
 
     framework: {
-      // all: true, // --- includes everything; for dev only!
+      // iconSet: 'ionicons-v4', // Quasar icon set
+      // lang: 'de', // Quasar language pack
 
-      components: [
-        'QBtn',
-        'QBtnDropdown',
-        'QCard',
-        'QCardActions',
-        'QCardSection',
-        'QCheckbox',
-        'QDate',
-        'QDialog',
-        'QDrawer',
-        'QExpansionItem',
-        'QField',
-        'QHeader',
-        'QIcon',
-        'QInput',
-        'QItem',
-        'QItemLabel',
-        'QItemSection',
-        'QLayout',
-        'QList',
-        'QOptionGroup',
-        'QPageContainer',
-        'QPage',
-        'QPopupProxy',
-        'QRadio',
-        'QSelect',
-        'QSeparator',
-        'QSpace',
-        'QSpinner',
-        'QTab',
-        'QTabs',
-        'QTabPanel',
-        'QTabPanels',
-        'QTable',
-        'QTd',
-        'QToolbar',
-        'QToolbarTitle',
-        'QRouteTab'
-      ],
+      // Possible values for "all":
+      // * 'auto' - Auto-import needed Quasar components & directives
+      //            (slightly higher compile time; next to minimum bundle size; most convenient)
+      // * false  - Manually specify what to import
+      //            (fastest compile time; minimum bundle size; most tedious)
+      // * true   - Import everything from Quasar
+      //            (not treeshaking Quasar; biggest bundle size; convenient)
+      all: 'auto',
+
+      components: [],
 
       directives: [
         'Ripple',
