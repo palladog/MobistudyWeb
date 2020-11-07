@@ -187,3 +187,15 @@ export default {
   }
 }
 </script>
+
+<style>
+.q-table td {
+  border-color: black;
+}
+.q-table th {
+  border-bottom-color: black;
+}
+.q-table__bottom {
+  border-top:  1px solid black;
+}
+</style>
