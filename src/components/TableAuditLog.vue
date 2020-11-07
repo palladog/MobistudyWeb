@@ -79,10 +79,10 @@ export default {
       pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0, sortBy: 'timestamp', descending: true },
       columns: [
         { name: 'timestamp', required: true, label: 'Datetime', align: 'left', field: 'timestamp', sortable: true },
-        { name: 'event', required: true, label: 'Event', align: 'right', field: 'event', sortable: false },
-        { name: 'userEmail', required: true, label: 'User', align: 'right', field: 'userEmail', sortable: false },
-        { name: 'message', required: true, label: 'Message', align: 'right', field: 'message', sortable: false },
-        { name: 'data', required: false, label: 'Data', align: 'right', field: 'data', sortable: false }
+        { name: 'event', required: true, label: 'Event', align: 'left', field: 'event', sortable: false },
+        { name: 'userEmail', required: true, label: 'User', align: 'left', field: 'userEmail', sortable: false },
+        { name: 'message', required: true, label: 'Message', align: 'left', field: 'message', sortable: false },
+        { name: 'data', required: false, label: 'Data', align: 'left', field: 'data', sortable: false }
       ],
       filter: {
         after: undefined,
