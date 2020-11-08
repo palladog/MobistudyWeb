@@ -182,7 +182,7 @@
             </div>
             <div class="col q-pl-sm">
               <q-field class="q-mt-md" :error="inst.dataAccess.$error" error-message="The level of data access is required">
-                <q-radio v-model.trim="inst.dataAccess.$model" val="no" color="secondary" label="No" @input="update()"/>
+                <q-radio v-model.trim="inst.dataAccess.$model" val="no access" color="secondary" label="No Access" @input="update()"/>
                 <q-radio v-model.trim="inst.dataAccess.$model" val="anonymised" color="secondary" label="Anonymised" @input="update()" style="margin-left: 10px"/>
                 <q-radio v-model.trim="inst.dataAccess.$model" val="full" color="secondary" label="Full" @input="update()" style="margin-left: 10px"/>
               </q-field>
