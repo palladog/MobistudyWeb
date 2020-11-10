@@ -14,7 +14,7 @@
         <div class="row q-ma-sm">
           <div class="col-2 text-bold">Code: </div>
           <div class="col">
-            <q-input type="textarea" :error="codeExpired[index]" error-message="This invitation code has EXPIRED" :value="team.invitationCode" ref="invCode" readonly/>
+            <q-input type="textarea" autogrow :error="codeExpired[index]" error-message="This invitation code has EXPIRED" :value="team.invitationCode" ref="invCode" readonly/>
           </div>
           <div class="q-ml-sm"><q-btn color="primary" round sm icon="file_copy" @click="copyCode(index)"/></div>
         </div>
@@ -25,7 +25,7 @@
           </div>
         </div>
         <div class="row q-mt-sm justify-between">
-          <q-btn label="Generate new invitation code" color="accent" @click="generateCode(team._key)"/>
+          <q-btn label="Generate new invitation code" color="accent" icon="add" @click="generateCode(team._key)"/>
           <q-btn class="float-right" label="Delete team" color="negative" icon="remove" @click="deleteTeam(index)"/>
         </div>
         <q-separator v-if="index != teams.length-1" class="q-mt-md"/>
