@@ -2,7 +2,9 @@
 <template>
   <!-- Create New Teams -->
   <q-card>
-    <q-card-section> <div class="text-h6"> Create new team </div> </q-card-section>
+    <q-card-section>
+      <div class="text-h5">Create new team</div>
+      </q-card-section>
     <q-card-section>
       <div class="row q-ma-sm">
         <div class="col-2 text-bold">Team name: </div>

@@ -2,8 +2,8 @@
   <div>
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Generalities </div>
-        <div class="text-subtitle1"> General information about the study. </div>
+        <div class="text-h5">Generalities</div>
+        <div class="text-subtitle1">General information about the study.</div>
       </q-card-section>
       <q-card-section>
         <div class="row">
@@ -66,7 +66,7 @@
 <!-- Gen Info Tab: Principal Investigator Card -->
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Principal Investigator(s) </div>
+        <div class="text-h5"> Principal Investigator(s) </div>
         <div class="text-subtitle1"> Principal investigators of this study. </div>
       </q-card-section>
       <q-card-section>
@@ -134,7 +134,7 @@
 <!-- Gen Info Tab: Institutions Card -->
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Institution(s) </div>
+        <div class="text-h5">Institution(s)</div>
         <div class="text-subtitle1"> Involved institutions and data access rules. </div>
       </q-card-section>
       <q-card-section>
@@ -218,8 +218,8 @@
 <!-- Gen Info Tab: Date Card -->
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Dates </div>
-        <div class="text-subtitle1"> The start and end dates of the study. </div>
+        <div class="text-h5">Dates</div>
+        <div class="text-subtitle1">The start and end dates of the study.</div>
       </q-card-section>
       <q-card-section>
         <div class="row">

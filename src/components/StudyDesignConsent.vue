@@ -2,7 +2,7 @@
   <div>
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Consent </div>
+        <div class="text-h5">Consent</div>
         <div class="text-subtitle1"> Consent information reviewed by participant </div>
       </q-card-section>
       <!-- Consent Tab: Invitation Message Card -->

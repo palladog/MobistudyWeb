@@ -1,6 +1,8 @@
 <template>
   <q-card>
-    <q-card-section> <div class="text-h6"> Studies </div> </q-card-section>
+    <q-card-section>
+      <div class="text-h5">Studies</div>
+      </q-card-section>
     <q-card-section>
       <div v-for="(study, index) in studies" :key="index">
         <div class="row">
@@ -10,7 +12,7 @@
           </div>
         </div>
         <div class="row q-ma-sm">
-          <div class="col-2 text-bold"> Study Key: </div>
+          <div class="col-2 text-bold">Study Key: </div>
           <div class="col"> {{study._key}} </div>
         </div>
         <div class="row q-ma-sm">

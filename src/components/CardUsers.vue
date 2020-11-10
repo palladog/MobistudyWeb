@@ -1,6 +1,8 @@
 <template>
   <q-card>
-    <q-card-section> <div class="text-h6"> Users </div> </q-card-section>
+    <q-card-section>
+      <div class="text-h5">Users</div>
+      </q-card-section>
     <q-card-section>
       <div v-for="(user, index) in users" :key="index">
         <div class="row">
@@ -10,15 +12,15 @@
           </div>
         </div>
         <div class="row q-ma-sm">
-          <div class="col-2 text-bold"> User Key: </div>
+          <div class="col-2 text-bold">User Key: </div>
           <div class="col"> {{user._key}} </div>
         </div>
         <div class="row q-ma-sm">
-          <div class="col-2 text-bold"> Role: </div>
+          <div class="col-2 text-bold">Role: </div>
           <div class="col"> {{user.role}} </div>
         </div>
         <div class="row q-ma-sm">
-          <div class="col-2 text-bold"> Name: </div>
+          <div class="col-2 text-bold">Name: </div>
           <div class="col"> {{user.email}} </div>
         </div>
         <q-separator v-if="index != users.length-1" class="q-mt-sm q-mb-sm"/>
