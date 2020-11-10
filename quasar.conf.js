@@ -36,6 +36,7 @@ module.exports = function (ctx) {
         'QDrawer',
         'QExpansionItem',
         'QField',
+        'QForm',
         'QHeader',
         'QIcon',
         'QInput',
