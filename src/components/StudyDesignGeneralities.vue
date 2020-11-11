@@ -127,7 +127,7 @@
               <q-btn class="float-right" v-show="index == value.principalInvestigators.length-1" label="Add PI" color="primary" icon="add" @click="addRowInvestigator(index)"/>
             </div>
           </div>
-          <q-separator v-show="index != value.principalInvestigators.length-1"/>
+          <q-separator color="primary" spaced="xl" v-show="index != value.principalInvestigators.length-1"/>
         </div>
       </q-card-section>
     </q-card>
