@@ -2,8 +2,8 @@
   <div>
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Tasks </div>
-        <div class="text-subtitle1"> At least one task has to be specified. </div>
+        <div class="text-h5">Tasks</div>
+        <div class="text-subtitle1">At least one task has to be specified.</div>
       </q-card-section>
       <q-card-section>
         <q-btn-dropdown
@@ -51,13 +51,13 @@
     >
       <q-card-section>
         <div
-          class="text-h6"
+          class="text-h5"
           v-if="task.type === 'dataQuery'"
-        > Data Query Task </div>
+        >Data Query Task</div>
         <div
-          class="text-h6"
+          class="text-h5"
           v-if="task.type === 'form'"
-        > Form Task </div>
+        >Form Task</div>
       </q-card-section>
       <q-card-section>
         <div

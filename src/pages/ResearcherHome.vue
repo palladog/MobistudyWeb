@@ -1,8 +1,8 @@
 <template>
   <q-page>
     <q-card class="q-ma-lg q-pa-lg">
-      <q-card-section v-show="teamsListOptions.length === 0">
-        <div class="text-h6">Teams</div>
+      <q-card-section>
+        <div class="text-h5">Teams</div>
       </q-card-section>
       <q-card-section v-show="teamsListOptions.length === 0">
         <div class="text-subtitle">You are not a member of any team. Please contact your Mobistudy admin to be added to one.</div>
@@ -21,7 +21,7 @@
 
     <q-card class="q-ma-lg q-pa-lg" v-show="teamsListOptions.length > 0">
       <q-card-section>
-        <div class="text-h6">Studies</div>
+        <div class="text-h5">Studies</div>
       </q-card-section>
       <q-card-section>
         <div class="text-subtitle">List of Studies for team {{ this.selectedTeamLabel }}</div>

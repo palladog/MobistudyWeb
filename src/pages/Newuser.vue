@@ -4,8 +4,8 @@
       <q-page class="flex flex-center">
         <q-card class="q-pa-lg newUserBox">
           <q-card-section>
-            <div class="text-h6">User Registration</div>
-            <div class="text-subtitle">Only available to researchers</div>
+            <div class="text-h4">User Registration</div>
+            <div class="text-subtitle1">Only available to researchers</div>
           </q-card-section>
           <q-separator />
           <q-card-section>

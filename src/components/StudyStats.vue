@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <div class="text-h6"> Participants </div>
+      <div class="text-h5"> Participants </div>
     </q-card-section>
     <q-card-section>
       <div class="row justify-around">
@@ -9,7 +9,7 @@
           <div class="text-h5">
             Joined
           </div>
-          <div class="text-h3">
+          <div class="text-h4">
             {{ participants.joined }}
           </div>
         </div>
@@ -17,7 +17,7 @@
           <div class="text-h5">
             Active
           </div>
-          <div class="text-h3">
+          <div class="text-h4">
             {{ participants.active }}
           </div>
         </div>
@@ -25,7 +25,7 @@
           <div class="text-h5">
             Completed
           </div>
-          <div class="text-h3">
+          <div class="text-h4">
             {{ participants.completed }}
           </div>
         </div>
@@ -33,7 +33,7 @@
           <div class="text-h5">
             Withdrawn
           </div>
-          <div class="text-h3">
+          <div class="text-h4">
             {{ participants.withdrawn }}
           </div>
         </div>

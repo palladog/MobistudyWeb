@@ -1,16 +1,17 @@
 <template>
   <!-- <q-page class="q-pa-lg"> -->
   <q-card>
-    <q-card-section> <div class="text-h6"> Send email from server </div> </q-card-section>
+    <q-card-section>
+      <div class="text-h5">Send email from server</div> </q-card-section>
     <q-card-section>
       <div class="row q-ma-sm">
-        <div class="col-2 text-bold"> Email address: </div>
+        <div class="col-2 text-bold">Email address: </div>
         <div class="col">
           <q-input type="email" v-model="emailAddress" :error="$v.emailAddress.$error" error-message="An valid email address is required" @blur="$v.emailAddress.$touch"/>
         </div>
       </div>
       <div class="row q-ma-sm">
-        <div class="col-2 text-bold"> Subject: </div>
+        <div class="col-2 text-bold">Subject: </div>
         <div class="col">
           <q-input type="text" v-model="emailSubject" :error="$v.emailSubject.$error" error-message="An subject is required" @blur="$v.emailSubject.$touch"/>
         </div>

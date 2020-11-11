@@ -1,6 +1,8 @@
 <template>
   <q-card>
-    <q-card-section> <div class="text-h6"> Teams &amp; Invitation Codes </div> </q-card-section>
+    <q-card-section>
+      <div class="text-h5">Teams &amp; Invitation Codes</div>
+      </q-card-section>
     <q-card-section>
       <div v-for="(team, index) in teams" :key="index" class="q-mt-sm">
         <div class="row q-ma-sm">
