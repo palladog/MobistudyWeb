@@ -119,7 +119,7 @@ export default {
   },
   methods: {
     niceTimestamp (timeStamp) {
-      return date.formatDate(timeStamp, 'DD/MM/YYYY HH:mm:ss')
+      return date.formatDate(timeStamp, 'YYYY/MM/DD HH:mm:ss')
     },
     async updateFilters () {
       this.loadLogs({
