@@ -3,7 +3,7 @@
     <q-page-container>
       <q-page class="flex flex-center">
         <q-card class="q-pa-sm loginBox">
-          <q-card-section><div class="text-h6">Sign In</div></q-card-section>
+          <q-card-section><div class="text-h4">Sign In</div></q-card-section>
           <q-card-section>
             <form autocomplete="on">
               <q-input v-model.trim="$v.email.$model" type="email" label="Email" placeholder="e.g. email@email.com"
