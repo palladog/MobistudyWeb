@@ -188,8 +188,8 @@
     <!-- Height & Weight Range -->
       <q-card-section
         @input="
-          $emit('minbmi', v.minWeight.$model, v.minHeight.$model),
-          $emit('maxbmi', v.maxWeight.$model, v.maxHeight.$model)
+          $emit('minbmi', v.minWeight.$model, v.minHeight.$model / 100),
+          $emit('maxbmi', v.maxWeight.$model, v.maxHeight.$model / 100)
         ">
         <div class="row">
           <div class="col-4 q-pt-lg">
@@ -263,21 +263,20 @@
           </div>
           <div class="col q-pl-sm">
             <q-input
-              type="number"
               align="center"
               v-model.trim="v.minBMI.$model"
               hint="Minimum BMI."
               readonly
-              hide-dropdown-icon
+              mask="##.##"
             />
           </div>
           <div class="col q-ml-sm">
             <q-input
-              type="number"
               align="center"
               v-model.trim="v.maxBMI.$model"
               hint="Maximum BMI."
               readonly
+              mask="##.##"
             />
           </div>
         </div>

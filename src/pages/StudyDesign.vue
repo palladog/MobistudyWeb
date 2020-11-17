@@ -224,14 +224,12 @@ export default {
   methods: {
     calculateMinBMI: function (weight, height) {
       let currentMinBMI = this.studyDesign.inclusionCriteria.minBMI
-      let newHeight = height / 100 // cm
-      currentMinBMI = weight / (newHeight * newHeight)
+      currentMinBMI = weight / (height * height)
       this.studyDesign.inclusionCriteria.minBMI = currentMinBMI.toFixed(2)
     },
     calculateMaxBMI: function (weight, height) {
       let currentMaxBMI = this.studyDesign.inclusionCriteria.maxBMI
-      let newHeight = height / 100 // cm
-      currentMaxBMI = weight / (newHeight * newHeight)
+      currentMaxBMI = weight / (height * height)
       this.studyDesign.inclusionCriteria.maxBMI = currentMaxBMI.toFixed(2)
     },
     checkValidation: function () {
