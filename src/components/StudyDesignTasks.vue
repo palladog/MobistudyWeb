@@ -238,6 +238,7 @@ let healthDataTypesEnum2String = function (type) {
   if (type === 'steps') return 'Steps'
   if (type === 'weight') return 'Weight'
   if (type === 'height') return 'Height'
+  if (type === 'bmi') return 'Body Mass Index (BMI)'
   if (type === 'activity') return 'Activity (incl. walking, running, biking, sleeping, sport, ...)'
   if (type === 'heart_rate') return 'Heart rate (cannot aggregate)'
   if (type === 'heart_rate_variability') return 'Heart Rate Variability (iPhones only, cannot aggregate)'

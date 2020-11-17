@@ -103,9 +103,15 @@ export default {
             'female',
             'other'
           ],
+          minHeight: undefined,
+          maxHeight: undefined,
+          minWeight: undefined,
+          maxWeight: undefined,
           numberOfParticipants: undefined,
           criteriaQuestions: [],
           diseases: [],
+          minBMI: undefined,
+          maxBMI: undefined,
           medications: []
         },
         tasks: [],
@@ -159,7 +165,13 @@ export default {
         countries: { required },
         minAge: { required },
         maxAge: { required },
-        sex: { required }
+        sex: { required },
+        minBMI: { required },
+        maxBMI: { required },
+        minWeight: { required },
+        maxWeight: { required },
+        minHeight: { required },
+        maxHeight: { required }
       },
       tasks: {
         required,
