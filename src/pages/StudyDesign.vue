@@ -22,7 +22,13 @@
         <study-design-generalities v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></study-design-generalities>
       </q-tab-panel>
       <q-tab-panel name="tab-crit">
-        <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria" :languages="studyDesign.generalities.languages"></study-design-criteria>
+        <study-design-criteria
+          v-model="studyDesign.inclusionCriteria"
+          :v="$v.studyDesign.inclusionCriteria"
+          :languages="studyDesign.generalities.languages"
+          @minbmi="calculateMinBMI"
+          @maxbmi="calculateMaxBMI"
+        ></study-design-criteria>
       </q-tab-panel>
       <q-tab-panel name="tab-tasks">
         <study-design-tasks v-model="studyDesign" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks"></study-design-tasks>
@@ -216,6 +222,18 @@ export default {
     }
   },
   methods: {
+    calculateMinBMI: function (weight, height) {
+      let currentMinBMI = this.studyDesign.inclusionCriteria.minBMI
+      let newHeight = height / 100 // cm
+      currentMinBMI = weight / (newHeight * newHeight)
+      this.studyDesign.inclusionCriteria.minBMI = currentMinBMI.toFixed(2)
+    },
+    calculateMaxBMI: function (weight, height) {
+      let currentMaxBMI = this.studyDesign.inclusionCriteria.maxBMI
+      let newHeight = height / 100 // cm
+      currentMaxBMI = weight / (newHeight * newHeight)
+      this.studyDesign.inclusionCriteria.maxBMI = currentMaxBMI.toFixed(2)
+    },
     checkValidation: function () {
       // Checking for Errors only in tabs generalities and Error
       let errors = false

@@ -186,7 +186,11 @@
       </q-card-section>
 
     <!-- Height & Weight Range -->
-    <q-card-section>
+      <q-card-section
+        @input="
+          $emit('minbmi', v.minWeight.$model, v.minHeight.$model),
+          $emit('maxbmi', v.maxWeight.$model, v.maxHeight.$model)
+        ">
         <div class="row">
           <div class="col-4 q-pt-lg">
             <div class="text-bold">
@@ -194,27 +198,28 @@
             </div>
             <div class="text-caption">
               Minimum and maximum height/weight range of the participants.
+              BMI gets calculated automatically
             </div>
           </div>
           <div class="col q-pl-sm">
             <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.minHeight.$model"
-            hint="Minimum height."
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.minHeight.$touch" @input="update()"
-            :error="v.minHeight.$error" error-message="A minimum height is required"/>
+              type="number"
+              align="center" min="0"
+              v-model.trim="v.minHeight.$model"
+              hint="Minimum height. (m)"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              @blur="v.minHeight.$touch" @input="update()"
+              :error="v.minHeight.$error" error-message="A minimum height is required"/>
           </div>
           <div class="col q-ml-sm">
             <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.maxHeight.$model"
-            hint="Maximum height."
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.maxHeight.$touch" @input="update()"
-            :error="v.maxHeight.$error" error-message="A maximum height is required"/>
+              type="number"
+              align="center" min="0"
+              v-model.trim="v.maxHeight.$model"
+              hint="Maximum height. (m)"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              @blur="v.maxHeight.$touch" @input="update()"
+              :error="v.maxHeight.$error" error-message="A maximum height is required"/>
           </div>
         </div>
         <div class="row">
@@ -225,17 +230,18 @@
             type="number"
             align="center" min="0"
             v-model.trim="v.minWeight.$model"
-            hint="Minimum weight."
+            hint="Minimum weight. (kg)"
             onkeypress="return event.charCode >= 48 && event.charCode <= 57"
             @blur="v.minWeight.$touch" @input="update()"
-            :error="v.minWeight.$error" error-message="A minimum weight is required"/>
+            :error="v.minWeight.$error" error-message="A minimum weight is required"
+            />
           </div>
           <div class="col q-ml-sm">
             <q-input
             type="number"
             align="center" min="0"
             v-model.trim="v.maxWeight.$model"
-            hint="Maximum weight."
+            hint="Maximum weight. (kg)"
             onkeypress="return event.charCode >= 48 && event.charCode <= 57"
             @blur="v.maxWeight.$touch" @input="update()"
             :error="v.maxWeight.$error" error-message="A maximum weight is required"/>
@@ -257,23 +263,22 @@
           </div>
           <div class="col q-pl-sm">
             <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.minBMI.$model"
-            hint="Minimum BMI."
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.minBMI.$touch" @input="update()"
-            :error="v.minBMI.$error" error-message="A minimum BMI is required"/>
+              type="number"
+              align="center"
+              v-model.trim="v.minBMI.$model"
+              hint="Minimum BMI."
+              readonly
+              hide-dropdown-icon
+            />
           </div>
           <div class="col q-ml-sm">
             <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.maxBMI.$model"
-            hint="Maximum BMI."
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.maxBMI.$touch" @input="update()"
-            :error="v.maxBMI.$error" error-message="A maximum BMI is required"/>
+              type="number"
+              align="center"
+              v-model.trim="v.maxBMI.$model"
+              hint="Maximum BMI."
+              readonly
+            />
           </div>
         </div>
       </q-card-section>

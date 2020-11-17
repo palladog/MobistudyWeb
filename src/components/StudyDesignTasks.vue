@@ -200,12 +200,12 @@
             </q-expansion-item>
           </div>
         </div>
-
         <q-btn
           label="Remove this task"
           color="negative"
           icon="remove"
           @click="removeTask(index)"
+          style="marginTop: 10px;"
         />
       </q-card-section>
     </q-card>
