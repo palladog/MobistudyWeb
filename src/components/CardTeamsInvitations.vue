@@ -79,7 +79,7 @@ export default {
       }
     },
     niceDate (timeStamp) {
-      return date.formatDate(timeStamp, 'DD/MM/YYYY')
+      return date.formatDate(timeStamp, 'YYYY/MM/DD')
     },
     async generateCode (key) {
       try {
