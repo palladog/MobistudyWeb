@@ -198,4 +198,8 @@ export default {
 .q-table__bottom {
   border-top:  1px solid black;
 }
+
+.q-table__top {
+  margin-bottom: 20px;
+}
 </style>
