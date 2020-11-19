@@ -1,6 +1,6 @@
 <template>
   <!-- Create New Teams -->
-  <div class="q-pa-md q-gutter-sm">
+  <div class="q-pa-md q-gutter-sm text-center">
     <q-btn label="Create a New Team" color="primary" @click="prompt = true" />
 
     <q-dialog v-model="prompt" persistent>
@@ -30,7 +30,7 @@ export default {
   name: 'CardNewTeam',
   data () {
     return {
-      teamName: '',
+      promptTeamName: '',
       prompt: false
     }
   },
@@ -81,9 +81,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.q-pa-md {
-  text-align: center;
-}
-</style>
