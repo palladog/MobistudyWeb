@@ -1,16 +1,16 @@
 <template>
   <!-- Create New Teams -->
   <div class="q-pa-md q-gutter-sm text-center">
-    <q-btn label="Create a New Team" color="primary" @click="prompt = true" />
+    <q-btn label="Create a New Team" color="primary" @click="promptTeamName = true" />
 
-    <q-dialog v-model="prompt" persistent>
+    <q-dialog v-model="promptTeamName" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">Team Name</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input placeholder="Enter a New Team Name" dense autofocus @keyup.enter="prompt = false" v-model="teamName" @blur="$v.teamName.$touch" :error="$v.teamName.$error" error-message="A name is required"/>
+          <q-input placeholder="Enter a New Team Name" dense autofocus @keyup.enter="promptTeamName = false" v-model="teamName" @blur="$v.teamName.$touch" :error="$v.teamName.$error" error-message="A name is required"/>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -30,8 +30,8 @@ export default {
   name: 'CardNewTeam',
   data () {
     return {
-      promptTeamName: '',
-      prompt: false
+      teamName: '',
+      promptTeamName: false
     }
   },
   validations: {
@@ -74,7 +74,7 @@ export default {
             }
           }
         }).onCancel(async () => {
-          this.prompt = true
+          this.promptTeamName = true
         })
       }
     }
