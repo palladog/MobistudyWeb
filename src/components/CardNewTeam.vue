@@ -1,24 +1,25 @@
-
 <template>
   <!-- Create New Teams -->
-  <q-card>
-    <q-card-section>
-      <div class="text-h5">Create new team</div>
-    </q-card-section>
-    <q-form @submit="createTeam">
-    <q-card-section>
-      <div class="row q-ma-sm">
-        <div class="col-2 text-bold">Team name: </div>
-        <div class="col">
-          <q-input type="text" v-model="teamName" @blur="$v.teamName.$touch" :error="$v.teamName.$error" error-message="A name is required"/>
-        </div>
-      </div>
-    </q-card-section>
-    <q-card-actions>
-      <q-btn label="Create" color="primary" type="submit"/>
-    </q-card-actions>
-    </q-form>
-  </q-card>
+  <div class="q-pa-md q-gutter-sm text-center">
+    <q-btn label="Create a New Team" color="primary" @click="promptTeamName = true" />
+
+    <q-dialog v-model="promptTeamName" persistent>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Team Name</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input placeholder="Enter a New Team Name" dense autofocus @keyup.enter="promptTeamName = false" v-model="teamName" @blur="$v.teamName.$touch" :error="$v.teamName.$error" error-message="A name is required"/>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Create Team" v-close-popup @click="createTeam()" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script>
@@ -29,7 +30,8 @@ export default {
   name: 'CardNewTeam',
   data () {
     return {
-      teamName: ''
+      teamName: '',
+      promptTeamName: false
     }
   },
   validations: {
@@ -43,17 +45,16 @@ export default {
       } else {
         this.$q.dialog({
           title: 'Create Team',
-          color: 'warning',
+          color: 'primary',
           message: 'You are creating a new team named "' + this.teamName + '". Would you like to continue?',
           ok: 'Yes, create new team',
-          cancel: 'Cancel'
+          cancel: 'Back'
         }).onOk(async () => {
           try {
             await API.createTeam(this.teamName)
             this.$q.notify({
               color: 'positive',
-              message: 'Team ' + this.teamName + ' created!',
-              icon: 'thumb_up'
+              message: 'Team ' + this.teamName + ' created!'
             })
             this.teamName = ''
             this.$emit('newTeam', this.teamName)
@@ -72,6 +73,8 @@ export default {
               })
             }
           }
+        }).onCancel(async () => {
+          this.promptTeamName = true
         })
       }
     }
