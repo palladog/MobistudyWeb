@@ -205,7 +205,7 @@
           color="negative"
           icon="remove"
           @click="removeTask(index)"
-          style="marginTop: 10px;"
+          class="q-mt-sm"
         />
       </q-card-section>
     </q-card>
