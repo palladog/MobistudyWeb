@@ -173,73 +173,19 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-select v-model="medsVue" use-input use-chips multiple
-            :options="medsOptions" input-debounce="500" @filter="searchMeds" @input="update()">
+            <q-select
+              v-model="medsVue"
+              use-input use-chips multiple
+              :options="medsOptions"
+              input-debounce="500"
+              @filter="searchMeds"
+              @input="update()">
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey"> No medications found </q-item-section>
                 </q-item>
               </template>
             </q-select>
-          </div>
-        </div>
-      </q-card-section>
-
-    <!-- Height & Weight Range -->
-      <q-card-section>
-        <div class="row">
-          <div class="col-4 q-pt-lg">
-            <div class="text-bold">
-              Height & Weight range:
-            </div>
-            <div class="text-caption">
-              Minimum and maximum height/weight range of the participants.
-            </div>
-          </div>
-          <div class="col q-pl-sm">
-            <q-input
-              type="number"
-              align="center" min="0"
-              v-model.trim="v.minHeight.$model"
-              hint="Minimum height. (m)"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              @blur="v.minHeight.$touch" @input="update()"
-              :error="v.minHeight.$error" error-message="A minimum height is required"/>
-          </div>
-          <div class="col q-ml-sm">
-            <q-input
-              type="number"
-              align="center" min="0"
-              v-model.trim="v.maxHeight.$model"
-              hint="Maximum height. (m)"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              @blur="v.maxHeight.$touch" @input="update()"
-              :error="v.maxHeight.$error" error-message="A maximum height is required"/>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4 q-pt-lg">
-          </div>
-          <div class="col q-pl-sm">
-            <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.minWeight.$model"
-            hint="Minimum weight. (kg)"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.minWeight.$touch" @input="update()"
-            :error="v.minWeight.$error" error-message="A minimum weight is required"
-            />
-          </div>
-          <div class="col q-ml-sm">
-            <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.maxWeight.$model"
-            hint="Maximum weight. (kg)"
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.maxWeight.$touch" @input="update()"
-            :error="v.maxWeight.$error" error-message="A maximum weight is required"/>
           </div>
         </div>
       </q-card-section>
