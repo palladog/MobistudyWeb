@@ -45,6 +45,9 @@
         />
       </q-tab-panel>
     </q-tab-panels>
+    <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
+      <q-btn class="shadow-10" fab icon="keyboard_arrow_up" color="secondary" />
+    </q-page-scroller>
   </q-page>
 </template>
 
