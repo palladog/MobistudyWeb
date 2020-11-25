@@ -7,7 +7,7 @@
           Mobistudy
           <!--<span slot="subtitle">{{ welcomeLabel }}</span>-->
         </q-toolbar-title>
-        <span class="q-mr-lg text-blue-grey-2"> {{ loggedInAsUserLabel }}</span>
+        <span class="gt-xs q-mr-lg text-blue-grey-2"> {{ loggedInAsUserLabel }}</span>
         <q-btn label="LOGOUT" flat dense icon-right="exit_to_app" @click="confirm = true" />
         <q-dialog v-model="confirm" persistent>
           <q-card>
