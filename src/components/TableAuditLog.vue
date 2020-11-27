@@ -215,6 +215,7 @@ export default {
         }
         this.pagination.rowsNumber = await API.getLogs(true, queryParams)
         this.logs = await API.getLogs(false, queryParams)
+        console.log('TableAuditLog.vue Logs List:', this.logs)
       } catch (err) {
         this.$q.notify({
           color: 'negative',

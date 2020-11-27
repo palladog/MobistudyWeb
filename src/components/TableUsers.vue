@@ -11,24 +11,20 @@
       @request="loadUsers"
     >
       <template #top-right>
-        <!--
-          @input="updateFilters()"
-        -->
         <q-select
           emit-value
           map-options
           :options="roleTypesOpts"
           v-model="filter.roleType"
+          @input="updateFilters()"
           hint="Event"
           class="q-mr-sm"
           style="width: 150px"
         />
-        <!--
-          @input="updateFilters()"
-        -->
         <q-input
           type="text"
           v-model="filter.userEmail"
+          @input="updateFilters()"
           hint="User email"
           clearable
           debounce="500"
@@ -59,9 +55,9 @@ export default {
   data () {
     return {
       users: [],
-      // pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0, sortBy: 'userkey', descending: true },
+      pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0, sortBy: 'userkey', descending: true },
       columns: [
-        { name: 'userkey', required: true, label: 'User Key', align: 'left', field: '_key', sortable: false }, // Change "_key" to "key" eventually
+        { name: 'userkey', required: true, label: 'User Key', align: 'left', field: 'userkey', sortable: false }, // Change "_key" to "key" eventually
         { name: 'email', required: true, label: 'Email', align: 'left', field: 'email', sortable: true },
         { name: 'role', required: true, label: 'Role', align: 'left', field: 'role', sortable: false },
         { name: 'delete', required: true, label: 'Delete user', align: 'left', field: 'delete', sortable: false }
@@ -70,28 +66,20 @@ export default {
         userEmail: undefined,
         roleType: 'all'
       },
-      roleTypesOpts: []
-      // loading: false
+      roleTypesOpts: [],
+      loading: false
     }
   },
   async created () {
     this.getRoleTypes()
   },
   async mounted () {
-    this.loadUsers()
+    this.loadUsers({
+      pagination: this.pagination,
+      filter: this.filter
+    })
   },
   methods: {
-    async loadUsers () {
-      try {
-        this.users = await API.getAllDbUsers()
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot retrieve users list',
-          icon: 'report_problem'
-        })
-      }
-    },
     async getRoleTypes () {
       try {
         let types = await API.getRoleTypes()
@@ -108,6 +96,35 @@ export default {
           icon: 'report_problem'
         })
       }
+    },
+    async loadUsers (params) {
+      console.log('Loading users')
+      this.loading = true
+      this.pagination = params.pagination
+      try {
+        let queryParams = {
+          roleType: params.filter.roleType === 'all' ? undefined : params.filter.roleType,
+          userEmail: params.filter.userEmail,
+          sortDirection: params.pagination.descending ? 'DESC' : 'ASC',
+          offset: (params.pagination.page - 1) * params.pagination.rowsPerPage,
+          count: params.pagination.rowsPerPage
+        }
+        this.pagination.rowsNumber = await API.getAllUsers(true, queryParams)
+        this.users = await API.getAllUsers(false, queryParams)
+      } catch (err) {
+        this.$q.notify({
+          color: 'negative',
+          message: 'Cannot retrieve users' + err.message,
+          icon: 'report_problem'
+        })
+      }
+      this.loading = false
+    },
+    async updateFilters () {
+      this.loadUsers({
+        pagination: this.pagination,
+        filter: this.filter
+      })
     },
     async deleteUser (user) {
       console.log('USER: ' + user.email)

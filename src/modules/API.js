@@ -58,6 +58,7 @@ export default {
     return resp.data
   },
   // USER
+  // NEW GET ROLE TYPES FUNCTION
   async getRoleTypes () {
     let resp = await axios.get(BASE_URL + '/users/roleTypes', axiosConfig)
     console.log('ROLE TYPES:', resp.data)
@@ -68,9 +69,21 @@ export default {
     return resp.data
   },
   // NEW GET USERS FUNCTION
-  // async getUsers () {}
-  async getAllDbUsers () {
-    let resp = await axios.get(BASE_URL + '/users/all', axiosConfig)
+  async getAllUsers (countOnly, filter) {
+    let queryParams = ''
+    let firstParam = true
+    for (let param in filter) {
+      if (filter[param] || filter[param] === 0) {
+        queryParams += (firstParam ? '' : '&') + param + '=' + encodeURIComponent(filter[param])
+        firstParam = false
+      }
+    }
+    let URL = BASE_URL + '/getUsers' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
+    let resp = await axios.get(URL, axiosConfig)
+    return resp.data
+  },
+  async deleteUser (userKey) {
+    let resp = await axios.delete(BASE_URL + '/users/' + userKey, axiosConfig)
     return resp.data
   },
   // STUDY
@@ -163,6 +176,7 @@ export default {
     }
     let URL = BASE_URL + '/auditlog' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
     let resp = await axios.get(URL, axiosConfig)
+    console.log('API.getLogs() RESP', resp)
     /* EXAMPLE RESPONSE DATA
       obj: Object
       _key: "105794"
