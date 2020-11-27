@@ -6,14 +6,14 @@
           <q-card-title v-show="!email">Reset your password</q-card-title>
           <q-card-title v-show="email">Reset password for {{ email }}</q-card-title>
           <q-card-main>
-            <q-field label="Token" helper="As received on your email." :error="$v.token.$error" error-label="A token is required." >
-              <q-input v-model.trim="$v.token.$model" type="text" @blur="$v.token.$touch"/>
+            <q-field label="Token" helper="As received on your email." :error="$v.token.$error" error-message="A token is required." >
+              <q-input v-model.trim="$v.token.$model" type="text" @blur.native="$v.token.$touch"/>
             </q-field>
-            <q-field class="q-mt-md" label="Password" helper="Enter a new password." :error="$v.newPassword.$error" :error-label="getFirstPwdCheckError(newPassword)">
-              <q-input v-model.trim="$v.newPassword.$model" type="password" @blur="$v.newPassword.$touch"/>
+            <q-field class="q-mt-md" label="Password" helper="Enter a new password." :error="$v.newPassword.$error" :error-message="getFirstPwdCheckError(newPassword)">
+              <q-input v-model.trim="$v.newPassword.$model" type="password" @blur.native="$v.newPassword.$touch"/>
             </q-field>
-            <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.newPassword2.$error" error-label="Passwords must match">
-              <q-input v-model.trim="$v.newPassword2.$model" type="password" @blur="$v.newPassword2.$touch"/>
+            <q-field class="q-mt-md" label="Repeat Password" helper="Please confirm your password." :error="$v.newPassword2.$error" error-message="Passwords must match">
+              <q-input v-model.trim="$v.newPassword2.$model" type="password" @blur.native="$v.newPassword2.$touch"/>
             </q-field>
           </q-card-main>
           <q-card-actions>
