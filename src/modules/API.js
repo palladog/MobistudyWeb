@@ -58,16 +58,19 @@ export default {
     return resp.data
   },
   // USER
+  async getRoleTypes () {
+    let resp = await axios.get(BASE_URL + '/users/roleTypes', axiosConfig)
+    console.log('ROLE TYPES:', resp.data)
+    return resp.data
+  },
   async getUserByKey (userKey) {
     let resp = await axios.get(BASE_URL + '/users/' + userKey, axiosConfig)
     return resp.data
   },
+  // NEW GET USERS FUNCTION
+  // async getUsers () {}
   async getAllDbUsers () {
     let resp = await axios.get(BASE_URL + '/users/all', axiosConfig)
-    return resp.data
-  },
-  async deleteUser (userKey) {
-    let resp = await axios.delete(BASE_URL + '/users/' + userKey, axiosConfig)
     return resp.data
   },
   // STUDY
@@ -160,6 +163,17 @@ export default {
     }
     let URL = BASE_URL + '/auditlog' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
     let resp = await axios.get(URL, axiosConfig)
+    /* EXAMPLE RESPONSE DATA
+      obj: Object
+      _key: "105794"
+      data: Null
+      event: "userCreated"
+      message: "New user created with email forreal@gmail.com"
+      refData: "users"
+      refKey: "105792"
+      timestamp: "2020-11-19T16:31:03.623Z"
+      email: "forreal@gmail.com"
+    */
     return resp.data
   },
   // Test stuff
