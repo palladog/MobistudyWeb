@@ -7,11 +7,11 @@
           <q-card-section>
             <form autocomplete="on">
               <q-input v-model.trim="$v.email.$model" type="email" label="Email" placeholder="e.g. email@email.com"
-               autocomplete="on" @blur="$v.email.$touch"
-               :error="$v.email.$error" error-label="An email address is required."/>
+               autocomplete="on" @blur.native="$v.email.$touch"
+               :error="$v.email.$error" error-message="An email address is required."/>
                <q-input v-model.trim="$v.password.$model" type="password" label="Password"
-               autocomplete="on" @blur="$v.password.$touch" @keyup.enter="login()"
-               :error="$v.password.$error" error-label="A password is required."/>
+               autocomplete="on" @blur.native="$v.password.$touch" @keyup.enter="login()"
+               :error="$v.password.$error" error-message="A password is required."/>
             </form>
           </q-card-section>
           <q-card-actions>

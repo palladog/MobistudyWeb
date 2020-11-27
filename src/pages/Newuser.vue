@@ -9,9 +9,9 @@
           </q-card-section>
           <q-separator />
           <q-card-section>
-            <q-input v-model.trim="$v.email.$model" label="Email" type="email" placeholder=" e.g. email@email.com" @blur="$v.email.$touch" :error="$v.email.$error" error-message="A valid email address is required"/>
-            <q-input v-model.trim="$v.password.$model" label="Password" type="password" @blur="$v.password.$touch" :error="$v.password.$error" :error-message="getFirstPwdCheckError(password)"/>
-            <q-input v-model.trim="$v.password2.$model" label="Repeat Password" type="password" @blur="$v.password2.$touch" :error="$v.password2.$error" error-message="Passwords must match"/>
+            <q-input v-model.trim="$v.email.$model" label="Email" type="email" placeholder=" e.g. email@email.com" @blur.native="$v.email.$touch" :error="$v.email.$error" error-message="A valid email address is required"/>
+            <q-input v-model.trim="$v.password.$model" label="Password" type="password" @blur.native="$v.password.$touch" :error="$v.password.$error" :error-message="getFirstPwdCheckError(password)"/>
+            <q-input v-model.trim="$v.password2.$model" label="Repeat Password" type="password" @blur.native="$v.password2.$touch" :error="$v.password2.$error" error-message="Passwords must match"/>
             <div class ="row q-mt-md">
               <div class = "col-5">
                 <q-btn label="Cancel" color="warning" @click="cancelRegistration"/>
