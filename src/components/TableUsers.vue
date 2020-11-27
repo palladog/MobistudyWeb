@@ -98,7 +98,6 @@ export default {
       }
     },
     async loadUsers (params) {
-      console.log('Loading users')
       this.loading = true
       this.pagination = params.pagination
       try {

@@ -176,7 +176,6 @@ export default {
     }
     let URL = BASE_URL + '/auditlog' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
     let resp = await axios.get(URL, axiosConfig)
-    console.log('API.getLogs() RESP', resp)
     /* EXAMPLE RESPONSE DATA
       obj: Object
       _key: "105794"
