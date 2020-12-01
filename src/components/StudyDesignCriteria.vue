@@ -56,13 +56,12 @@
               type="number"
               align="center"
               min="0"
-              v-model.trim="v.minAge.$model"
+              v-model.number="v.minAge.$model"
               hint="Minimum age."
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @blur="v.minAge.$touch"
               @input="update()"
               :error="v.minAge.$error"
-              error-message="A minimum age is required"
+              error-message="A minimum age of 0 is required"
             />
           </div>
           <div class="col q-ml-sm">
@@ -70,13 +69,12 @@
               type="number"
               align="center"
               min="0"
-              v-model.trim="v.maxAge.$model"
+              v-model.number="v.maxAge.$model"
               hint="Maximum age."
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @blur="v.maxAge.$touch"
               @input="update()"
               :error="v.maxAge.$error"
-              error-message="A maximum age is required"
+              error-message="A minimum age of 0 is required"
             />
           </div>
         </div>
@@ -135,7 +133,7 @@
           <div class="col q-pl-sm">
             <q-input
               type="number"
-              min="0"
+              min="1"
               align="center"
               v-model.trim="value.numberOfParticipants"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
@@ -226,32 +224,30 @@
           </div>
           <div class="col q-pl-sm">
             <q-input
-              min="10"
-              max="80"
+              type="number"
+              min="5"
+              max="210"
               align="center"
-              v-model.trim="v.minBMI.$model"
+              v-model.number="v.minBMI.$model"
               hint="Minimum BMI."
-              mask="##.##"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @blur="v.minBMI.$touch"
               @input="update()"
               :error="v.minBMI.$error"
-              error-message="A minimum BMI is required"
+              error-message="A BMI between 5 and 210 is required"
             />
           </div>
           <div class="col q-ml-sm">
             <q-input
-              min="10"
-              max="80"
+              type="number"
+              min="5"
+              max="210"
               align="center"
-              v-model.trim="v.maxBMI.$model"
+              v-model.number="v.maxBMI.$model"
               hint="Maximum BMI."
-              mask="##.##"
-              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
               @blur="v.maxBMI.$touch"
-              @input="update()"
+              :input="update()"
               :error="v.maxBMI.$error"
-              error-message="A maximum BMI is required"
+              error-message="A BMI between 5 and 210 is required"
             />
           </div>
         </div>
@@ -418,6 +414,7 @@ export default {
   },
   methods: {
     update () {
+      console.log(this.value)
       this.$emit('input', this.value)
     },
     async searchDisease (diseaseDescription, update, abort) {
