@@ -17,21 +17,37 @@
       <q-tab name="tab-tasks" icon="list" label="Tasks" :class="$v.studyDesign.tasks.$error? 'text-red': ''"/>
       <q-tab name="tab-consent" icon="verified_user" label="Consent" :class="$v.studyDesign.consent.$error? 'text-red': ''"/>
     </q-tabs>
-    <q-tab-panels v-model="studyTab">
+    <q-tab-panels v-model="studyTab" animated>
       <q-tab-panel name="tab-gen">
-        <study-design-generalities v-model="studyDesign.generalities" :v="$v.studyDesign.generalities"></study-design-generalities>
+        <study-design-generalities
+          v-model="studyDesign.generalities"
+          :v="$v.studyDesign.generalities"
+        />
       </q-tab-panel>
       <q-tab-panel name="tab-crit">
-        <study-design-criteria v-model="studyDesign.inclusionCriteria" :v="$v.studyDesign.inclusionCriteria" :languages="studyDesign.generalities.languages"></study-design-criteria>
+        <study-design-criteria
+          v-model="studyDesign.inclusionCriteria"
+          :v="$v.studyDesign.inclusionCriteria"
+          :languages="studyDesign.generalities.languages"
+        />
       </q-tab-panel>
       <q-tab-panel name="tab-tasks">
-        <study-design-tasks v-model="studyDesign" :teamKey="studyDesign.teamKey" :v="$v.studyDesign.tasks"></study-design-tasks>
+        <study-design-tasks
+          v-model="studyDesign"
+          :teamKey="studyDesign.teamKey"
+          :v="$v.studyDesign.tasks"
+        />
       </q-tab-panel>
       <q-tab-panel name="tab-consent">
-        <study-design-consent v-model="studyDesign" :v="$v.studyDesign"></study-design-consent>
+        <study-design-consent
+          v-model="studyDesign"
+          :v="$v.studyDesign"
+        />
       </q-tab-panel>
     </q-tab-panels>
-
+    <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[18, 18]">
+      <q-btn class="shadow-10" fab icon="keyboard_arrow_up" color="secondary" />
+    </q-page-scroller>
   </q-page>
 </template>
 
@@ -106,6 +122,8 @@ export default {
           numberOfParticipants: undefined,
           criteriaQuestions: [],
           diseases: [],
+          minBMI: undefined,
+          maxBMI: undefined,
           medications: []
         },
         tasks: [],
@@ -159,7 +177,9 @@ export default {
         countries: { required },
         minAge: { required },
         maxAge: { required },
-        sex: { required }
+        sex: { required },
+        minBMI: { required },
+        maxBMI: { required }
       },
       tasks: {
         required,

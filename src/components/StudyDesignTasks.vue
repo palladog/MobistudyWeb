@@ -2,8 +2,8 @@
   <div>
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Tasks </div>
-        <div class="text-subtitle1"> At least one task has to be specified. </div>
+        <div class="text-h5">Tasks</div>
+        <div class="text-subtitle1">At least one task has to be specified.</div>
       </q-card-section>
       <q-card-section>
         <q-btn-dropdown
@@ -51,13 +51,13 @@
     >
       <q-card-section>
         <div
-          class="text-h6"
+          class="text-h5"
           v-if="task.type === 'dataQuery'"
-        > Data Query Task </div>
+        >Data Query Task</div>
         <div
-          class="text-h6"
+          class="text-h5"
           v-if="task.type === 'form'"
-        > Form Task </div>
+        >Form Task</div>
       </q-card-section>
       <q-card-section>
         <div
@@ -200,12 +200,12 @@
             </q-expansion-item>
           </div>
         </div>
-
         <q-btn
           label="Remove this task"
           color="negative"
           icon="remove"
           @click="removeTask(index)"
+          class="q-mt-sm"
         />
       </q-card-section>
     </q-card>
@@ -238,6 +238,7 @@ let healthDataTypesEnum2String = function (type) {
   if (type === 'steps') return 'Steps'
   if (type === 'weight') return 'Weight'
   if (type === 'height') return 'Height'
+  if (type === 'bmi') return 'Body Mass Index (BMI)'
   if (type === 'activity') return 'Activity (incl. walking, running, biking, sleeping, sport, ...)'
   if (type === 'heart_rate') return 'Heart rate (cannot aggregate)'
   if (type === 'heart_rate_variability') return 'Heart Rate Variability (iPhones only, cannot aggregate)'

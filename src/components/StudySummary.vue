@@ -2,7 +2,7 @@
   <div>
     <q-card>
       <q-card-section>
-        <div class="text-h6"> {{ studyDesign.generalities.title }} </div>
+        <div class="text-h5"> {{ studyDesign.generalities.title }} </div>
       </q-card-section>
       <q-card-section>
         <div class="row q-ma-sm">
@@ -31,7 +31,7 @@
 
     <q-card class="q-mt-md">
       <q-card-section>
-        <div class="text-h6"> Principal Investigators </div>
+        <div class="text-h5"> Principal Investigators </div>
       </q-card-section>
       <q-card-section>
         <div v-for="(pi, pIndex) in studyDesign.generalities.principalInvestigators" :key="pIndex">
@@ -54,7 +54,7 @@
 
     <q-card class="q-mt-md">
       <q-card-section>
-        <div class="text-h6"> Institutions </div>
+        <div class="text-h5"> Institutions </div>
       </q-card-section>
       <q-card-section>
         <div v-for="(inst, inIndex) in studyDesign.generalities.institutions" :key="inIndex">
@@ -81,7 +81,7 @@
 
     <q-card class="q-mt-md">
       <q-card-section>
-        <div class="text-h6"> Inclusion Criteria: </div>
+        <div class="text-h5"> Inclusion Criteria: </div>
       </q-card-section>
       <q-card-section>
         <div class="row q-ma-sm">
@@ -123,7 +123,7 @@
 
     <q-card class="q-mt-md">
       <q-card-section>
-        <div class="text-h6"> Tasks: </div>
+        <div class="text-h5"> Tasks: </div>
       </q-card-section>
       <q-card-section>
         <div v-for="(task, taIndex) in studyDesign.tasks" :key="taIndex">
@@ -169,7 +169,7 @@
     </q-card>
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Consent: </div>
+        <div class="text-h5"> Consent: </div>
       </q-card-section>
       <q-card-section>
         <div class="row q-ma-sm">

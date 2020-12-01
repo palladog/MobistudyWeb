@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <div class="text-h6"> Scheduler </div>
+      <div class="text-h5"> Scheduler </div>
       <div class="text-subtitle1"> Configure when the event will be scheduled. </div>
     </q-card-section>
     <q-separator />

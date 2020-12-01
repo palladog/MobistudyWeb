@@ -2,8 +2,8 @@
   <div>
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Generalities </div>
-        <div class="text-subtitle1"> General information about the study. </div>
+        <div class="text-h5">Generalities</div>
+        <div class="text-subtitle1">General information about the study.</div>
       </q-card-section>
       <q-card-section>
         <div class="row">
@@ -66,7 +66,7 @@
 <!-- Gen Info Tab: Principal Investigator Card -->
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Principal Investigator(s) </div>
+        <div class="text-h5"> Principal Investigator(s) </div>
         <div class="text-subtitle1"> Principal investigators of this study. </div>
       </q-card-section>
       <q-card-section>
@@ -127,14 +127,14 @@
               <q-btn class="float-right" v-show="index == value.principalInvestigators.length-1" label="Add PI" color="primary" icon="add" @click="addRowInvestigator(index)"/>
             </div>
           </div>
-          <q-separator v-show="index != value.principalInvestigators.length-1"/>
+          <q-separator color="primary" spaced="xl" v-show="index != value.principalInvestigators.length-1"/>
         </div>
       </q-card-section>
     </q-card>
 <!-- Gen Info Tab: Institutions Card -->
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Institution(s) </div>
+        <div class="text-h5">Institution(s)</div>
         <div class="text-subtitle1"> Involved institutions and data access rules. </div>
       </q-card-section>
       <q-card-section>
@@ -182,7 +182,7 @@
             </div>
             <div class="col q-pl-sm">
               <q-field class="q-mt-md" :error="inst.dataAccess.$error" error-message="The level of data access is required">
-                <q-radio v-model.trim="inst.dataAccess.$model" val="no" color="secondary" label="No" @input="update()"/>
+                <q-radio v-model.trim="inst.dataAccess.$model" val="no access" color="secondary" label="No Access" @input="update()"/>
                 <q-radio v-model.trim="inst.dataAccess.$model" val="anonymised" color="secondary" label="Anonymised" @input="update()" style="margin-left: 10px"/>
                 <q-radio v-model.trim="inst.dataAccess.$model" val="full" color="secondary" label="Full" @input="update()" style="margin-left: 10px"/>
               </q-field>
@@ -218,8 +218,8 @@
 <!-- Gen Info Tab: Date Card -->
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Dates </div>
-        <div class="text-subtitle1"> The start and end dates of the study. </div>
+        <div class="text-h5">Dates</div>
+        <div class="text-subtitle1">The start and end dates of the study.</div>
       </q-card-section>
       <q-card-section>
         <div class="row">

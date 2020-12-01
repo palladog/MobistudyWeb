@@ -2,7 +2,7 @@
   <div>
     <q-card class="form-card">
       <q-card-section>
-        <div class="text-h6"> Consent </div>
+        <div class="text-h5">Consent</div>
         <div class="text-subtitle1"> Consent information reviewed by participant </div>
       </q-card-section>
       <!-- Consent Tab: Invitation Message Card -->
@@ -73,7 +73,10 @@
           <div class="col q-pl-sm">
             <q-list class="q-mt-md">
               <q-item v-for="(et, eindex) in value.consent.extraItems" :key="eindex">
-                <q-item-section avatar>Item {{ (eindex + 1) }}<q-btn round icon="remove" size="xs" color="negative" @click="removeExtraItem(eindex)"></q-btn></q-item-section>
+                <q-item-section avatar>
+                    Item {{ (eindex + 1) }}
+                    <q-btn round icon="remove" size="xs" color="negative" class="q-mt-xs" @click="removeExtraItem(eindex)"></q-btn>
+                </q-item-section>
                 <q-item-section>
                   <div class="row items-center">
                     <div class="col-10">

@@ -1,6 +1,8 @@
 <template>
   <q-card>
-    <q-card-section> <div class="text-h6"> Teams &amp; Invitation Codes </div> </q-card-section>
+    <q-card-section>
+      <div class="text-h5">Teams &amp; Invitation Codes</div>
+      </q-card-section>
     <q-card-section>
       <div v-for="(team, index) in teams" :key="index" class="q-mt-sm">
         <div class="row q-ma-sm">
@@ -14,7 +16,7 @@
         <div class="row q-ma-sm">
           <div class="col-2 text-bold">Code: </div>
           <div class="col">
-            <q-input type="textarea" :error="codeExpired[index]" error-message="This invitation code has EXPIRED" :value="team.invitationCode" ref="invCode" readonly/>
+            <q-input type="textarea" autogrow :error="codeExpired[index]" error-message="This invitation code has EXPIRED" :value="team.invitationCode" ref="invCode" readonly/>
           </div>
           <div class="q-ml-sm"><q-btn color="primary" round sm icon="file_copy" @click="copyCode(index)"/></div>
         </div>
@@ -25,7 +27,7 @@
           </div>
         </div>
         <div class="row q-mt-sm justify-between">
-          <q-btn label="Generate new invitation code" color="accent" @click="generateCode(team._key)"/>
+          <q-btn label="Generate new invitation code" color="accent" icon="add" @click="generateCode(team._key)"/>
           <q-btn class="float-right" label="Delete team" color="negative" icon="remove" @click="deleteTeam(index)"/>
         </div>
         <q-separator v-if="index != teams.length-1" class="q-mt-md"/>
@@ -77,7 +79,7 @@ export default {
       }
     },
     niceDate (timeStamp) {
-      return date.formatDate(timeStamp, 'DD/MM/YYYY')
+      return date.formatDate(timeStamp, 'YYYY/MM/DD')
     },
     async generateCode (key) {
       try {
@@ -112,7 +114,7 @@ export default {
     async deleteTeam (index) {
       this.$q.dialog({
         title: 'Delete Team',
-        color: 'warning',
+        color: 'negative',
         message: 'You are deleting team ' + this.teams[index].name + ' from the system. This will also delete all associated studies and corresponding data. This cannot be undone. Would you like to continue?',
         ok: 'Yes, delete Team: ' + this.teams[index].name,
         cancel: 'Cancel'

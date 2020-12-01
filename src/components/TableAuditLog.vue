@@ -1,20 +1,74 @@
 <template>
   <div>
-    <q-table title="Audit logs" ref="table" color="primary" :data="logs" selection="none" :columns="columns" :filter="filter" row-key="_key" :pagination.sync="pagination"  @request="loadLogs" :loading="loading">
-      <template slot="top-right">
-        <q-select emit-value map-options :options="eventTypesOpts" v-model="filter.eventType" hint="Event" @input="updateFilters()" class="q-mr-sm" style="width: 150px"/>
-        <q-input v-model="filter.after" type="date" hint="From date" clearable @input="updateFilters()" class="q-mr-sm"/>
-        <q-input v-model="filter.before" type="date" hint="To date" clearable @input="updateFilters()" class="q-mr-sm"/>
-        <q-input v-model="filter.userEmail" type="text" hint="User email" clearable @input="updateFilters()" debounce="500"/>
+    <q-table
+      title="Audit logs"
+      ref="table"
+      color="primary"
+      :data="logs"
+      selection="none"
+      :columns="columns"
+      :filter="filter"
+      row-key="_key"
+      :pagination.sync="pagination"
+      @request="loadLogs"
+      :loading="loading"
+    >
+      <template #top-right>
+        <q-select
+          emit-value
+          map-options
+          :options="eventTypesOpts"
+          v-model="filter.eventType"
+          hint="Event"
+          @input="updateFilters()"
+          class="q-mr-sm"
+          style="width: 150px"
+        />
+        <q-input
+          v-model="filter.after"
+          type="date"
+          hint="From date"
+          clearable
+          @input="updateFilters()"
+          class="q-mr-sm"
+        />
+        <q-input
+          v-model="filter.before"
+          type="date"
+          hint="To date"
+          clearable
+          @input="updateFilters()"
+          class="q-mr-sm"
+        />
+        <q-input
+          v-model="filter.userEmail"
+          type="text"
+          hint="User email"
+          clearable
+          @input="updateFilters()"
+          debounce="500"
+        />
       </template>
-      <q-td slot="body-cell-timestamp" slot-scope="props" :props="props">
-        {{ niceTimestamp(props.value) }}
-      </q-td>
-      <q-td slot="body-cell-data" slot-scope="props" :props="props">
-        <q-btn v-if="props.value" flat icon="info"  @click="showLogData(props)"/>
-      </q-td>
+      <template #body-cell-timestamp="props">
+        <q-td :props="props">
+          {{ niceTimestamp(props.value) }}
+        </q-td>
+      </template>
+      <template #body-cell-data="props">
+        <q-td :props="props">
+          <q-btn
+            v-if="props.value"
+            flat
+            icon="info"
+            @click="showLogData(props)"
+          />
+        </q-td>
+      </template>
     </q-table>
-    <q-dialog v-model="logDataModal" :content-css="{minWidth: '50vw'}">
+    <q-dialog
+      v-model="logDataModal"
+      :content-css="{minWidth: '50vw'}"
+    >
       <q-card>
         <q-card-section class="row items-center">
           <div class="text-h6">
@@ -23,7 +77,13 @@
             <span v-if="logDataType == 'answers'">Answers:</span>
           </div>
           <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
+          <q-btn
+            icon="close"
+            flat
+            round
+            dense
+            v-close-popup
+          />
         </q-card-section>
 
         <q-card-section>
@@ -33,14 +93,21 @@
             </pre>
           </div>
           <div v-if="logDataType == 'healthStoreData'">
-            <div v-for="(hd, index) in logDataModalContent.healthData" :key="index" class="q-ma-md">
+            <div
+              v-for="(hd, index) in logDataModalContent.healthData"
+              :key="index"
+              class="q-ma-md"
+            >
               Start: {{ niceTimestamp(hd.startDate )}}<br />
               End: {{ niceTimestamp(hd.endDate) }}<br />
               Value: {{ hd.value }} {{ hd.unit }}
             </div>
           </div>
           <div v-if="logDataType == 'answers'">
-            <div v-for="(answer, index) in logDataModalContent.responses" :key="index">
+            <div
+              v-for="(answer, index) in logDataModalContent.responses"
+              :key="index"
+            >
               <p class="q-title">
                 {{ answer.questionText }}
               </p>
@@ -51,7 +118,10 @@
                 {{ answer.answer.answerText }}
               </p>
               <div v-if="answer.questionType == 'multiChoice'">
-                <p v-for="(subanswer, index1) in answer.answer" :key="index1">
+                <p
+                  v-for="(subanswer, index1) in answer.answer"
+                  :key="index1"
+                >
                   {{ subanswer.answerText }}
                 </p>
               </div>
@@ -79,10 +149,10 @@ export default {
       pagination: { page: 1, rowsPerPage: 20, rowsNumber: 0, sortBy: 'timestamp', descending: true },
       columns: [
         { name: 'timestamp', required: true, label: 'Datetime', align: 'left', field: 'timestamp', sortable: true },
-        { name: 'event', required: true, label: 'Event', align: 'right', field: 'event', sortable: false },
-        { name: 'userEmail', required: true, label: 'User', align: 'right', field: 'userEmail', sortable: false },
-        { name: 'message', required: true, label: 'Message', align: 'right', field: 'message', sortable: false },
-        { name: 'data', required: false, label: 'Data', align: 'right', field: 'data', sortable: false }
+        { name: 'event', required: true, label: 'Event', align: 'left', field: 'event', sortable: false },
+        { name: 'userEmail', required: true, label: 'User', align: 'left', field: 'userEmail', sortable: false },
+        { name: 'message', required: true, label: 'Message', align: 'left', field: 'message', sortable: false },
+        { name: 'data', required: false, label: 'Data', align: 'left', field: 'data', sortable: false }
       ],
       filter: {
         after: undefined,
@@ -119,7 +189,7 @@ export default {
   },
   methods: {
     niceTimestamp (timeStamp) {
-      return date.formatDate(timeStamp, 'DD/MM/YYYY HH:mm:ss')
+      return date.formatDate(timeStamp, 'YYYY/MM/DD HH:mm:ss')
     },
     async updateFilters () {
       this.loadLogs({
@@ -187,3 +257,19 @@ export default {
   }
 }
 </script>
+
+<style>
+.q-table td {
+  border-color: black;
+}
+.q-table th {
+  border-bottom-color: black;
+}
+.q-table__bottom {
+  border-top: 1px solid black;
+}
+
+.q-table__top {
+  margin-bottom: 20px;
+}
+</style>
