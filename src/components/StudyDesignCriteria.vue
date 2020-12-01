@@ -221,7 +221,7 @@
             </div>
             <div class="text-caption">
               Minimum and maximum BMI range of the participants.
-              Values must be between and 80.
+              Values must be between 10 and 80.
             </div>
           </div>
           <div class="col q-pl-sm">
