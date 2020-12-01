@@ -167,7 +167,7 @@
             </div>
             <div class="text-caption">
               How often the heart rate must be measured in minutes.
-              The lower the more battery is used.
+              The more often its measured the more the battery is used. (enter more exact info on battery life)
             </div>
           </div>
           <div class="col q-pl-sm">

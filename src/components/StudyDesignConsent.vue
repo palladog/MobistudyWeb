@@ -127,6 +127,10 @@ export default {
           newTaskItem.description[lang] = this.$i18n.t('consent.taskItemForm', lang, {
             formName: task.formName[lang], scheduling: schedulingToString(task.scheduling, lang)
           })
+        } else if (task.type === 'miband3') {
+          newTaskItem.description[lang] = this.$i18n.t('consent.taskItemMiband3', lang, {
+            formName: task.formName[lang], scheduling: schedulingToString(task.scheduling, lang)
+          })
         }
       }
       this.value.consent.taskItems.push(newTaskItem)
@@ -158,7 +162,7 @@ export default {
             let localDatatype = this.$i18n.t('healthDataTypes.' + task.dataType, lang)
             string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQuery', lang, { dataType: localDatatype })
           } else if (task.type === 'miband3') {
-            string += '\n' + this.$i18n.t('privacyPolicy.taskItemMiBand3', lang)
+            string += '\n' + this.$i18n.t('privacyPolicy.collectedDataMiband3', lang)
           }
         }
         string += '\n\n' + this.$i18n.t('privacyPolicy.storage', lang)
