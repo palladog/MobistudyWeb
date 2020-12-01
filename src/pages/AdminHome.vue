@@ -1,11 +1,37 @@
 <template>
   <q-page>
-    <q-tabs v-model="tab" class="bg-secondary text-grey-5 shadow-2" switch-indicator active-color= "white" align="justify">
-      <q-tab name="tab-logs" icon="format_align_justify" label="Logs" />
-      <q-tab name="tab-teams" icon="group" label="Teams" />
-      <q-tab name="tab-studies" icon="local_library" label="Studies" />
-      <q-tab name="tab-users" icon="person" label="Users" />
-      <q-tab name="tab-tester" icon="verified_user" label="Tests" />
+    <q-tabs
+      v-model="tab"
+      class="bg-secondary text-grey-5 shadow-2"
+      switch-indicator
+      active-color="white"
+      align="justify"
+    >
+      <q-tab
+        name="tab-logs"
+        icon="format_align_justify"
+        label="Logs"
+      />
+      <q-tab
+        name="tab-teams"
+        icon="group"
+        label="Teams"
+      />
+      <q-tab
+        name="tab-studies"
+        icon="local_library"
+        label="Studies"
+      />
+      <q-tab
+        name="tab-users"
+        icon="person"
+        label="Users"
+      />
+      <q-tab
+        name="tab-tester"
+        icon="verified_user"
+        label="Tests"
+      />
     </q-tabs>
     <q-tab-panels v-model="tab">
       <q-tab-panel name="tab-logs">
@@ -14,7 +40,11 @@
 
       <q-tab-panel name="tab-teams">
         <card-new-team @newTeam="refreshTeams()" />
-        <card-teams-invitations ref="invitations" @teamDeleted="refreshStudies()" class="q-mt-md" />
+        <card-teams-invitations
+          ref="invitations"
+          @teamDeleted="refreshStudies()"
+          class="q-mt-md"
+        />
       </q-tab-panel>
 
       <q-tab-panel name="tab-studies">
@@ -22,7 +52,7 @@
       </q-tab-panel>
 
       <q-tab-panel name="tab-users">
-        <card-users />
+        <table-users />
       </q-tab-panel>
 
       <q-tab-panel name="tab-tester">
@@ -42,9 +72,9 @@ div .exactFit {
 import TableAuditLog from '../components/TableAuditLog'
 import CardNewTeam from '../components/CardNewTeam'
 import CardTeamsInvitations from '../components/CardTeamsInvitations'
-import CardUsers from '../components/CardUsers'
 import CardStudies from '../components/CardStudies'
 import CardEmailTester from '../components/CardEmailTester'
+import TableUsers from '../components/TableUsers.vue'
 
 export default {
   name: 'AdminHomePage',
@@ -53,8 +83,8 @@ export default {
     CardNewTeam,
     CardTeamsInvitations,
     CardStudies,
-    CardUsers,
-    CardEmailTester
+    CardEmailTester,
+    TableUsers
   },
   data () {
     return {
