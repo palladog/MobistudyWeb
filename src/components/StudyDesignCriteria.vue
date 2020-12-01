@@ -221,12 +221,13 @@
             </div>
             <div class="text-caption">
               Minimum and maximum BMI range of the participants.
-              The recommended BMI range for adults, age 18 or older is between 18.5 - 25 kg/m2
+              Values must be between and 80.
             </div>
           </div>
           <div class="col q-pl-sm">
             <q-input
-              min="0"
+              min="10"
+              max="80"
               align="center"
               v-model.trim="v.minBMI.$model"
               hint="Minimum BMI."
@@ -240,7 +241,8 @@
           </div>
           <div class="col q-ml-sm">
             <q-input
-              min="0"
+              min="10"
+              max="80"
               align="center"
               v-model.trim="v.maxBMI.$model"
               hint="Maximum BMI."
