@@ -19,11 +19,14 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-field :error="v.countries.$error" error-message="At least one country must be specified">
+            <q-field
+              :error="v.countries.$error"
+              error-message="At least one country must be specified"
+            >
               <q-checkbox
                 v-model="v.countries.$model"
                 label="Sweden"
-                val="sv"
+                val="se"
                 @input="update()"
               />
               <q-checkbox
@@ -50,27 +53,31 @@
           </div>
           <div class="col q-pl-sm">
             <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.minAge.$model"
-            hint="Minimum age."
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.minAge.$touch"
-            @input="update()"
-            :error="v.minAge.$error"
-            error-message="A minimum age is required"/>
+              type="number"
+              align="center"
+              min="0"
+              v-model.trim="v.minAge.$model"
+              hint="Minimum age."
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              @blur="v.minAge.$touch"
+              @input="update()"
+              :error="v.minAge.$error"
+              error-message="A minimum age is required"
+            />
           </div>
           <div class="col q-ml-sm">
             <q-input
-            type="number"
-            align="center" min="0"
-            v-model.trim="v.maxAge.$model"
-            hint="Maximum age."
-            onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-            @blur="v.maxAge.$touch"
-            @input="update()"
-            :error="v.maxAge.$error"
-            error-message="A maximum age is required"/>
+              type="number"
+              align="center"
+              min="0"
+              v-model.trim="v.maxAge.$model"
+              hint="Maximum age."
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              @blur="v.maxAge.$touch"
+              @input="update()"
+              :error="v.maxAge.$error"
+              error-message="A maximum age is required"
+            />
           </div>
         </div>
       </q-card-section>
@@ -87,7 +94,10 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-field :error="v.sex.$error" error-message="At least one sex must be specified">
+            <q-field
+              :error="v.sex.$error"
+              error-message="At least one sex must be specified"
+            >
               <q-checkbox
                 v-model="v.sex.$model"
                 label="Male"
@@ -119,12 +129,19 @@
               Maximum number of participants:
             </div>
             <div class="text-caption">
-              Optional. Mobistudy will stop proposing this study when this number of participants  has joined this study. Withdrawals are included.
+              Optional. Mobistudy will stop proposing this study when this number of participants has joined this study. Withdrawals are included.
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-input type="number" min="0" align="center"
-            v-model.trim="value.numberOfParticipants" onkeypress="return event.charCode >= 48 && event.charCode <= 57"  clearable @input="update()"/>
+            <q-input
+              type="number"
+              min="0"
+              align="center"
+              v-model.trim="value.numberOfParticipants"
+              onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+              clearable
+              @input="update()"
+            />
           </div>
         </div>
       </q-card-section>
@@ -143,7 +160,9 @@
           <div class="col q-pl-sm">
             <q-select
               v-model="diseasesVue"
-              use-input use-chips multiple
+              use-input
+              use-chips
+              multiple
               :options="diseaseOptions"
               input-debounce="500"
               @filter="searchDisease"
@@ -152,7 +171,7 @@
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
-                  No diseases found
+                    No diseases found
                   </q-item-section>
                 </q-item>
               </template>
@@ -166,7 +185,7 @@
         <div class="row">
           <div class="col-4 q-pt-lg">
             <div class="text-bold">
-               List of medications:
+              List of medications:
             </div>
             <div class="text-caption">
               Type in and select the list of medications the patient has to be taking (only generics). The medication name is searched on SNOMED.
@@ -175,11 +194,14 @@
           <div class="col q-pl-sm">
             <q-select
               v-model="medsVue"
-              use-input use-chips multiple
+              use-input
+              use-chips
+              multiple
               :options="medsOptions"
               input-debounce="500"
               @filter="searchMeds"
-              @input="update()">
+              @input="update()"
+            >
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey"> No medications found </q-item-section>
@@ -207,20 +229,28 @@
               min="0"
               align="center"
               v-model.trim="v.minBMI.$model"
-              hint="Minimum BMI." mask="##.##"
+              hint="Minimum BMI."
+              mask="##.##"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              @blur="v.minBMI.$touch" @input="update()"
-              :error="v.minBMI.$error" error-message="A minimum BMI is required"/>
+              @blur="v.minBMI.$touch"
+              @input="update()"
+              :error="v.minBMI.$error"
+              error-message="A minimum BMI is required"
+            />
           </div>
           <div class="col q-ml-sm">
             <q-input
               min="0"
               align="center"
               v-model.trim="v.maxBMI.$model"
-              hint="Maximum BMI." mask="##.##"
+              hint="Maximum BMI."
+              mask="##.##"
               onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-              @blur="v.maxBMI.$touch" @input="update()"
-              :error="v.maxBMI.$error" error-message="A maximum BMI is required"/>
+              @blur="v.maxBMI.$touch"
+              @input="update()"
+              :error="v.maxBMI.$error"
+              error-message="A maximum BMI is required"
+            />
           </div>
         </div>
       </q-card-section>
@@ -233,7 +263,10 @@
         <div class="text-subtitle1"> Questions for additional custom inclusion criteria. </div>
       </q-card-section>
       <q-card-section>
-        <div v-for="(criteriaQuestion, index) in value.criteriaQuestions" :key="index">
+        <div
+          v-for="(criteriaQuestion, index) in value.criteriaQuestions"
+          :key="index"
+        >
           <div class="row">
             <div class="col-4 q-pt-lg">
               <div class="text-bold">
@@ -245,7 +278,12 @@
               </div>
             </div>
             <div class="col q-pl-sm">
-              <q-input-multilang v-model="criteriaQuestion.title" @input="update()" :languages="languages" required/>
+              <q-input-multilang
+                v-model="criteriaQuestion.title"
+                @input="update()"
+                :languages="languages"
+                required
+              />
             </div>
           </div>
           <div class="row">
@@ -258,21 +296,54 @@
               </div>
             </div>
             <div class="col q-pl-sm">
-              <q-radio v-model="criteriaQuestion.answer" val="yes" label="Yes" @input="update()"/>
-              <q-radio v-model="criteriaQuestion.answer" val="no" label="No" @input="update()"/>
+              <q-radio
+                v-model="criteriaQuestion.answer"
+                val="yes"
+                label="Yes"
+                @input="update()"
+              />
+              <q-radio
+                v-model="criteriaQuestion.answer"
+                val="no"
+                label="No"
+                @input="update()"
+              />
             </div>
           </div>
           <div class="row justify-center">
             <div class="col">
-              <q-btn class="float-left" label="Remove Question" color="negative" icon="remove" @click="removeRowCriteriaQuestion(index)" />
-              <q-btn class="float-right" v-show="index == value.criteriaQuestions.length-1" label="Add Question" color="primary" icon="add" @click="addRowCriteriaQuestion()" />
+              <q-btn
+                class="float-left"
+                label="Remove Question"
+                color="negative"
+                icon="remove"
+                @click="removeRowCriteriaQuestion(index)"
+              />
+              <q-btn
+                class="float-right"
+                v-show="index == value.criteriaQuestions.length-1"
+                label="Add Question"
+                color="primary"
+                icon="add"
+                @click="addRowCriteriaQuestion()"
+              />
             </div>
           </div>
-          <q-separator class="q-mt-sm" v-show="index != value.criteriaQuestions.length-1"/>
+          <q-separator
+            class="q-mt-sm"
+            v-show="index != value.criteriaQuestions.length-1"
+          />
         </div>
         <div class="row">
           <div class="col">
-            <q-btn class="float-right" v-show="value.criteriaQuestions.length == 0" label="Add Question" color="primary" icon="add" @click="addRowCriteriaQuestion()" />
+            <q-btn
+              class="float-right"
+              v-show="value.criteriaQuestions.length == 0"
+              label="Add Question"
+              color="primary"
+              icon="add"
+              @click="addRowCriteriaQuestion()"
+            />
           </div>
         </div>
       </q-card-section>
