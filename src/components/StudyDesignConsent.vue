@@ -131,8 +131,8 @@ export default {
             formName: task.formName[lang], scheduling: schedulingToString(task.scheduling, lang)
           })
         } else if (task.type === 'miband3') {
-          newTaskItem.description[lang] = this.$i18n.t('consent.taskItemMiband3', lang, {
-            formName: task.formName[lang], scheduling: schedulingToString(task.scheduling, lang)
+          newTaskItem.description[lang] = this.$i18n.t('consent.taskItemMiBand3', lang, {
+            scheduling: schedulingToString(task.scheduling, lang)
           })
         }
       }

@@ -29,7 +29,7 @@ Mobistudy servers are managed by the University of Malmö and located in Sweden.
   consent: {
     taskItemDataQuery: `I agree to send my data about {dataType}, {scheduling}`,
     taskItemForm: `I agree to answer the {formName} form, {scheduling}`,
-    taskItemMiBand3: `I agree to send my data collected by the MiBand3 fitness tracker`
+    taskItemMiBand3: `I agree to send my data collected by the MiBand3 fitness tracker, {scheduling}`
   },
   scheduling: {
     notDefined: 'Not defined yet',

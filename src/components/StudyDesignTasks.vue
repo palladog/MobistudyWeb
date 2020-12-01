@@ -33,7 +33,7 @@
             <q-item
               clickable
               v-close-popup
-              @click.native="addMiband3T()()"
+              @click.native="addMiband3T()"
             >
               <q-item-section>
                 <q-item-label>MiBand3 data collection</q-item-label>
@@ -400,7 +400,7 @@ export default {
           monthDays: [],
           weekDays: []
         },
-        hrInterval: 3
+        hrInterval: 1
       })
       this.update()
     },
