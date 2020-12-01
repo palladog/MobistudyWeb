@@ -5,8 +5,9 @@
         <img src="statics/icons/favicon-32x32.png" alt="Mobistudy-Logo">
         <q-toolbar-title>
           Mobistudy
-          <span slot="subtitle">{{ welcomeLabel }}</span>
+          <!--<span slot="subtitle">{{ welcomeLabel }}</span>-->
         </q-toolbar-title>
+        <span class="gt-xs q-mr-lg text-blue-grey-2"> {{ loggedInAsUserLabel }}</span>
         <q-btn label="LOGOUT" flat dense icon-right="exit_to_app" @click="confirm = true" />
         <q-dialog v-model="confirm" persistent>
           <q-card>
@@ -45,6 +46,9 @@ export default {
   computed: {
     welcomeLabel () {
       return 'Hello ' + userinfo.getUser().email + '. You are logged in as ' + userinfo.getUser().role + '.'
+    },
+    loggedInAsUserLabel () {
+      return userinfo.getUser().email
     }
   },
   methods: {
