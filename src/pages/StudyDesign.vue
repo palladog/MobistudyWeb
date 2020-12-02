@@ -11,7 +11,7 @@
       <q-btn class="float-right q-mr-md" round color="black" icon="close" @click="exitDesigner"/>
     </q-toolbar>
 
-    <q-tabs v-model="studyTab" class="bg-secondary text-white shadow-2" align="justify">
+    <q-tabs v-model="studyTab" class="bg-secondary text-grey-2 shadow-2" active-color="white" switch-indicator align="justify">
       <q-tab name="tab-gen" icon="subject" label="Generalities" :class="$v.studyDesign.generalities.$error? 'text-red': ''"/>
       <q-tab name="tab-crit" icon="fingerprint" label="Inclusion Criteria" :class="$v.studyDesign.inclusionCriteria.$error? 'text-red': ''"/>
       <q-tab name="tab-tasks" icon="list" label="Tasks" :class="$v.studyDesign.tasks.$error? 'text-red': ''"/>
