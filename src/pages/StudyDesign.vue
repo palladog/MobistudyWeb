@@ -57,7 +57,7 @@ import StudyDesignCriteria from '../components/StudyDesignCriteria'
 import StudyDesignTasks from '../components/StudyDesignTasks'
 import StudyDesignConsent from '../components/StudyDesignConsent'
 import API from '../modules/API.js'
-import { required, requiredIf, minLength } from 'vuelidate/lib/validators'
+import { required, requiredIf, minLength, minValue, maxValue } from 'vuelidate/lib/validators'
 
 export default {
   name: 'StudyDesignLayout',
@@ -111,7 +111,7 @@ export default {
           ]
         },
         inclusionCriteria: {
-          countries: ['sv'],
+          countries: ['se'],
           minAge: undefined,
           maxAge: undefined,
           sex: [
@@ -175,11 +175,11 @@ export default {
       },
       inclusionCriteria: {
         countries: { required },
-        minAge: { required },
-        maxAge: { required },
+        minAge: { required, minValue: minValue(0) },
+        maxAge: { required, minValue: minValue(0) },
         sex: { required },
-        minBMI: { required },
-        maxBMI: { required }
+        minBMI: { required, minValue: minValue(5), maxValue: maxValue(210) },
+        maxBMI: { required, minValue: minValue(5), maxValue: maxValue(210) }
       },
       tasks: {
         required,

@@ -33,7 +33,7 @@
             <q-item
               clickable
               v-close-popup
-              @click.native="addMiband3T()()"
+              @click.native="addMiband3T()"
             >
               <q-item-section>
                 <q-item-label>MiBand3 data collection</q-item-label>
@@ -167,7 +167,7 @@
             </div>
             <div class="text-caption">
               How often the heart rate must be measured in minutes.
-              The lower the more battery is used.
+              The more often its measured the more the battery is used. (enter more exact info on battery life)
             </div>
           </div>
           <div class="col q-pl-sm">
@@ -400,7 +400,7 @@ export default {
           monthDays: [],
           weekDays: []
         },
-        hrInterval: 3
+        hrInterval: 1
       })
       this.update()
     },
