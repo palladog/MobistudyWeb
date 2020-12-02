@@ -39,6 +39,24 @@
                 <q-item-label>MiBand3 data collection</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              @click.native="addQCSTT()()"
+            >
+              <q-item-section>
+                <q-item-label>Queens college step test</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              v-close-popup
+              @click.native="addSMWTT()()"
+            >
+              <q-item-section>
+                <q-item-label>Six minute walk test</q-item-label>
+              </q-item-section>
+            </q-item>
           </q-list>
         </q-btn-dropdown>
       </q-card-section>
@@ -58,6 +76,18 @@
           class="text-h5"
           v-if="task.type === 'form'"
         >Form Task</div>
+        <div
+          class="text-h5"
+          v-if="task.type === 'miband3'"
+        >Miband3 Task</div>
+        <div
+          class="text-h5"
+          v-if="task.type === 'qcst'"
+        >QCST Task</div>
+        <div
+          class="text-h5"
+          v-if="task.type === 'smwt'"
+        >SMWT Task</div>
       </q-card-section>
       <q-card-section>
         <div
@@ -372,7 +402,7 @@ export default {
           startEvent: 'consent',
           startDelaySecs: undefined,
           untilSecs: undefined,
-          occurrences: undefined,
+          occurrences: 7,
           intervalType: 'd',
           interval: 1,
           months: [],
@@ -401,6 +431,42 @@ export default {
           weekDays: []
         },
         hrInterval: 1
+      })
+      this.update()
+    },
+    addQCSTT () {
+      this.value.tasks.push({
+        id: this.value.tasks.length + 1,
+        type: 'qcst',
+        scheduling: {
+          startEvent: 'consent',
+          startDelaySecs: undefined,
+          untilSecs: undefined,
+          occurrences: undefined,
+          intervalType: 'd',
+          interval: 1,
+          months: [],
+          monthDays: [],
+          weekDays: []
+        }
+      })
+      this.update()
+    },
+    addSMWTT () {
+      this.value.tasks.push({
+        id: this.value.tasks.length + 1,
+        type: 'smwt',
+        scheduling: {
+          startEvent: 'consent',
+          startDelaySecs: undefined,
+          untilSecs: undefined,
+          occurrences: undefined,
+          intervalType: 'd',
+          interval: 1,
+          months: [],
+          monthDays: [],
+          weekDays: []
+        }
       })
       this.update()
     },

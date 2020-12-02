@@ -192,6 +192,14 @@ export default {
           newTaskItem.description[lang] = this.$i18n.t('consent.taskItemMiBand3', lang, {
             scheduling: schedulingToString(task.scheduling, lang)
           })
+        } else if (task.type === 'qcst') {
+          newTaskItem.description[lang] = this.$i18n.t('consent.taskItemQCST', lang, {
+            scheduling: schedulingToString(task.scheduling, lang)
+          })
+        } else if (task.type === 'smwt') {
+          newTaskItem.description[lang] = this.$i18n.t('consent.taskItemSMWT', lang, {
+            scheduling: schedulingToString(task.scheduling, lang)
+          })
         }
       }
       this.value.consent.taskItems.push(newTaskItem)
@@ -228,6 +236,10 @@ export default {
             string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQCST', lang)
           } else if (task.type === 'miband3') {
             string += '\n' + this.$i18n.t('privacyPolicy.collectedDataMiband3', lang)
+          } else if (task.type === 'qcst') {
+            string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQCST', lang)
+          } else if (task.type === 'smwt') {
+            string += '\n' + this.$i18n.t('privacyPolicy.collectedDataSMWT', lang)
           }
         }
         string += this.$i18n.t('privacyPolicy.collectedDataReason', lang)

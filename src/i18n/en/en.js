@@ -43,7 +43,9 @@ Technical logs will be deleted after 1 year they are produced.
   consent: {
     taskItemDataQuery: `I agree to send my data about {dataType}, {scheduling}`,
     taskItemForm: `I agree to answer the {formName} form, {scheduling}`,
-    taskItemMiBand3: `I agree to send my data collected by the MiBand3 fitness tracker, {scheduling}`
+    taskItemMiBand3: `I agree to send my data collected by the MiBand3 fitness tracker, {scheduling}`,
+    taskItemQCST: 'I agree to perform the queens college step test, {scheduling}',
+    taskItemSMWT: 'I agree to perform the six minute walk test, {scheduling}'
   },
   scheduling: {
     notDefined: 'Not defined yet',
