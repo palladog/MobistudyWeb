@@ -104,7 +104,6 @@ export default {
       })
     },
     async deleteUser (user) {
-      console.log('USER: ' + user.email)
       this.$q.dialog({
         title: 'Delete User',
         color: 'warning',
@@ -114,15 +113,20 @@ export default {
       }).onOk(async () => {
         try {
           if (user.role === 'participant') {
-            // Get participant key
-            let partKey = await API.getOneParticipant(user._key)
-            await API.deleteParticipant(partKey._key)
+            // Gets Participant from User's userkey
+            let participant = await API.getOneParticipant(user.userkey)
+            // Deletes entry in Participants and the corresponding one in Users
+            let partKey = participant._key
+            await API.deleteParticipant(partKey)
           } else {
-            await API.deleteUser(user._key)
+            await API.deleteUser(user.userkey)
           }
           this.users.splice(user, 1)
           this.$q.notify('User ' + user.email + ' deleted')
-          this.loadUsers()
+          this.loadUsers({
+            pagination: this.pagination,
+            filter: this.filter
+          })
         } catch (err) {
           console.debug(err)
           this.$q.notify({
