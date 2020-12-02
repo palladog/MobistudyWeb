@@ -10,6 +10,7 @@
       row-key="_key"
       @request="loadUsers"
     >
+      <!-- Change row-key="_key" when it changes in the database (to be independent from ArangoDB) -->
       <template #top-right>
         <q-select
           emit-value
@@ -40,9 +41,6 @@
           />
         </q-td>
       </template>
-      <!-- Change row-key="_key" when it changes in the database (to be independent from ArangoDB) -->
-      <!-- Add loading after you add filters and sorting -->
-      <!-- INSERT <q-td> element (from TableAuditLog.vue) to include the delete button -->
     </q-table>
   </div>
 </template>
@@ -64,14 +62,11 @@ export default {
       ],
       filter: {
         userEmail: undefined,
-        roleType: 'all'
+        roleType: 'All'
       },
-      roleTypesOpts: [],
+      roleTypesOpts: ['All', 'admin', 'researcher', 'participant'],
       loading: false
     }
-  },
-  async created () {
-    this.getRoleTypes()
   },
   async mounted () {
     this.loadUsers({
@@ -80,29 +75,12 @@ export default {
     })
   },
   methods: {
-    async getRoleTypes () {
-      try {
-        let types = await API.getRoleTypes()
-        if (types) {
-          this.roleTypesOpts = types.map(evt => {
-            return { label: evt, value: evt }
-          })
-        }
-        this.roleTypesOpts.unshift({ label: 'All', value: 'all' })
-      } catch (err) {
-        this.$q.notify({
-          color: 'negative',
-          message: 'Cannot retrieve role types',
-          icon: 'report_problem'
-        })
-      }
-    },
     async loadUsers (params) {
       this.loading = true
       this.pagination = params.pagination
       try {
         let queryParams = {
-          roleType: params.filter.roleType === 'all' ? undefined : params.filter.roleType,
+          roleType: params.filter.roleType === 'All' ? undefined : params.filter.roleType,
           userEmail: params.filter.userEmail,
           sortDirection: params.pagination.descending ? 'DESC' : 'ASC',
           offset: (params.pagination.page - 1) * params.pagination.rowsPerPage,
