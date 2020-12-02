@@ -17,7 +17,14 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-input-multilang type="textarea" v-model.trim="value.consent.invitation" @blur="v.consent.invitation.$touch" @input="update()" :languages="value.generalities.languages" required/>
+            <q-input-multilang
+              type="textarea"
+              v-model.trim="value.consent.invitation"
+              @blur="v.consent.invitation.$touch"
+              @input="update()"
+              :languages="value.generalities.languages"
+              required
+            />
           </div>
         </div>
         <div class="row q-mt-sm">
@@ -30,8 +37,19 @@
             </div>
           </div>
           <div class="col q-pl-sm">
-            <q-input-multilang type="textarea" v-model.trim="value.consent.privacyPolicy" @blur="v.consent.privacyPolicy.$touch" @input="update()" :languages="value.generalities.languages" required/>
-            <q-btn label="Generate example policy" color="primary" @click="generatePrivacy()"/>
+            <q-input-multilang
+              type="textarea"
+              v-model.trim="value.consent.privacyPolicy"
+              @blur="v.consent.privacyPolicy.$touch"
+              @input="update()"
+              :languages="value.generalities.languages"
+              required
+            />
+            <q-btn
+              label="Generate example policy"
+              color="primary"
+              @click="generatePrivacy()"
+            />
           </div>
         </div>
         <div class="row q-mt-sm">
@@ -45,14 +63,29 @@
           </div>
           <div class="col q-pl-sm">
             <q-list>
-              <q-item v-for="(tt, tindex) in value.consent.taskItems" :key="tindex">
+              <q-item
+                v-for="(tt, tindex) in value.consent.taskItems"
+                :key="tindex"
+              >
                 <q-item-section avatar>Task {{ (tindex + 1) }}</q-item-section>
                 <q-item-section>
                   <div class="row items-center">
                     <div class="col-10">
-                      <q-input-multilang type="textarea" v-model="tt.description" @input="update()" :languages="value.generalities.languages" required/>
+                      <q-input-multilang
+                        type="textarea"
+                        v-model="tt.description"
+                        @input="update()"
+                        :languages="value.generalities.languages"
+                        required
+                      />
                     </div>
-                    <div class="col-2"><q-checkbox label="Optional" v-model="alwaysTrue"  disable/></div>
+                    <div class="col-2">
+                      <q-checkbox
+                        label="Optional"
+                        v-model="alwaysTrue"
+                        disable
+                      />
+                    </div>
                   </div>
                 </q-item-section>
               </q-item>
@@ -72,22 +105,47 @@
           </div>
           <div class="col q-pl-sm">
             <q-list class="q-mt-md">
-              <q-item v-for="(et, eindex) in value.consent.extraItems" :key="eindex">
+              <q-item
+                v-for="(et, eindex) in value.consent.extraItems"
+                :key="eindex"
+              >
                 <q-item-section avatar>
-                    Item {{ (eindex + 1) }}
-                    <q-btn round icon="remove" size="xs" color="negative" class="q-mt-xs" @click="removeExtraItem(eindex)"></q-btn>
+                  Item {{ (eindex + 1) }}
+                  <q-btn
+                    round
+                    icon="remove"
+                    size="xs"
+                    color="negative"
+                    class="q-mt-xs"
+                    @click="removeExtraItem(eindex)"
+                  ></q-btn>
                 </q-item-section>
                 <q-item-section>
                   <div class="row items-center">
                     <div class="col-10">
-                      <q-input-multilang type="textarea" v-model="et.description" @input="update()" :languages="value.generalities.languages" required/>
+                      <q-input-multilang
+                        type="textarea"
+                        v-model="et.description"
+                        @input="update()"
+                        :languages="value.generalities.languages"
+                        required
+                      />
                     </div>
-                    <div class="col-2"><q-checkbox label="Optional" v-model="et.optional"  @input="update()"/></div>
+                    <div class="col-2">
+                      <q-checkbox
+                        label="Optional"
+                        v-model="et.optional"
+                        @input="update()"
+                      />
+                    </div>
                   </div>
                 </q-item-section>
               </q-item>
             </q-list>
-            <q-btn icon="add" @click="addExtraItem()">Add a custom item</q-btn>
+            <q-btn
+              icon="add"
+              @click="addExtraItem()"
+            >Add a custom item</q-btn>
           </div>
         </div>
       </q-card-section>
@@ -164,16 +222,21 @@ export default {
           } else if (task.type === 'dataQuery') {
             let localDatatype = this.$i18n.t('healthDataTypes.' + task.dataType, lang)
             string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQuery', lang, { dataType: localDatatype })
+          } else if (task.type === 'smwt') {
+            string += '\n' + this.$i18n.t('privacyPolicy.collectedDataSMWT', lang)
+          } else if (task.type === 'qcst') {
+            string += '\n' + this.$i18n.t('privacyPolicy.collectedDataQCST', lang)
           } else if (task.type === 'miband3') {
             string += '\n' + this.$i18n.t('privacyPolicy.collectedDataMiband3', lang)
           }
         }
-        string += '\n\n' + this.$i18n.t('privacyPolicy.storage', lang)
+        string += this.$i18n.t('privacyPolicy.collectedDataReason', lang)
+        string += '\n\n' + this.$i18n.t('privacyPolicy.storage', lang, { studyEndDate: this.value.generalities.endDate })
         string += '\n\n' + this.$i18n.t('privacyPolicy.access', lang)
         for (let institution of this.value.generalities.institutions) {
           string += '\n' + this.$i18n.t('privacyPolicy.accessInstitution', lang, { institution: institution.name })
           if (institution.dataAccess !== 'no') {
-            string += ', ' + this.$i18n.t('privacyPolicy.accessReason', lang, { reason: institution.reasonForDataAccess[lang] })
+            string += ', ' + this.$i18n.t('privacyPolicy.accessReason', lang, { institution: institution.name, reason: institution.reasonForDataAccess[lang] })
           }
         }
         string += '\n\n' + this.$i18n.t('privacyPolicy.rights', lang)

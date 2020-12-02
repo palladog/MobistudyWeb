@@ -1,30 +1,44 @@
 export default {
   privacyPolicy: {
-    collectedData: `What personal data will be collected?
-\u2022 Your general profile information like email address, name, surname, date of birth, country, language, main health conditions, long-term treatments and lifestyle.
-\u2022 Your participation into the studies and the times you complete a task.
-\u2022 Technical information about access to the server (like logins) for security and auditing.`,
-    collectedDataForm: `\u2022 Answers given to {formName} form.`,
-    collectedDataQuery: `\u2022 {dataType} from GoogleFit (Android phones) or HealthKit (iPhones).`,
-    collectedDataMiband3: `\u2022 {Activity and heart rate related data from the Miband3}`,
-    storage: `Where will this data be stored?
-On your phone:
-\u2022 Your profile
-\u2022 Your participation activity into the studies and their tasks
-On Mobistudy servers:
-\u2022 All the data mentioned before.
-\u2022 Security and auditing information.
-Mobistudy servers are managed by the University of Malmö and located in Sweden.`,
+    collectedData: `To conduct this study, we need to collect some data from you using the Mobistudy app.
+    What personal data will be collected?
+\u2022 Your general profile information like email address, name, surname, date of birth, sex, country, language, main health conditions, long-term treatments, weight and height.
+These are needed to identify you and to create statistics about those who participate in this study.
+\u2022 Your participation in the study and the times you complete a task.
+These are needed to assess your level of involvement into the study.
+\u2022 Technical information about access to the server (like logins).
+These are needed for security and auditing.
+\u2022 Data collected within the tasks assigned in this study, concretely: 
+`,
+    collectedDataForm: `    \u2022 Answers given to {formName} form.`,
+    collectedDataQuery: `    \u2022 {dataType} from GoogleFit (Android phones) or HealthKit (iPhones).`,
+    collectedDataQCST: `    \u2022 Heart rate and steps collected during a Queens College Step Test.`,
+    collectedDataSMWT: `    \u2022 Your geographical position, distance and steps during the Six-minute Walk Test`,
+    collectedDataMiband3: `    \u2022 Your heart rate, activity level, steps and activity type collected by the MiBand3 fitness tracker.`,
+    collectedDataReason: `These data are needed to fulfil the aims of the research. [ADD REASONS FOR WHY THESE DATA ARE NEEDED IN THE SPECIFIC STUDY]`,
+    storage: `All these data will be stored on the Mobistudy servers, which are managed by the University of Malmö in Sweden. Your phone will keep your profile and data about your participation in the studies only.
+
+For how long will this data be kept?
+Your profile and participation in the study will be kept for as long as you will keep an account on Mobistudy.
+Data collected within the tasks assigned in this study will be kept on the Mobistudy servers until the end of the study, on {studyEndDate}.
+Technical logs will be deleted after 1 year they are produced.
+
+[SPECIFY FOR HOW LONG STUDY DATA WILL BE KEPT BY RESEARCHERS]
+`,
     access: `Who will have access to this data?
-\u2022 Personnell from the University of Malmö. Reason: technical maintenance and auditing.`,
+\u2022 Personnel from the University of Malmö for technical maintenance and auditing (Malmö University is the processor of your personal information).`,
     accessInstitution: `\u2022 {institution}`,
-    accessReason: `. Reason: {reason}`,
+    accessReason: ` for {reason} ({institution} is the controller of your personal information).`,
     rights: `What are my rights?
-\u2022 You can withdraw from this study whenever you want. The data you have produced so far will be kept.
-\u2022 You can remove your account from Mobistudy. This will remove all your data, produced in all the studies, except the technical logs (which need to be kept for security reasons, but will be deleted after 5 years).
-\u2022 You can download the data in a machine-readable format. Contact info@mobistudy.org if you need to.`,
-    contacts: `For any other general question, please contact one of the principal investigators:`,
-    piContact: `{name} at: {contact}`
+\u2022 You can withdraw from this study whenever you want by accessing the “studies” section of this app. The data you have produced so far within the study will be kept, but if you want them to be removed contact mobistudy@mau.se.
+\u2022 You can remove your account from Mobistudy by accessing the “profile” section of this app. This will remove all your data collected by Mobistudy except the technical logs, which will be deleted after 1 year. Be aware that data already downloaded by institutions involved in this or past studies may still keep your data after you have removed your account. If you want these data to be deleted, please contact mobistudy@mau.se.
+\u2022 You can ask the processing of your data to be stopped or restricted (even without deleting your account). In this case contact mobistudy@mau.se.
+\u2022 You can find out what has been registered about you and download the data in a machine-readable format by contacting mobistudy@mau.se.
+\u2022 You can ask errors in your data to be corrected. In this case write to mobistudy@mau.se.
+\u2022 If you have complaints that cannot be resolved with Malmö University you may submit these to Datainspektionen.`,
+    contacts: `For questions about how data is processed by each institution involved in the study please contact:
+\u2022 Malmö University, at: dataskyddsombud@mau.se`,
+    piContact: `\u2022 {name} at: {contact}`
   },
   consent: {
     taskItemDataQuery: `I agree to send my data about {dataType}, {scheduling}`,
