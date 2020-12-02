@@ -7,6 +7,8 @@ export default {
     collectedDataForm: `\u2022 Answers given to {formName} form.`,
     collectedDataQuery: `\u2022 {dataType} from GoogleFit (Android phones) or HealthKit (iPhones).`,
     collectedDataMiband3: `\u2022 {Activity and heart rate related data from the Miband3}`,
+    collectedDataQCST: `\u2022 {Total distance in steps and heart rate data collected during the test and an answer to the Borg scale question`,
+    collectedDataSMWT: `\u2022 {Total distance in steps collected during the test and an answer to the Borg scale question`,
     storage: `Where will this data be stored?
 On your phone:
 \u2022 Your profile
@@ -29,7 +31,9 @@ Mobistudy servers are managed by the University of Malmö and located in Sweden.
   consent: {
     taskItemDataQuery: `I agree to send my data about {dataType}, {scheduling}`,
     taskItemForm: `I agree to answer the {formName} form, {scheduling}`,
-    taskItemMiBand3: `I agree to send my data collected by the MiBand3 fitness tracker, {scheduling}`
+    taskItemMiBand3: `I agree to send my data collected by the MiBand3 fitness tracker, {scheduling}`,
+    taskItemQCST: 'I agree to perform the queens college step test, {scheduling}',
+    taskItemSMWT: 'I agree to perform the six minute walk test, {scheduling}'
   },
   scheduling: {
     notDefined: 'Not defined yet',
