@@ -97,6 +97,7 @@ export default {
       try {
         this.$refs.invCode[index].select()
         document.execCommand('copy')
+        window.getSelection().removeAllRanges()
         this.$q.notify({
           color: 'primary',
           position: 'bottom',
