@@ -197,7 +197,8 @@
             </div>
             <div class="text-caption">
               How often the heart rate must be measured in minutes.
-              The more often its measured the more the battery is used. (enter more exact info on battery life)
+              The more often its measured the more the battery is used.
+              <!-- TODO: it would be nice to have more specific information about battery life -->
             </div>
           </div>
           <div class="col q-pl-sm">
@@ -205,8 +206,8 @@
               v-model="task.hrInterval"
               emit-value
               type="number"
-              min= "0"
-              max= "255"
+              min="0"
+              max="255"
               @input="update()"
             />
           </div>
