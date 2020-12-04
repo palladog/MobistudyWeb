@@ -47,8 +47,8 @@
         />
       </q-tab-panel>
 
-      <q-tab-panel name="tab-studies">
-        <card-studies ref="studies" />
+     F <q-tab-panel name="tab-studies">
+        <table-studies />
       </q-tab-panel>
 
       <q-tab-panel name="tab-users">
@@ -72,9 +72,9 @@ div .exactFit {
 import TableAuditLog from '../components/TableAuditLog'
 import CardNewTeam from '../components/CardNewTeam'
 import CardTeamsInvitations from '../components/CardTeamsInvitations'
-import CardStudies from '../components/CardStudies'
 import CardEmailTester from '../components/CardEmailTester'
 import TableUsers from '../components/TableUsers.vue'
+import TableStudies from '../components/TableStudies.vue'
 
 export default {
   name: 'AdminHomePage',
@@ -82,9 +82,9 @@ export default {
     TableAuditLog,
     CardNewTeam,
     CardTeamsInvitations,
-    CardStudies,
     CardEmailTester,
-    TableUsers
+    TableUsers,
+    TableStudies
   },
   data () {
     return {

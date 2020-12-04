@@ -100,6 +100,21 @@ export default {
     let resp = await axios.get(BASE_URL + '/studies/' + studyKey, axiosConfig)
     return resp.data
   },
+  // NEW GET STUDIES FUNCTION FOR TableStudies.vue
+  async getAllStudies (countOnly, filter) {
+    let queryParams = ''
+    let firstParam = true
+    for (let param in filter) {
+      if (filter[param] || filter[param] === 0) {
+        queryParams += (firstParam ? '' : '&') + param + '=' + encodeURIComponent(filter[param])
+        firstParam = false
+      }
+    }
+    let URL = BASE_URL + '/getStudies' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
+    let resp = await axios.get(URL, axiosConfig)
+    console.log('API RECEIVED DATA', resp.data)
+    return resp.data
+  },
   async getStudies () {
     let resp = await axios.get(BASE_URL + '/studies/', axiosConfig)
     return resp.data
