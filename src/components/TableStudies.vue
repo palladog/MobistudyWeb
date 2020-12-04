@@ -21,6 +21,11 @@
           debounce="500"
         />
       </template>
+      <template #body-cell-created="props">
+        <q-td :props="props">
+          {{ niceTimestamp(props.value) }}
+        </q-td>
+      </template>
       <template #body-cell-delete="props">
         <q-td :props="props">
           <q-btn
@@ -37,6 +42,7 @@
 
 <script>
 import API from '../modules/API.js'
+import { date } from 'quasar'
 export default {
   name: 'TableStudies',
   data () {
@@ -64,6 +70,9 @@ export default {
     })
   },
   methods: {
+    niceTimestamp (timeStamp) {
+      return date.formatDate(timeStamp, 'YYYY/MM/DD HH:mm:ss')
+    },
     async loadStudies (params) {
       this.loading = true
       this.pagination = params.pagination
