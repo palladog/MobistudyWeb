@@ -26,6 +26,11 @@
           {{ niceTimestamp(props.value) }}
         </q-td>
       </template>
+      <template #body-cell-published="props">
+        <q-td :props="props">
+          {{ niceTimestamp(props.value) }}
+        </q-td>
+      </template>
       <template #body-cell-delete="props">
         <q-td :props="props">
           <q-btn
