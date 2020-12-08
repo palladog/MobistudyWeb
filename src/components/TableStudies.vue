@@ -31,6 +31,11 @@
           {{ niceTimestamp(props.value) }}
         </q-td>
       </template>
+      <template #body-cell-studyTitle="props">
+        <q-td :props="props">
+          {{ niceTitle(props.row.studytitle) }}
+        </q-td>
+      </template>
       <template #body-cell-delete="props">
         <q-td :props="props">
           <q-btn
@@ -77,6 +82,19 @@ export default {
   methods: {
     niceTimestamp (timeStamp) {
       return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+    },
+    niceTitle (titles) {
+      let titleString = ''
+      let firstItem = true
+      let studyTitles = Object.entries(titles)
+
+      for (const [lang, val] of studyTitles) {
+        if (val !== '') {
+          titleString += (firstItem ? '' : ', ') + `${lang}: ${val}`
+          firstItem = false
+        }
+      }
+      return titleString
     },
     async loadStudies (params) {
       this.loading = true
