@@ -2,7 +2,7 @@
   <q-page>
     <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>
-        Statistics about {{ studyDesign.generalities.title }}
+        Statistics about <strong>{{ niceTitle(studyDesign.generalities.title) }}</strong>
       </q-toolbar-title>
       <q-btn class="float-right q-mr-md" round color="black" icon="close" @click="$router.push('/researcher')"/>
     </q-toolbar>
@@ -58,6 +58,21 @@ export default {
         message: 'Cannot retrieve the study description. ' + err.message,
         icon: 'report_problem'
       })
+    }
+  },
+  methods: {
+    niceTitle (titles) {
+      let titleString = ''
+      let firstItem = true
+      let studyTitles = Object.entries(titles)
+
+      for (const [lang, val] of studyTitles) {
+        if (val !== '') {
+          titleString += (firstItem ? '' : ', ') + `${lang}: ${val}`
+          firstItem = false
+        }
+      }
+      return titleString
     }
   }
 }
