@@ -28,10 +28,12 @@
 import API from '../modules/API.js'
 import StudyStats from '../components/StudyStats'
 import StudySummary from '../components/StudySummary'
+import { getLocalTitle } from '../mixins/getLocalTitleMixin'
 
 export default {
   name: 'StudyMonitor',
   props: ['studyKey'],
+  mixins: [getLocalTitle],
   components: {
     StudyStats, StudySummary
   },
@@ -62,18 +64,10 @@ export default {
   },
   methods: {
     niceTitle (titles) {
-      let titleString = ''
-      let firstItem = true
-      let studyTitles = Object.entries(titles)
-
-      for (const [lang, val] of studyTitles) {
-        if (val !== '') {
-          titleString += (firstItem ? '' : ', ') + `${lang}: ${val}`
-          firstItem = false
-        }
-      }
-      return titleString
+      // Sends study titles object as a param and returns a single title
+      return this.getFirstTitle(titles)
     }
   }
 }
+
 </script>
