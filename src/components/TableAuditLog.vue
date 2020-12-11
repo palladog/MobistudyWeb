@@ -211,7 +211,7 @@ export default {
           userEmail: params.filter.userEmail,
           sortDirection: params.pagination.descending ? 'DESC' : 'ASC',
           offset: (params.pagination.page - 1) * params.pagination.rowsPerPage,
-          rowsPerPage: params.pagination.rowsPerPage === 0 ? this.pagination.rowsNumber : params.pagination.rowsPerPage
+          rowsPerPage: params.pagination.rowsPerPage === 0 ? undefined : params.pagination.rowsPerPage
         }
         this.pagination.rowsNumber = await API.getLogs(true, queryParams)
         this.logs = await API.getLogs(false, queryParams)
