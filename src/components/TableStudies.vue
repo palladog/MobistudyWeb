@@ -49,6 +49,16 @@
           {{ niceTimestamp(props.value) }}
         </q-td>
       </template>
+      <template #body-cell-startDate="props">
+        <q-td :props="props">
+          {{ niceDate(props.value) }}
+        </q-td>
+      </template>
+      <template #body-cell-endDate="props">
+        <q-td :props="props">
+          {{ niceDate(props.value) }}
+        </q-td>
+      </template>
       <template #body-cell-studyTitle="props">
         <q-td :props="props">
           {{ niceTitle(props.row.studytitle) }}
@@ -83,8 +93,8 @@ export default {
         { name: 'teamName', required: true, label: 'Team Name', align: 'left', field: 'teamName', sortable: false },
         { name: 'created', required: true, label: 'Created', align: 'left', field: 'createdTS', sortable: true },
         { name: 'published', required: true, label: 'Published', align: 'left', field: 'publishedTS', sortable: true },
-        { name: 'start', required: true, label: 'Start', align: 'left', field: 'start', sortable: false },
-        { name: 'end', required: true, label: 'End', align: 'left', field: 'end', sortable: false },
+        { name: 'startDate', required: true, label: 'Start', align: 'left', field: 'startDate', sortable: false },
+        { name: 'endDate', required: true, label: 'End', align: 'left', field: 'endDate', sortable: false },
         { name: 'delete', required: true, label: 'Delete Study', align: 'left', field: 'delete', sortable: false }
       ],
       filter: {
@@ -104,6 +114,9 @@ export default {
   methods: {
     niceTimestamp (timeStamp) {
       return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+    },
+    niceDate (dateStamp) {
+      return date.formatDate(dateStamp, 'YYYY-MM-DD')
     },
     niceTitle (titles) {
       let titleString = ''
