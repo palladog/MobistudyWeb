@@ -2,7 +2,7 @@
   <q-page>
     <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>
-        Statistics about {{ studyDesign.generalities.title }}
+        Statistics about <strong>{{ niceTitle(studyDesign.generalities.title) }}</strong>
       </q-toolbar-title>
       <q-btn class="float-right q-mr-md" round color="black" icon="close" @click="$router.push('/researcher')"/>
     </q-toolbar>
@@ -28,10 +28,12 @@
 import API from '../modules/API.js'
 import StudyStats from '../components/StudyStats'
 import StudySummary from '../components/StudySummary'
+import { getLocalTitle } from '../mixins/getLocalTitleMixin'
 
 export default {
   name: 'StudyMonitor',
   props: ['studyKey'],
+  mixins: [getLocalTitle],
   components: {
     StudyStats, StudySummary
   },
@@ -59,6 +61,13 @@ export default {
         icon: 'report_problem'
       })
     }
+  },
+  methods: {
+    niceTitle (titles) {
+      // Sends study titles object as a param and returns a single title
+      return this.getFirstTitle(titles)
+    }
   }
 }
+
 </script>
