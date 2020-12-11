@@ -8,7 +8,9 @@
       selection="none"
       :columns="columns"
       row-key="_key"
+      :pagination.sync="pagination"
       @request="loadStudies"
+      :loading="loading"
     >
       <!-- Change row-key="_key" when it changes in the database (to be independent from ArangoDB) -->
       <template #top-right>
