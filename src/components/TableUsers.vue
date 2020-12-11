@@ -7,8 +7,11 @@
       :data="users"
       selection="none"
       :columns="columns"
+      :filter="filter"
       row-key="_key"
+      :pagination.sync="pagination"
       @request="loadUsers"
+      :loading="loading"
     >
       <!-- Change row-key="_key" when it changes in the database (to be independent from ArangoDB) -->
       <template #top-right>
