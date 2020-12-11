@@ -213,6 +213,7 @@ export default {
           offset: (params.pagination.page - 1) * params.pagination.rowsPerPage,
           rowsPerPage: params.pagination.rowsPerPage
         }
+        console.log(queryParams)
         this.pagination.rowsNumber = await API.getLogs(true, queryParams)
         this.logs = await API.getLogs(false, queryParams)
       } catch (err) {

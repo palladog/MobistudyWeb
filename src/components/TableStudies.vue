@@ -13,6 +13,22 @@
       <!-- Change row-key="_key" when it changes in the database (to be independent from ArangoDB) -->
       <template #top-right>
         <q-input
+          v-model="filter.after"
+          type="date"
+          hint="From date"
+          clearable
+          @input="updateFilters()"
+          class="q-mr-sm"
+        />
+        <q-input
+          v-model="filter.before"
+          type="date"
+          hint="To date"
+          clearable
+          @input="updateFilters()"
+          class="q-mr-sm"
+        />
+        <q-input
           type="text"
           v-model="filter.studyTitle"
           @input="updateFilters()"
@@ -68,6 +84,8 @@ export default {
         { name: 'delete', required: true, label: 'Delete Study', align: 'left', field: 'delete', sortable: false }
       ],
       filter: {
+        after: undefined,
+        before: undefined,
         studyTitle: undefined
       },
       loading: false
@@ -101,11 +119,14 @@ export default {
       this.pagination = params.pagination
       try {
         let queryParams = {
+          after: params.filter.after,
+          before: params.filter.before ? new Date(new Date(params.filter.before).getTime() + 24 * 60 * 60 * 1000).toISOString().substr(0, 10) : undefined, // the before must add 24 hours to include the whole day
           studyTitle: params.filter.studyTitle,
           sortDirection: params.pagination.descending ? 'DESC' : 'ASC',
           offset: (params.pagination.page - 1) * params.pagination.rowsPerPage,
           rowsPerPage: params.pagination.rowsPerPage
         }
+        console.log(queryParams)
         this.pagination.rowsNumber = await API.getAllStudies(true, queryParams)
         this.studies = await API.getAllStudies(false, queryParams)
         console.log('TABLESTUDIES RECEIVED DATA:', this.studies)
