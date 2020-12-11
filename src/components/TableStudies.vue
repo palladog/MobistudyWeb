@@ -83,6 +83,8 @@ export default {
         { name: 'teamName', required: true, label: 'Team Name', align: 'left', field: 'teamName', sortable: false },
         { name: 'created', required: true, label: 'Created', align: 'left', field: 'createdTS', sortable: true },
         { name: 'published', required: true, label: 'Published', align: 'left', field: 'publishedTS', sortable: true },
+        { name: 'start', required: true, label: 'Start', align: 'left', field: 'start', sortable: false },
+        { name: 'end', required: true, label: 'End', align: 'left', field: 'end', sortable: false },
         { name: 'delete', required: true, label: 'Delete Study', align: 'left', field: 'delete', sortable: false }
       ],
       filter: {
