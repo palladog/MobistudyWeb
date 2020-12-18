@@ -14,7 +14,8 @@
 
       <q-tab-panel name="tab-teams">
         <card-new-team @newTeam="refreshTeams()" />
-        <card-teams-invitations ref="invitations" @teamDeleted="refreshStudies()" class="q-mt-md" />
+        <!--<card-teams-invitations ref="invitations" @teamDeleted="refreshStudies()" class="q-mt-md" />-->
+        <table-teams />
       </q-tab-panel>
 
       <q-tab-panel name="tab-studies">
@@ -41,20 +42,22 @@ div .exactFit {
 <script>
 import TableAuditLog from '../components/TableAuditLog'
 import CardNewTeam from '../components/CardNewTeam'
-import CardTeamsInvitations from '../components/CardTeamsInvitations'
+// import CardTeamsInvitations from '../components/CardTeamsInvitations'
 import CardUsers from '../components/CardUsers'
 import CardStudies from '../components/CardStudies'
 import CardEmailTester from '../components/CardEmailTester'
+import TableTeams from '../components/TableTeams.vue'
 
 export default {
   name: 'AdminHomePage',
   components: {
     TableAuditLog,
     CardNewTeam,
-    CardTeamsInvitations,
+    // CardTeamsInvitations,
     CardStudies,
     CardUsers,
-    CardEmailTester
+    CardEmailTester,
+    TableTeams
   },
   data () {
     return {
