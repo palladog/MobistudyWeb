@@ -19,7 +19,6 @@
           type="date"
           hint="From date"
           clearable
-          @input="updateFilters()"
           class="q-mr-sm"
         />
         <q-input
@@ -27,13 +26,11 @@
           type="date"
           hint="To date"
           clearable
-          @input="updateFilters()"
           class="q-mr-sm"
         />
         <q-input
           type="text"
           v-model="filter.studyTitle"
-          @input="updateFilters()"
           hint="Study Title"
           clearable
           debounce="500"
@@ -154,12 +151,6 @@ export default {
         })
       }
       this.loading = false
-    },
-    async updateFilters () {
-      this.loadStudies({
-        pagination: this.pagination,
-        filter: this.filter
-      })
     },
     // Delete STUDY from Db
     async deleteStudy (study) {
