@@ -39,6 +39,22 @@ export default {
       name: teamName
     }, axiosConfig)
   },
+  // NEW GET TEAMS FUNCTION FOR TableTeams.vue
+  async getAllTeams (countOnly, filter) {
+    let queryParams = ''
+    let firstParam = true
+    for (let param in filter) {
+      if (filter[param] || filter[param] === 0) {
+        queryParams += (firstParam ? '' : '&') + param + '=' + encodeURIComponent(filter[param])
+        firstParam = false
+      }
+    }
+    let URL = BASE_URL + '/getTeams' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
+    let resp = await axios.get(URL, axiosConfig)
+    console.log('API.js URL: ', URL)
+    console.log('API.js resp.data: ', resp.data)
+    return resp.data
+  },
   async getTeams () {
     let resp = await axios.get(BASE_URL + '/teams', axiosConfig)
     return resp.data
