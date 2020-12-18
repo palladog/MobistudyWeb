@@ -146,7 +146,6 @@ export default {
         console.log(queryParams)
         this.pagination.rowsNumber = await API.getAllStudies(true, queryParams)
         this.studies = await API.getAllStudies(false, queryParams)
-        console.log('TABLESTUDIES RECEIVED DATA:', this.studies)
       } catch (err) {
         this.$q.notify({
           color: 'negative',
