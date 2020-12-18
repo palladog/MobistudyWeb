@@ -7,6 +7,7 @@
       :data="studies"
       selection="none"
       :columns="columns"
+      :filter="filter"
       row-key="_key"
       :pagination.sync="pagination"
       @request="loadStudies"
