@@ -13,14 +13,12 @@
       @request="loadUsers"
       :loading="loading"
     >
-      <!-- Change row-key="_key" when it changes in the database (to be independent from ArangoDB) -->
       <template #top-right>
         <q-select
           emit-value
           map-options
           :options="roleTypesOpts"
           v-model="filter.roleType"
-          @input="updateFilters()"
           hint="Event"
           class="q-mr-sm"
           style="width: 150px"
@@ -28,7 +26,6 @@
         <q-input
           type="text"
           v-model="filter.userEmail"
-          @input="updateFilters()"
           hint="User email"
           clearable
           debounce="500"
@@ -99,12 +96,6 @@ export default {
         })
       }
       this.loading = false
-    },
-    async updateFilters () {
-      this.loadUsers({
-        pagination: this.pagination,
-        filter: this.filter
-      })
     },
     async deleteUser (user) {
       this.$q.dialog({
