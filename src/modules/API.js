@@ -112,7 +112,6 @@ export default {
     }
     let URL = BASE_URL + '/getStudies' + (countOnly ? '/count' : '') + (firstParam ? '' : '?') + queryParams
     let resp = await axios.get(URL, axiosConfig)
-    
     return resp.data
   },
   async getStudies () {
