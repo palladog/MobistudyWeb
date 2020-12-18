@@ -163,20 +163,19 @@ export default {
       })
     },
     // Delete STUDY from Db
-    async deleteStudy (index) {
-      let study = this.studies[index]
+    async deleteStudy (study) {
       this.$q.dialog({
         title: 'Deleting Study',
         color: 'warning',
-        message: 'You are deleting the study ' + study.generalities.title + ' from the DB. This will affect participants of that study ' +
+        message: 'You are deleting the study ' + study.studytitle.en + ' from the DB. This will affect participants of that study ' +
         ' and they will no longer be associated to that study. This cannot be undone. Would you like to continue?',
         ok: 'Yes, delete Study',
         cancel: 'Cancel'
       }).onOk(async () => {
         try {
-          await API.deleteStudy(study._key)
-          this.allUsers.splice(index, 1)
-          this.$q.notify('Study ' + study.generalities.title + ' Deleted')
+          await API.deleteStudy(study.studykey)
+          this.studies.splice(study, 1)
+          this.$q.notify('Study ' + study.studytitle.en + ' Deleted')
           this.loadStudies({
             pagination: this.pagination,
             filter: this.filter
@@ -185,7 +184,7 @@ export default {
           console.debug(err)
           this.$q.notify({
             color: 'negative',
-            message: 'Cannot delete study ' + study.generalities.title,
+            message: 'Cannot delete study ' + study.studytitle.en,
             icon: 'report_problem'
           })
         }
