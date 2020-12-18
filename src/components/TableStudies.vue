@@ -13,7 +13,6 @@
       @request="loadStudies"
       :loading="loading"
     >
-      <!-- Change row-key="_key" when it changes in the database (to be independent from ArangoDB) -->
       <template #top-right>
         <q-input
           v-model="filter.after"
@@ -91,7 +90,7 @@ export default {
       columns: [
         { name: 'studyKey', required: true, label: 'Study Key', align: 'left', field: 'studykey', sortable: false }, // Change "_key" to "key" eventually
         { name: 'studyTitle', required: true, label: 'Title', align: 'left', field: 'title', sortable: true },
-        { name: 'teamName', required: true, label: 'Team Name', align: 'left', field: 'teamName', sortable: false },
+        { name: 'teamName', required: true, label: 'Team Name', align: 'left', field: 'teamname', sortable: false },
         { name: 'created', required: true, label: 'Created', align: 'left', field: 'createdTS', sortable: true },
         { name: 'published', required: true, label: 'Published', align: 'left', field: 'publishedTS', sortable: true },
         { name: 'startDate', required: true, label: 'Start', align: 'left', field: 'startDate', sortable: false },
